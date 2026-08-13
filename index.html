@@ -1536,6 +1536,214 @@
     text-align: center;
   }
   .start-footer b { color: #b6a5e8; }
+
+  /* ===== 随机抽选模式 ===== */
+  .random-mode-intro {
+    font-size: 12px; color: #8b7bb8; margin-bottom: 12px; line-height: 1.6;
+  }
+  .random-mode-intro b { color: #ffd700; }
+  .random-size-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 12px 16px;
+  }
+  .random-size-label { font-size: 13px; color: #fff; font-weight: 600; white-space: nowrap; }
+  .random-size-slider { flex: 1; }
+  .random-size-val {
+    font-size: 22px; font-weight: 900; min-width: 60px; text-align: center;
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .random-preview {
+    display: flex; gap: 10px; margin-bottom: 12px;
+  }
+  .random-preview-team {
+    flex: 1; border-radius: 10px; padding: 10px; text-align: center;
+    min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  }
+  .random-preview-team.a { background: rgba(255,122,61,0.08); border: 1px solid rgba(255,122,61,0.3); }
+  .random-preview-team.b { background: rgba(95,212,255,0.08); border: 1px solid rgba(95,212,255,0.3); }
+  .random-preview-team .rpt-name { font-size: 12px; font-weight: 700; }
+  .random-preview-team .rpt-slots { font-size: 20px; letter-spacing: 2px; }
+  .random-preview-team.a .rpt-name { color: #ff7a3d; }
+  .random-preview-team.b .rpt-name { color: #5fd4ff; }
+
+  /* ===== 结算页战斗数据 ===== */
+  .result-mvp {
+    width: 100%; max-width: 560px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.12), rgba(255,107,107,0.08));
+    border: 2px solid rgba(255,215,0,0.4);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 4px 20px rgba(255,215,0,0.15);
+  }
+  .mvp-crown {
+    font-size: 36px; flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(255,215,0,0.6));
+    animation: mvpPulse 2s ease-in-out infinite;
+  }
+  @keyframes mvpPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  .mvp-info { flex: 1; }
+  .mvp-label {
+    font-size: 11px; font-weight: 700; color: #ffd700;
+    letter-spacing: 3px; margin-bottom: 2px;
+  }
+  .mvp-name {
+    font-size: 18px; font-weight: 800; margin-bottom: 4px;
+  }
+  .mvp-detail {
+    font-size: 12px; color: #ccc; display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .mvp-detail span b { color: #fff; }
+  .mvp-score {
+    font-size: 28px; font-weight: 900; color: #ffd700;
+    text-shadow: 0 0 10px rgba(255,215,0,0.4);
+    flex-shrink: 0;
+  }
+  .result-stats-section {
+    width: 100%; max-width: 560px; margin-top: 8px;
+  }
+  .stats-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 12px;
+  }
+  .stats-table th {
+    text-align: center; padding: 6px 4px;
+    color: #8b7bb8; font-weight: 600; font-size: 11px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .stats-table td {
+    text-align: center; padding: 7px 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .stats-table tr.mvp-row {
+    background: rgba(255,215,0,0.08);
+  }
+  .stats-table tr.mvp-row td {
+    border-bottom: 1px solid rgba(255,215,0,0.2);
+  }
+  .stats-table .st-name {
+    text-align: left; font-weight: 700; white-space: nowrap;
+  }
+  .stats-table .st-team {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    margin-right: 4px; vertical-align: middle;
+  }
+  .stats-table .st-dmg { color: #ff6b6b; }
+  .stats-table .st-heal { color: #5bff8e; }
+  .stats-table .st-kill { color: #ffd700; }
+  .stats-table .st-taken { color: #aaa; }
+  .stats-table .st-score { color: #fff; font-weight: 700; }
+
+  /* 抽选动画覆盖层 - CSGO风格 */
+  .draw-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5,5,15,0.95);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  .draw-overlay.hidden { display: none; }
+  .draw-title {
+    font-size: 26px; font-weight: 900; color: #fff; margin-bottom: 4px;
+    letter-spacing: 4px; text-shadow: 0 0 20px rgba(255,215,0,0.3);
+  }
+  .draw-subtitle {
+    font-size: 13px; color: #8b7bb8; margin-bottom: 16px;
+  }
+  .draw-arena {
+    display: flex; gap: 24px; align-items: flex-start;
+  }
+  .draw-team-col {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .draw-team-label {
+    font-size: 15px; font-weight: 800; margin-bottom: 2px;
+  }
+  .draw-slots {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  /* CSGO风格横向转盘 */
+  .csgo-reel-wrap {
+    position: relative;
+    width: 280px; height: 68px;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(20,15,40,0.4));
+  }
+  .csgo-reel-wrap.team-a { border-color: rgba(255,122,61,0.15); }
+  .csgo-reel-wrap.team-b { border-color: rgba(95,212,255,0.15); }
+  .csgo-reel-wrap.stopped.team-a { border-color: rgba(255,122,61,0.6); box-shadow: 0 0 20px rgba(255,122,61,0.2); }
+  .csgo-reel-wrap.stopped.team-b { border-color: rgba(95,212,255,0.6); box-shadow: 0 0 20px rgba(95,212,255,0.2); }
+  /* 中心指示线 */
+  .csgo-reel-marker {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 3px; z-index: 10;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, transparent 0%, #ffd700 20%, #ffd700 80%, transparent 100%);
+    box-shadow: 0 0 12px rgba(255,215,0,0.8), 0 0 4px rgba(255,255,255,0.5);
+    pointer-events: none;
+  }
+  .csgo-reel-marker::before, .csgo-reel-marker::after {
+    content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0;
+  }
+  .csgo-reel-marker::before {
+    top: -1px; border: 5px solid transparent; border-top-color: #ffd700;
+  }
+  .csgo-reel-marker::after {
+    bottom: -1px; border: 5px solid transparent; border-bottom-color: #ffd700;
+  }
+  /* 左右渐变遮罩 */
+  .csgo-reel-wrap::before, .csgo-reel-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 5;
+    pointer-events: none;
+  }
+  .csgo-reel-wrap::before {
+    left: 0; background: linear-gradient(90deg, rgba(5,5,15,0.9), transparent);
+  }
+  .csgo-reel-wrap::after {
+    right: 0; background: linear-gradient(270deg, rgba(5,5,15,0.9), transparent);
+  }
+  /* 滚动条 */
+  .csgo-reel-strip {
+    display: flex; height: 100%; align-items: center;
+    will-change: transform;
+  }
+  .csgo-reel-item {
+    flex-shrink: 0; width: 70px; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1px; border-right: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.3s;
+  }
+  .csgo-reel-item .ri-icon { font-size: 26px; line-height: 1; }
+  .csgo-reel-item .ri-name { font-size: 9px; font-weight: 600; white-space: nowrap; }
+  .csgo-reel-item.winner {
+    background: radial-gradient(ellipse at center, rgba(255,215,0,0.18) 0%, transparent 70%);
+  }
+  .draw-vs {
+    font-size: 28px; font-weight: 900; align-self: center;
+    background: linear-gradient(135deg, #ff7a3d, #5fd4ff);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    margin-top: 24px;
+  }
+  .draw-action-btn {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+    color: #fff; border: none; padding: 12px 40px;
+    border-radius: 10px; font-size: 16px; font-weight: 700;
+    cursor: pointer; letter-spacing: 2px;
+    box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+    transition: all 0.2s;
+  }
+  .draw-action-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,107,107,0.6); }
+  .draw-action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .draw-action-btn.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -1553,6 +1761,7 @@
         <div class="mode-tab" data-mode="budget">20元组队</div>
         <div class="mode-tab" data-mode="survival">无尽生存</div>
         <div class="mode-tab" data-mode="battleroyale">大逃杀</div>
+        <div class="mode-tab" data-mode="random">随机抽选</div>
       </div>
 
       <!-- 地形选择 -->
@@ -1668,6 +1877,29 @@
         </div>
         <button class="start-btn" id="brStartBtn" style="width:100%;">开始大逃杀</button>
       </div>
+
+      <!-- 随机抽选模式 -->
+      <div id="randomMode" style="display:none;">
+        <div class="random-mode-intro">
+          随机抽取职业角色！两边队伍各自抽取 <b>等量</b> 角色，全凭运气决定阵容。选择队伍人数后点击下方按钮开始<b>抽选仪式</b>。
+        </div>
+        <div class="random-size-row">
+          <span class="random-size-label">每队人数</span>
+          <input type="range" id="randomTeamSize" min="1" max="6" value="3" class="random-size-slider">
+          <span class="random-size-val" id="randomTeamSizeLabel">3v3</span>
+        </div>
+        <div class="random-preview">
+          <div class="random-preview-team a">
+            <div class="rpt-name">队伍 A</div>
+            <div class="rpt-slots" id="randomPreviewA">❓ ❓ ❓</div>
+          </div>
+          <div class="random-preview-team b">
+            <div class="rpt-name">队伍 B</div>
+            <div class="rpt-slots" id="randomPreviewB">❓ ❓ ❓</div>
+          </div>
+        </div>
+        <button class="start-btn" id="randomStartBtn" style="width:100%;background:linear-gradient(135deg,#ffd700,#ff6b6b);box-shadow:0 8px 24px rgba(255,107,107,0.4);">🎲 开始抽选</button>
+      </div>
     </div>
 
     <div class="start-shortcuts">
@@ -1683,6 +1915,24 @@
     <div class="start-footer">
       <b>提示</b>：游戏运行中可随时调整阵容、参数，支持实时热更新
     </div>
+  </div>
+
+  <!-- ===== 随机抽选动画覆盖层 (CSGO风格) ===== -->
+  <div class="draw-overlay hidden" id="drawOverlay">
+    <div class="draw-title" id="drawTitle">🎲 抽选仪式</div>
+    <div class="draw-subtitle" id="drawSubtitle">正在抽选...</div>
+    <div class="draw-arena">
+      <div class="draw-team-col">
+        <div class="draw-team-label" style="color:#ff7a3d;">队伍 A</div>
+        <div class="draw-slots" id="drawSlotsA"></div>
+      </div>
+      <div class="draw-vs">VS</div>
+      <div class="draw-team-col">
+        <div class="draw-team-label" style="color:#5fd4ff;">队伍 B</div>
+        <div class="draw-slots" id="drawSlotsB"></div>
+      </div>
+    </div>
+    <button class="draw-action-btn hidden" id="drawStartBtn">开始对战</button>
   </div>
 
   <!-- ===== 图鉴总览弹窗 ===== -->
@@ -1726,6 +1976,8 @@
         <div class="result-stat-row"><span>阵容</span><b id="resultRolesB">-</b></div>
       </div>
     </div>
+    <div class="result-mvp hidden" id="resultMvp"></div>
+    <div class="result-stats-section hidden" id="resultStatsSection"></div>
     <div class="result-buttons">
       <button class="result-btn result-btn-primary" id="rematchBtn">再 来 一 局</button>
       <button class="result-btn result-btn-secondary" id="backToMenuBtn">返 回 主 菜 单</button>
@@ -1833,10 +2085,10 @@
     trap: {
       label: '陷阱师', icon: '✦', maxHp: 130, color: '#5fd4ff', cost: 4,
       desc: '远距投放·眩晕陷阱',
-      stats: { atk: 2, def: 7, spd: 5, rng: 8, sup: 1, ctrl: 10 },
+      stats: { atk: 3, def: 7, spd: 5, rng: 8, sup: 1, ctrl: 10 },
       codex: '战场控制专家，远距离向敌人附近投放大范围吸附陷阱。陷阱伤害降低但范围更大，吸附敌人至中心并造成0.25秒眩晕，持续扣血使其无法动弹。',
       params: [
-        { key: 'dmg', label: '陷阱伤害/秒', min: 1, max: 15, step: 1, def: 2, int: true },
+        { key: 'dmg', label: '陷阱伤害/秒', min: 1, max: 15, step: 1, def: 1, int: true },
         { key: 'dur', label: '陷阱持续秒', min: 1, max: 8, step: 0.5, def: 3, int: false }
       ]
     },
@@ -2005,44 +2257,54 @@
       ]
     },
     windRanger: {
-      label: '风舞游侠', icon: '💨', maxHp: 60, color: '#62c8d8', cost: 4, ballSpeed: 155,
+      label: '风舞游侠', icon: '💨', maxHp: 95, color: '#62c8d8', cost: 4, ballSpeed: 155,
       desc: '高速游击・位移拉扯',
-      stats: { atk: 6, def: 3, spd: 12, rng: 5, sup: 2, ctrl: 5 },
-      codex: '来去如风的游击战士，不断变换位置躲避伤害，弹射攻击同时打击多个对手，带动全队机动性。向侧身短距离冲刺位移规避来袭弹道，普通攻击可在敌人之间弹射（伤害逐次衰减），自身移动时小幅提升周围友军移动速度。',
+      stats: { atk: 6, def: 4, spd: 12, rng: 5, sup: 2, ctrl: 5 },
+      codex: '来去如风的游击战士，不断变换位置躲避伤害，弹射攻击同时打击多个对手，带动全队机动性。每隔数秒向前短距离冲刺位移规避来袭弹道，普通攻击可在敌人之间弹射（伤害逐次衰减），自身移动时小幅提升周围友军移动速度。',
       params: [
-        { key: 'dmg', label: '弹射伤害', min: 3, max: 20, step: 1, def: 6, int: true },
-        { key: 'rate', label: '射速/秒', min: 0.4, max: 2.5, step: 0.1, def: 1.2, int: false },
-        { key: 'dashCd', label: '冲刺冷却秒', min: 1, max: 4, step: 0.2, def: 0.3, int: false },
-        { key: 'bounceDecay', label: '弹射衰减%', min: 10, max: 60, step: 5, def: 30, int: true },
-        { key: 'allySpd', label: '友军移速加成%', min: 5, max: 40, step: 5, def: 15, int: true }
+        { key: 'dmg', label: '弹射伤害', min: 3, max: 20, step: 1, def: 3, int: true },
+        { key: 'rate', label: '射速/秒', min: 0.4, max: 2.5, step: 0.1, def: 2, int: false },
+        { key: 'dashCd', label: '冲刺冷却秒', min: 1, max: 4, step: 0.2, def: 0.2, int: false },
+        { key: 'bounceDecay', label: '弹射衰减%', min: 10, max: 60, step: 5, def: 25, int: true },
+        { key: 'allySpd', label: '友军移速加成%', min: 5, max: 40, step: 5, def: 25, int: true }
       ]
     },
     empMage: {
       label: '电磁脉冲师', icon: '⚡', maxHp: 80, color: '#4da6ff', cost: 4,
       desc: 'EMP脉冲・陷阱克星',
       stats: { atk: 5, def: 4, spd: 4, rng: 6, sup: 4, ctrl: 7 },
-      codex: '电磁掌控者，普通攻击叠加漏电标记，满层眩晕敌人。定期释放大范围EMP脉冲，瘫痪敌方技能释放。专克陷阱师，但被高速刺客突进克制。',
+      codex: '电磁掌控者，普通攻击叠加漏电标记，满层眩晕敌人。定期释放大范围EMP脉冲，瘫痪敌方技能释放并直接摧毁陷阱师的陷阱。专克陷阱师与熔岩巨人，但被高速刺客突进克制。',
       params: [
         { key: 'dmg', label: '普攻伤害', min: 3, max: 16, step: 1, def: 6, int: true },
         { key: 'rate', label: '射速/秒', min: 0.4, max: 2.0, step: 0.1, def: 1.0, int: false },
         { key: 'maxStacks', label: '眩晕层数', min: 2, max: 5, step: 1, def: 3, int: true },
         { key: 'stunTime', label: '眩晕时长/秒', min: 0.3, max: 2, step: 0.1, def: 0.8, int: false },
-        { key: 'empCd', label: 'EMP冷却秒', min: 4, max: 12, step: 0.5, def: 6, int: false },
+        { key: 'empCd', label: 'EMP冷却秒', min: 4, max: 12, step: 0.5, def: 7, int: false },
         { key: 'empRadius', label: 'EMP半径', min: 120, max: 280, step: 10, def: 180, int: true },
         { key: 'empSilence', label: '沉默时长/秒', min: 0.5, max: 3, step: 0.1, def: 1.5, int: false }
       ]
     },
-    shadowMage: {
-      label: '暗影术士', icon: '☠️', maxHp: 65, color: '#4a7c59', cost: 5,
-      desc: '持续腐蚀・减益干扰',
-      stats: { atk: 9, def: 3, spd: 4, rng: 4, sup: 5, ctrl: 8 },
-      codex: '来自剧毒的诅咒施法者，不靠爆发靠持续侵蚀，废掉敌方回血坦度，瓦解敌方肉盾阵容。每1.5秒释放毒雾，对范围内敌人施加腐蚀，持续每秒扣血同时降低敌方防御；被毒雾影响的敌人治疗效果降低40%；击杀敌方单位后，瞬间扩大一次毒雾范围。',
+    thunderLord: {
+      label: '雷霆主宰', icon: '⚡', maxHp: 200, color: '#1a75ff', cost: 6, ballSpeed: 95,
+      desc: '远程电弧AOE・雷霆跳跃・蓄能爆发',
+      stats: { atk: 9, def: 7, spd: 4, rng: 6, sup: 6, ctrl: 9 },
+      codex: '电弧惊雷，万敌连锁！以远程电弧攻击为引，电弧在敌群中传导蔓延，积蓄雷霆之力。蓄雷满层时瞬间跃至敌阵核心引爆全域雷暴，麻痹全屏敌人并赋能队友；雷印敌人互相靠近产生雷电链接持续刮痧，满层雷蚀易伤令全队输出飙升。',
       params: [
-        { key: 'dotDmg', label: '腐蚀每秒伤害', min: 2, max: 15, step: 1, def: 15, int: true },
-        { key: 'defReduce', label: '防御削减', min: 1, max: 8, step: 1, def: 3, int: true },
-        { key: 'healReduce', label: '治疗削弱%', min: 20, max: 60, step: 5, def: 40, int: true },
-        { key: 'miasmaRadius', label: '瘴气范围', min: 100, max: 250, step: 10, def: 180, int: true },
-        { key: 'miasmaCd', label: '瘴气间隔秒', min: 2, max: 4, step: 0.5, def: 1.5, int: false }
+        { key: 'dmg', label: '电弧伤害', min: 6, max: 30, step: 1, def: 14, int: true },
+        { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.0, step: 0.1, def: 1.0, int: false },
+        { key: 'markDuration', label: '雷印持续秒', min: 3, max: 10, step: 0.5, def: 5, int: false },
+        { key: 'chainDecay', label: '连锁衰减%', min: 10, max: 50, step: 5, def: 20, int: true },
+        { key: 'maxCharge', label: '蓄雷满层', min: 6, max: 15, step: 1, def: 10, int: true },
+        { key: 'stormDmg', label: '雷暴伤害', min: 15, max: 60, step: 1, def: 30, int: true },
+        { key: 'paralyzeTime', label: '麻痹秒', min: 0.2, max: 1.5, step: 0.1, def: 0.5, int: false },
+        { key: 'slowPerStack', label: '减速%/层', min: 3, max: 15, step: 1, def: 8, int: true },
+        { key: 'vulnBonus', label: '易伤%', min: 5, max: 25, step: 1, def: 12, int: true },
+        { key: 'empAtk', label: '赋能攻击%', min: 5, max: 30, step: 1, def: 15, int: true },
+        { key: 'empAtkSpd', label: '赋能攻速%', min: 5, max: 40, step: 1, def: 20, int: true },
+        { key: 'empDuration', label: '赋能持续秒', min: 2, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'healAmount', label: '续航回复', min: 1, max: 10, step: 1, def: 3, int: true },
+        { key: 'jumpDist', label: '跳跃落点间距', min: 0, max: 40, step: 2, def: 8, int: true },
+        { key: 'jumpCD', label: '跳跃冷却秒', min: 0, max: 10, step: 0.5, def: 2, int: false }
       ]
     }
   };
@@ -2131,6 +2393,174 @@
     const b = budgetBuildTeam('随机挑战者', '#5fd4ff', oppKeys);
     return { A: a, B: b };
   }
+
+  // ===== 随机抽选模式 =====
+  let randomTeamSize = 3;
+  let randomPicks = { A: [], B: [] }; // 抽选结果
+  let drawAnimating = false;
+
+  function RANDOM_TEAMS(){
+    const buildSide = (keys, name, color) => {
+      const roles = keys.map(k => {
+        const c = CLASSES[k];
+        const params = {};
+        c.params.forEach(p => { params[p.key] = p.def; });
+        return { cls: k, name: c.label, color: c.color, count: 1, size: 18, speed: 120, params };
+      });
+      return { name, color, roles };
+    };
+    return {
+      A: buildSide(randomPicks.A, '随机队A', '#ff7a3d'),
+      B: buildSide(randomPicks.B, '随机队B', '#5fd4ff')
+    };
+  }
+
+  // 随机抽N个职业（允许重复）
+  function randomPickClasses(n){
+    const keys = Object.keys(CLASSES);
+    const picked = [];
+    for (let i = 0; i < n; i++){
+      picked.push(keys[Math.floor(Math.random() * keys.length)]);
+    }
+    return picked;
+  }
+
+  // 更新预览
+  function updateRandomPreview(){
+    const n = randomTeamSize;
+    const slots = '❓ '.repeat(n).trim();
+    $('randomPreviewA').textContent = slots;
+    $('randomPreviewB').textContent = slots;
+    $('randomTeamSizeLabel').textContent = n + 'v' + n;
+  }
+
+  // CSGO风格转盘：创建单个转盘容器
+  function createReelSlot(teamIdx, slotIdx){
+    const wrap = document.createElement('div');
+    const teamClass = teamIdx === 'A' ? 'team-a' : 'team-b';
+    wrap.className = `csgo-reel-wrap ${teamClass}`;
+    wrap.id = `reelWrap-${teamIdx}-${slotIdx}`;
+    wrap.innerHTML = `
+      <div class="csgo-reel-marker"></div>
+      <div class="csgo-reel-strip" id="reel-${teamIdx}-${slotIdx}"></div>
+    `;
+    return wrap;
+  }
+
+  // 抽选动画主流程 - CSGO风格：所有转盘同时启动，依次停止
+  async function startRandomDraw(){
+    if (drawAnimating) return;
+    drawAnimating = true;
+
+    const n = randomTeamSize;
+    // 预先生成结果
+    randomPicks.A = randomPickClasses(n);
+    randomPicks.B = randomPickClasses(n);
+
+    // 构建转盘UI
+    const slotsA = $('drawSlotsA');
+    const slotsB = $('drawSlotsB');
+    slotsA.innerHTML = '';
+    slotsB.innerHTML = '';
+    for (let i = 0; i < n; i++){
+      slotsA.appendChild(createReelSlot('A', i));
+      slotsB.appendChild(createReelSlot('B', i));
+    }
+
+    // 显示覆盖层
+    $('drawOverlay').classList.remove('hidden');
+    $('drawStartBtn').classList.add('hidden');
+    $('drawTitle').textContent = '🎲 抽选仪式';
+    $('drawSubtitle').textContent = '滚动中...';
+
+    await sleep(300);
+
+    // 所有转盘同时启动，错开停止时间
+    const promises = [];
+    for (let i = 0; i < n; i++){
+      // A队转盘：停止时间递增
+      const durA = 3500 + i * 1200;
+      promises.push(animateCsgoReel('A', i, randomPicks.A[i], durA));
+      // B队转盘：停止时间递增（比A队稍晚）
+      const durB = 4100 + i * 1200;
+      promises.push(animateCsgoReel('B', i, randomPicks.B[i], durB));
+    }
+
+    // 等待所有转盘停止
+    await Promise.all(promises);
+
+    // 全部完成
+    $('drawSubtitle').textContent = '抽选完成！阵容已确认';
+    $('drawTitle').textContent = '✅ 阵容确认';
+    $('drawStartBtn').classList.remove('hidden');
+    drawAnimating = false;
+  }
+
+  // CSGO风格单转盘动画：匀速滚动→末段减速→停止
+  async function animateCsgoReel(teamIdx, slotIdx, finalKey, duration){
+    const strip = $(`reel-${teamIdx}-${slotIdx}`);
+    const wrap = $(`reelWrap-${teamIdx}-${slotIdx}`);
+    if (!strip || !wrap) return;
+
+    const keys = Object.keys(CLASSES);
+    const itemWidth = 70; // 必须与CSS一致
+    const containerWidth = wrap.offsetWidth || 280;
+    const centerOffset = containerWidth / 2 - itemWidth / 2;
+
+    // 生成滚动条：大量随机项，目标项在末尾附近
+    const totalItems = 40 + Math.floor(Math.random() * 8);
+    const targetIndex = totalItems - 4; // 目标在倒数第4个位置
+    let html = '';
+    for (let i = 0; i < totalItems; i++){
+      const key = (i === targetIndex) ? finalKey : keys[Math.floor(Math.random() * keys.length)];
+      const c = CLASSES[key];
+      const isWinner = (i === targetIndex) ? ' winner' : '';
+      html += `<div class="csgo-reel-item${isWinner}">
+        <div class="ri-icon">${c.icon}</div>
+        <div class="ri-name" style="color:${c.color};">${c.label}</div>
+      </div>`;
+    }
+    strip.innerHTML = html;
+
+    // 计算最终位置：目标项居中
+    const finalX = -(targetIndex * itemWidth - centerOffset);
+
+    // 自定义动画曲线：前65%匀速快速滚动，后35%减速
+    const speedPhase = 0.65;
+    const easeOutCubic = x => 1 - Math.pow(1 - x, 3);
+    const easeFunc = t => {
+      if (t < speedPhase) {
+        return (t / speedPhase) * 0.72; // 匀速到72%
+      }
+      return 0.72 + 0.28 * easeOutCubic((t - speedPhase) / (1 - speedPhase));
+    };
+
+    // 使用requestAnimationFrame驱动动画
+    const startTime = performance.now();
+    return new Promise(resolve => {
+      function tick(){
+        const elapsed = performance.now() - startTime;
+        const t = Math.min(1, elapsed / duration);
+        const progress = easeFunc(t);
+        const currentX = finalX * progress;
+        strip.style.transform = `translateX(${currentX.toFixed(2)}px)`;
+        if (t < 1){
+          requestAnimationFrame(tick);
+        } else {
+          strip.style.transform = `translateX(${finalX}px)`;
+          wrap.classList.add('stopped');
+          const winnerItem = strip.children[targetIndex];
+          if (winnerItem){
+            winnerItem.style.boxShadow = 'inset 0 0 15px rgba(255,215,0,0.3)';
+          }
+          resolve();
+        }
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
   // ===== 无尽生存模式 =====
   let survivalRoster = []; // 玩家所选职业
@@ -3228,6 +3658,9 @@
       this.burnTime = 0; // 灼烧剩余时间
       this.stun = 0; // 眩晕剩余时间
       this.substituteUsed = false; // 替身术是否已使用
+      // ===== 战斗数据统计 =====
+      this.stats = { dmgDealt: 0, dmgTaken: 0, healDone: 0, kills: 0 };
+      this.lastAttacker = null;
       this.invisible = false; // 是否隐身
       this.invisibleTime = 0; // 隐身剩余时间
       this.isDecoy = false; // 是否为替身
@@ -3277,12 +3710,13 @@
       this.empCastCD = 4; // EMP脉冲冷却（开局4秒后首次释放）
       this.leakStacks = 0; // 漏电标记层数（被电磁脉冲师普攻叠加）
       this.leakTimer = 0; // 漏电标记持续计时
-      // 暗影术士相关状态
-      this.corrosionDmg = 0; // 腐蚀每秒伤害
-      this.corrosionTimer = 0; // 腐蚀持续时间
-      this.defReduce = 0; // 防御削减数值
-      this.healReduce = 0; // 治疗削弱比例（0-1）
-      this.shadowMiasmaCD = 2.5; // 暗影瘴气冷却
+      // 雷霆主宰相关状态
+      this.thunderMarkStacks = 0; // 雷印层数（被雷霆主宰叠加）
+      this.thunderMarkTimer = 0; // 雷印持续计时
+      this.thunderEmpowerTime = 0; // 雷霆赋能buff剩余时间
+      this.thunderCharge = 0; // 蓄雷值（仅雷霆主宰自身）
+      this.thunderStormReady = false; // 蓄雷满层标记
+      this.thunderJumpCD = 0; // 雷霆跳跃冷却
       // 大逃杀模式状态
       this.brAtkBoost = 0; // 攻击增益剩余时间
       this.brShield = 0; // 护盾值
@@ -3428,21 +3862,22 @@
         this.leakTimer -= dt;
         if (this.leakTimer <= 0){ this.leakStacks = 0; }
       }
-      // 腐蚀状态处理
-      if (this.corrosionTimer > 0){
-        this.corrosionTimer -= dt;
-        // 每秒结算一次腐蚀伤害
-        this._corrosionDotAcc = (this._corrosionDotAcc || 0) + dt;
-        if (this._corrosionDotAcc >= 1){
-          this._corrosionDotAcc -= 1;
-          const dotDmg = this.corrosionDmg || 5;
-          this.takeDamage(dotDmg, '#228b22', particles, this._corrosionSource, true); // 腐蚀伤害：无视护盾与铁壁减伤
-        }
-        if (this.corrosionTimer <= 0){
-          this.corrosionDmg = 0;
-          this.defReduce = 0;
-          this.healReduce = 0;
-        }
+      // 雷印计时
+      if (this.thunderMarkTimer > 0){
+        this.thunderMarkTimer -= dt;
+        if (this.thunderMarkTimer <= 0){ this.thunderMarkStacks = 0; }
+      }
+      // 雷霆赋能buff计时
+      if (this.thunderEmpowerTime > 0){
+        this.thunderEmpowerTime -= dt;
+        // 赋能攻速加成：额外减少fireCD
+        this.fireCD -= dt * ((this._empAtkSpdBuff || 0) / 100);
+      }
+      // 雷霆跳跃冷却计时
+      if (this.thunderJumpCD > 0) this.thunderJumpCD -= dt;
+      // 雷印减攻速：每层降低攻速
+      if (this.thunderMarkStacks > 0){
+        this.fireCD += dt * (this.thunderMarkStacks * (this._thunderSlowPerStack || 0.08) * 0.5);
       }
       if (this.frozenTime > 0) this.frozenTime -= dt;
       if (this.frostTickCD > 0) this.frostTickCD -= dt;
@@ -3519,7 +3954,9 @@
           }
         }
       }
-      const spdMul = (1 - this.slow*0.85) * (1 + this.windSpeedBuff);
+      // 雷印减速：每层降低移速
+      const thunderSlow = this.thunderMarkStacks > 0 ? this.thunderMarkStacks * (this._thunderSlowPerStack || 0.08) : 0;
+      const spdMul = (1 - this.slow*0.85) * (1 + this.windSpeedBuff) * (1 - thunderSlow);
 
       // 陷阱效果（吸附+伤害+眩晕）—— 在眩晕判断之前处理，确保眩晕期间也能持续扣血
       for (const tr of traps){
@@ -3676,7 +4113,7 @@
         case 'shieldGuard': this.aiShieldGuard(dt, enemy, d, dirX, dirY, spdMul, balls, ironWalls, particles); break;
         case 'windRanger': this.aiWindRanger(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
         case 'empMage': this.aiEmpMage(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
-        case 'shadowMage': this.aiShadowMage(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'thunderLord': this.aiThunderLord(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
       }
       }
 
@@ -4050,7 +4487,9 @@
           if (b.hp / b.maxHp >= 0.85) continue;
           const dd = Math.hypot(b.x - this.x, b.y - this.y);
           if (dd < healR){
+            const actualHeal = Math.min(this.params.dmg, b.maxHp - b.hp);
             b.hp = Math.min(b.maxHp, b.hp + this.params.dmg);
+            this.stats.healDone += actualHeal;
             healed = true;
             healWaves.push(new HealWave(b.x, b.y, this.color, 45));
             for (let i=0;i<8;i++){
@@ -4920,15 +5359,10 @@
           if (td < empR){
             tr.life = 0;
             trapCount++;
-            // 陷阱爆炸电弧 - 增强打击感
-            for (let i=0;i<20;i++){
+            // 陷阱爆炸电弧
+            for (let i=0;i<12;i++){
               const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(tr.x, tr.y, '#a8d8ff', {ang:a, speed:150+Math.random()*150, life:0.5, size:3.5}));
-            }
-            // 添加闪电链效果
-            for (let i=0;i<5;i++){
-              const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(tr.x, tr.y, '#4da6ff', {ang:a, speed:200+Math.random()*100, life:0.4, size:5}));
+              particles.push(new Particle(tr.x, tr.y, '#a8d8ff', {ang:a, speed:100+Math.random()*100, life:0.4, size:2.5}));
             }
           }
         }
@@ -4941,41 +5375,23 @@
             b.frozenTime = Math.max(b.frozenTime, stunTime); // 短暂停顿
             b.silenceTime = Math.max(b.silenceTime, silenceTime); // 技能沉默
             hitCount++;
-            // 电磁命中粒子 - 增强打击感
-            for (let i=0;i<12;i++){
+            // 电磁命中粒子
+            for (let i=0;i<6;i++){
               const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(b.x, b.y, '#4da6ff', {ang:a, speed:120+Math.random()*120, life:0.45, size:3}));
-            }
-            // 添加击中闪光效果
-            for (let i=0;i<4;i++){
-              const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(b.x, b.y, '#ffffff', {ang:a, speed:80+Math.random()*60, life:0.25, size:4}));
+              particles.push(new Particle(b.x, b.y, '#4da6ff', {ang:a, speed:70+Math.random()*80, life:0.35, size:2}));
             }
           }
         }
-        // EMP脉冲扩散特效：多层扩散环 - 增强打击感
-        this._empPulseFx = { r: 0, maxR: empR, life: 0.8, maxLife: 0.8, intensity: 1.0 };
-        // 中心电弧爆发 
-        for (let i=0;i<40;i++){
-          const a = (i/40)*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, '#4da6ff', {ang:a, speed:280+Math.random()*80, life:0.7, size:4.5}));
+        // EMP脉冲扩散特效：多层扩散环
+        this._empPulseFx = { r: 0, maxR: empR, life: 0.6, maxLife: 0.6 };
+        // 中心电弧爆发
+        for (let i=0;i<24;i++){
+          const a = (i/24)*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#4da6ff', {ang:a, speed:200, life:0.5, size:3}));
         }
-        for (let i=0;i<20;i++){
+        for (let i=0;i<12;i++){
           const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:180+Math.random()*100, life:0.5, size:3}));
-        }
-        // 添加高频闪电流星
-        for (let i=0;i<8;i++){
-          const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, '#00d4ff', {ang:a, speed:350+Math.random()*120, life:0.3, size:5}));
-        }
-        // 屏幕震动增强打击感
-        if (typeof shake !== 'undefined') shake = Math.min(20, (shake||0) + 12);
-        // 添加环形闪电扩散效果
-        for (let i=0;i<6;i++){
-          const a = Math.random()*Math.PI*2;
-          const speed = 400 + Math.random()*100;
-          particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:speed, life:0.4, size:2}));
+          particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:120+Math.random()*80, life:0.35, size:2}));
         }
       }
 
@@ -4990,84 +5406,278 @@
       }
     }
 
-    // ===== 暗影术士 AI =====
-    aiShadowMage(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
-      // 中距离风筝走位
-      const ideal = 160;
-      if (d > ideal + 30){
-        this.vx += dirX * this.baseSpeed * spdMul * dt * 4;
-        this.vy += dirY * this.baseSpeed * spdMul * dt * 4;
-      } else if (d < ideal - 40){
-        this.vx -= dirX * this.baseSpeed * spdMul * dt * 4;
-        this.vy -= dirY * this.baseSpeed * spdMul * dt * 4;
-      } else {
-        const side = Math.sin(Date.now()*0.0025 + this.bobPhase) > 0 ? 1 : -1;
-        this.vx += -dirY*side*this.baseSpeed*spdMul*dt*3;
-        this.vy += dirX*side*this.baseSpeed*spdMul*dt*3;
+    // ===== 雷霆主宰 AI =====
+    aiThunderLord(dt, enemy, d, dirX, dirY, spdMul, balls, particles){
+      const p = this.params;
+      const arcRange = 260; // 远程电弧射程
+
+      // 中距离游击：保持电弧射程内的距离
+      if (enemy && d > arcRange){
+        this.vx += dirX * this.baseSpeed * spdMul * dt * 5;
+        this.vy += dirY * this.baseSpeed * spdMul * dt * 5;
+      } else if (enemy && d < arcRange * 0.4){
+        this.vx -= dirX * this.baseSpeed * spdMul * dt * 3;
+        this.vy -= dirY * this.baseSpeed * spdMul * dt * 3;
+      } else if (enemy){
+        const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+        this.vx += -dirY*side*this.baseSpeed*spdMul*dt*2;
+        this.vy += dirX*side*this.baseSpeed*spdMul*dt*2;
       }
 
-      // 暗影瘴气：持续腐蚀效果
-      this.shadowMiasmaCD = (this.shadowMiasmaCD || (this.params.miasmaCd || 2.5)) - dt;
-      if (this.shadowMiasmaCD <= 0){
-        this.shadowMiasmaCD = this.params.miasmaCd || 2.5;
-        const miasmaR = this.params.miasmaRadius || 160;
-        const dotDmg = this.params.dotDmg || 5;
-        const defReduce = this.params.defReduce || 3;
-        const healReduce = this.params.healReduce || 40;
+      // 蓄雷满层检查（蓄雷值由每次施加雷印累积，见_addThunderCharge）
+      if (this.thunderCharge >= (p.maxCharge || 10)) this.thunderStormReady = true;
 
-        // 对范围内敌人施加腐蚀
-        for (const b of balls){
-          if (!b.alive || b.team === this.team) continue;
-          const bd = Math.hypot(b.x - this.x, b.y - this.y);
-          if (bd < miasmaR + b.size){
-            // 施加腐蚀状态
-            b.corrosionDmg = dotDmg;
-            b.corrosionTimer = 3; // 腐蚀持续3秒
-            b.defReduce = defReduce;
-            b.healReduce = healReduce / 100;
-            b._corrosionSource = this;
+      // 远程电弧普攻
+      this.fireCD -= dt;
+      if (this.fireCD <= 0 && enemy && d < arcRange){
+        this.fireCD = 1 / (p.atkRate || 1.0);
 
-            // 腐蚀粒子效果
-            for (let i=0;i<8;i++){
-              const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(b.x, b.y, '#228b22', {ang:a, speed:50+Math.random()*60, life:0.5, size:2.5}));
-            }
-          }
+        // 蓄雷满层且跳跃冷却结束：跳到敌人脸上触发全域雷暴
+        if (this.thunderStormReady && this.thunderJumpCD <= 0){
+          this.thunderStormReady = false;
+          this.thunderCharge = 0;
+          this.thunderJumpCD = p.jumpCD ?? 2;
+          this._thunderJump(enemy, balls, particles, p);
+          this._thunderStorm(balls, particles, p);
+          return;
         }
 
-        // 瘴气扩散特效 - 增强持续时间和可见度
-        this._shadowMiasmaFx = { r: 0, maxR: miasmaR, life: 2.0, maxLife: 2.0, intensity: 1.0 };
-
-        // 毒雾爆发粒子 - 增强效果
-        for (let i=0;i<30;i++){
-          const a = (i/30)*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, '#3cb371', {ang:a, speed:200+Math.random()*120, life:0.8, size:4}));
-        }
-        // 添加额外的绿色粒子
-        for (let i=0;i<15;i++){
-          const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, '#2e8b57', {ang:a, speed:150+Math.random()*100, life:0.6, size:3}));
-        }
+        // 远程电弧攻击：向目标发射电弧，可传导
+        this._arcAttack(enemy, balls, particles, p);
       }
 
-      // 持续腐蚀伤害处理（在update中实现）
-      if (this.corrosionTimer > 0){
-        this.corrosionTimer -= dt;
-        if (this.corrosionTimer <= 0){
-          this.corrosionDmg = 0;
-          this.defReduce = 0;
-          this.healReduce = 0;
-        }
-      }
-
-      // 持续暗影粒子特效
-      if (Math.random() < 0.25){
+      // 持续雷电粒子（身体表面）
+      if (Math.random() < 0.15){
         const a = Math.random()*Math.PI*2;
         const r = this.size * 0.8;
         particles.push(new Particle(
           this.x + Math.cos(a)*r, this.y + Math.sin(a)*r,
-          '#4b2e70', {ang: a + Math.PI/2 + (Math.random()-0.5)*1.0, speed: 15+Math.random()*20, life:0.25, size:1.5}
+          '#5aa8ff', {ang: a + Math.PI + (Math.random()-0.5)*1.2, speed: 15+Math.random()*25, life:0.2, size:2}
         ));
+      }
+    }
+
+    // 雷霆跳跃：瞬间跳到敌人脸上
+    _thunderJump(enemy, balls, particles, p){
+      // 起跳残影
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#5aa8ff', {ang:a, speed:50+Math.random()*100, life:0.4, size:3}));
+      }
+      // 跳跃轨迹闪电链
+      const segs = 12;
+      for (let i=0;i<=segs;i++){
+        const t = i / segs;
+        const px = this.x + (enemy.x - this.x) * t + (Math.random()-0.5)*22;
+        const py = this.y + (enemy.y - this.y) * t + (Math.random()-0.5)*22;
+        particles.push(new Particle(px, py, '#ffffff', {speed:5, life:0.25, size:3.5}));
+        if (i % 2 === 0){
+          particles.push(new Particle(px, py, '#5aa8ff', {speed:3, life:0.15, size:2.5}));
+        }
+      }
+      // 瞬移到敌人旁边
+      const jumpDist = this.size + enemy.size + (p.jumpDist ?? 8);
+      const jdx = enemy.x - this.x;
+      const jdy = enemy.y - this.y;
+      const jlen = Math.hypot(jdx, jdy) || 1;
+      this.x = enemy.x - (jdx / jlen) * jumpDist;
+      this.y = enemy.y - (jdy / jlen) * jumpDist;
+      // 落地冲击
+      for (let i=0;i<28;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#1a75ff', {ang:a, speed:120+Math.random()*160, life:0.5, size:4}));
+      }
+      for (let i=0;i<18;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:80+Math.random()*110, life:0.35, size:3}));
+      }
+    }
+
+    // 远程电弧攻击：向目标发射电弧并传导
+    _arcAttack(enemy, balls, particles, p){
+      let dmg = p.dmg || 14;
+      if (this.thunderEmpowerTime > 0) dmg = Math.round(dmg * (1 + (p.empAtk || 15)/100));
+
+      // 对主目标造成伤害+叠加雷印
+      enemy.takeDamage(dmg, this.color, particles, this);
+      this._applyThunderMark(enemy, p, particles);
+      this._addThunderCharge(balls, particles, p);
+
+      // 电弧主光束特效（自身→目标）
+      const segs = 10;
+      for (let i=0;i<=segs;i++){
+        const t = i / segs;
+        const px = this.x + (enemy.x - this.x) * t + (Math.random()-0.5)*16;
+        const py = this.y + (enemy.y - this.y) * t + (Math.random()-0.5)*16;
+        particles.push(new Particle(px, py, '#5aa8ff', {speed:5, life:0.18, size:3}));
+        if (i % 2 === 0){
+          particles.push(new Particle(px, py, '#ffffff', {speed:3, life:0.12, size:2}));
+        }
+      }
+      // 命中迸射
+      for (let i=0;i<8;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(enemy.x, enemy.y, '#ffffff', {ang:a, speed:60+Math.random()*80, life:0.25, size:2.5}));
+      }
+
+      // 电弧传导：向周围敌人连锁（不要求雷印）
+      this._arcChain(enemy.x, enemy.y, balls, particles, p, enemy);
+      // 传导时为队友回复
+      this._thunderHealAllies(balls, particles, p);
+    }
+
+    // 电弧传导：不要求雷印，直接连锁附近敌人
+    _arcChain(srcX, srcY, balls, particles, p, excludeBall){
+      const chainR = 140;
+      const decay = (p.chainDecay || 20) / 100;
+      let baseDmg = Math.max(1, Math.round((p.dmg || 14) * 0.6));
+      if (this.thunderEmpowerTime > 0) baseDmg = Math.round(baseDmg * (1 + (p.empAtk || 15)/100));
+      let chainDmg = baseDmg;
+      let cx = srcX, cy = srcY;
+      const hitSet = new Set();
+      if (excludeBall) hitSet.add(excludeBall);
+      for (let bounce = 0; bounce < 4; bounce++){
+        let target = null, bestD = Infinity;
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          if (hitSet.has(b)) continue;
+          const bd = Math.hypot(b.x - cx, b.y - cy);
+          if (bd < chainR && bd < bestD){ bestD = bd; target = b; }
+        }
+        if (!target) break;
+        hitSet.add(target);
+        target.takeDamage(chainDmg, this.color, particles, this);
+        this._applyThunderMark(target, p, particles);
+        this._addThunderCharge(balls, particles, p);
+        // 闪电弧粒子链
+        const segs = 6;
+        for (let i=0;i<=segs;i++){
+          const t = i / segs;
+          const px = cx + (target.x-cx)*t + (Math.random()-0.5)*14;
+          const py = cy + (target.y-cy)*t + (Math.random()-0.5)*14;
+          particles.push(new Particle(px, py, '#5aa8ff', {speed:8, life:0.15, size:2.5}));
+          if (i % 2 === 0){
+            particles.push(new Particle(px, py, '#ffffff', {speed:4, life:0.1, size:1.8}));
+          }
+        }
+        cx = target.x; cy = target.y;
+        chainDmg = Math.max(1, Math.round(chainDmg * (1 - decay)));
+      }
+    }
+
+    // 施加雷印
+    _applyThunderMark(b, p, particles){
+      b.thunderMarkStacks = Math.min(3, b.thunderMarkStacks + 1);
+      b.thunderMarkTimer = p.markDuration || 5;
+      b._thunderSlowPerStack = (p.slowPerStack || 8) / 100;
+      b._thunderVulnBonus = p.vulnBonus || 12;
+      for (let i=0;i<5;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(b.x, b.y, '#5aa8ff', {ang:a, speed:40+Math.random()*60, life:0.3, size:2}));
+      }
+    }
+
+    // 蓄雷值累积：每次施加雷印+1（可反复打同一敌人攒蓄雷）
+    _addThunderCharge(balls, particles, p){
+      const prev = this.thunderCharge;
+      this.thunderCharge = (prev || 0) + 1;
+      if (Math.floor(prev / 5) < Math.floor(this.thunderCharge / 5)){
+        this._thunderHealAllies(balls, particles, p);
+      }
+    }
+
+    // 连锁雷击
+    _chainLightning(srcX, srcY, balls, particles, p){
+      const chainR = 150;
+      const decay = (p.chainDecay || 20) / 100;
+      let chainDmg = Math.max(1, Math.round((p.dmg || 14) * 0.6));
+      let cx = srcX, cy = srcY;
+      const hitSet = new Set();
+      for (let bounce = 0; bounce < 4; bounce++){
+        let target = null, bestD = Infinity;
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          if (hitSet.has(b)) continue;
+          if (b.thunderMarkStacks <= 0) continue;
+          const bd = Math.hypot(b.x - cx, b.y - cy);
+          if (bd < chainR && bd < bestD){ bestD = bd; target = b; }
+        }
+        if (!target) break;
+        hitSet.add(target);
+        target.takeDamage(chainDmg, this.color, particles, this);
+        this._applyThunderMark(target, p, particles);
+        this._addThunderCharge(balls, particles, p);
+        // 闪电弧粒子链
+        const segs = 5;
+        for (let i=0;i<=segs;i++){
+          const t = i / segs;
+          const px = cx + (target.x-cx)*t + (Math.random()-0.5)*12;
+          const py = cy + (target.y-cy)*t + (Math.random()-0.5)*12;
+          particles.push(new Particle(px, py, '#5aa8ff', {speed:8, life:0.12, size:2.5}));
+        }
+        cx = target.x; cy = target.y;
+        chainDmg = Math.max(1, Math.round(chainDmg * (1 - decay)));
+      }
+    }
+
+    // 全域雷暴
+    _thunderStorm(balls, particles, p){
+      const stormDmg = p.stormDmg || 30;
+      const paralyzeTime = p.paralyzeTime || 0.5;
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        let dmg = stormDmg;
+        if (b.hp < b.maxHp * 0.4) dmg = Math.round(dmg * 1.5); // 残血暴击
+        b.takeDamage(dmg, this.color, particles, this);
+        b.frozenTime = Math.max(b.frozenTime, paralyzeTime);
+        b.silenceTime = Math.max(b.silenceTime, paralyzeTime); // 打断施法
+        b.thunderMarkStacks = 0; b.thunderMarkTimer = 0; // 清空雷印
+        for (let i=0;i<12;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(b.x, b.y, '#5aa8ff', {ang:a, speed:80+Math.random()*120, life:0.45, size:3}));
+        }
+      }
+      // 雷暴扩散环
+      this._empPulseFx = { r: 0, maxR: 800, life: 0.9, maxLife: 0.9 };
+      for (let i=0;i<30;i++){
+        const a = (i/30)*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#1a75ff', {ang:a, speed:280, life:0.7, size:4}));
+      }
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:150+Math.random()*120, life:0.5, size:3}));
+      }
+      // 雷霆赋能：自身+周围队友
+      const empR = 180;
+      for (const b of balls){
+        if (!b.alive || b.team !== this.team) continue;
+        const bd = Math.hypot(b.x - this.x, b.y - this.y);
+        if (bd < empR || b === this){
+          b.thunderEmpowerTime = p.empDuration || 3;
+          b._empAtkSpdBuff = p.empAtkSpd || 20;
+          b._empAtkBuff = p.empAtk || 15;
+          b.slow = 0; b.frostTimer = 0; b.frostStacks = 0; // 净化负面
+          for (let i=0;i<8;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(b.x, b.y, '#5aa8ff', {ang:a, speed:60+Math.random()*60, life:0.4, size:2.5}));
+          }
+        }
+      }
+    }
+
+    // 雷霆续航：为周围队友回复
+    _thunderHealAllies(balls, particles, p){
+      const healAmt = p.healAmount || 3;
+      const healR = 160;
+      for (const b of balls){
+        if (!b.alive || b.team !== this.team || b === this) continue;
+        const bd = Math.hypot(b.x - this.x, b.y - this.y);
+        if (bd < healR){
+          const actualHeal = Math.min(healAmt, b.maxHp - b.hp);
+          b.hp = Math.min(b.maxHp, b.hp + healAmt);
+          this.stats.healDone += actualHeal;
+          particles.push(new Particle(b.x, b.y - b.size, '#5aa8ff', {speed:25, life:0.35, size:2}));
+        }
       }
     }
 
@@ -5150,6 +5760,14 @@
       if (attacker && attacker.dmgBuff > 0) dmg *= (1 + attacker.dmgBuff);
       // 大逃杀攻击增益
       if (attacker && attacker.brAtkBoost > 0) dmg *= 1.3;
+      // 雷霆赋能：攻击方拥有赋能buff时伤害提升
+      if (attacker && attacker.thunderEmpowerTime > 0 && attacker._empAtkBuff){
+        dmg *= (1 + attacker._empAtkBuff / 100);
+      }
+      // 雷蚀易伤：满层雷印时受到额外伤害
+      if (this.thunderMarkStacks >= 3 && this._thunderVulnBonus){
+        dmg *= (1 + this._thunderVulnBonus / 100);
+      }
       // 超时空战士跃迁（隐身）期间完全免疫伤害
       if (this.cls === 'chrono' && this.chronoWarpTime > 0){
         // 跃迁免疫时显示时空偏转粒子反馈（无掉血）
@@ -5212,6 +5830,12 @@
       }
       this.hp -= dmg;
       this.hitFlash = 0.15;
+      // ===== 战斗数据追踪 =====
+      this.stats.dmgTaken += dmg;
+      if (attacker && attacker.stats){
+        attacker.stats.dmgDealt += dmg;
+        this.lastAttacker = attacker;
+      }
       for (let i=0;i<5;i++){
         particles.push(new Particle(this.x, this.y, fromColor, {speed:160, life:0.4, size:2.5}));
       }
@@ -5223,17 +5847,14 @@
           this.spawnClone(balls, particles, true);
         }
       }
-      // 卫士反弹 - 仅反弹近战攻击（距离小于等于60视为近战）
+      // 卫士反弹
       if (this.cls === 'guard' && attacker && attacker.alive && attacker !== this){
-        const distToAttacker = Math.hypot(attacker.x - this.x, attacker.y - this.y);
-        if (distToAttacker <= 60) { // 近战判定距离
-          attacker.hp -= this.params.dmg * (1 + (this.dmgBuff || 0));
-          attacker.hitFlash = 0.12;
-          for (let i=0;i<4;i++){
-            particles.push(new Particle(attacker.x, attacker.y, this.color, {speed:140, life:0.35, size:2.5}));
-          }
-          if (attacker.hp <= 0 && attacker.alive) attacker.die(particles);
+        attacker.hp -= this.params.dmg * (1 + (this.dmgBuff || 0));
+        attacker.hitFlash = 0.12;
+        for (let i=0;i<4;i++){
+          particles.push(new Particle(attacker.x, attacker.y, this.color, {speed:140, life:0.35, size:2.5}));
         }
+        if (attacker.hp <= 0 && attacker.alive) attacker.die(particles);
       }
       // 忍者替身术：受到致命伤时触发（仅有1次）
       if (this.hp <= 0 && this.alive && this.cls === 'ninja' && !this.substituteUsed && !this.isDecoy){
@@ -5261,7 +5882,9 @@
       // 狂暴狂战士击杀回血
       if (this.hp <= 0 && this.alive && attacker && attacker.cls === 'berserker' && attacker.alive){
         const heal = attacker.maxHp * (attacker.params.killHeal || 30) / 100;
+        const actualHeal = Math.min(heal, attacker.maxHp - attacker.hp);
         attacker.hp = Math.min(attacker.maxHp, attacker.hp + heal);
+        attacker.stats.healDone += actualHeal;
         attacker.hitFlash = 0.15;
         // 回血特效：绿色光点
         for (let i=0;i<16;i++){
@@ -5342,49 +5965,10 @@
     }
 
     die(particles){
-      // 暗影术士：击杀敌方单位后，瞬间扩大一次瘴气范围
-      const shadowMage = balls.find(b => b.alive && b !== this && b.team !== this.team && b.cls === 'shadowMage');
-      if (shadowMage && shadowMage.shadowMiasmaCD > 0){
-        // 立即释放一次扩大范围的瘴气
-        const expandR = (shadowMage.params.miasmaRadius || 160) * 1.5;
-        const dotDmg = shadowMage.params.dotDmg || 5;
-        const defReduce = shadowMage.params.defReduce || 3;
-        const healReduce = shadowMage.params.healReduce || 40;
-
-        // 对扩大范围内敌人施加腐蚀
-        for (const b of balls){
-          if (!b.alive || b.team === shadowMage.team) continue;
-          const bd = Math.hypot(b.x - shadowMage.x, b.y - shadowMage.y);
-          if (bd < expandR + b.size){
-            b.corrosionDmg = dotDmg;
-            b.corrosionTimer = 3;
-            b.defReduce = defReduce;
-            b.healReduce = healReduce / 100;
-            b._corrosionSource = shadowMage;
-
-            // 扩圈腐蚀粒子效果
-            for (let i=0;i<12;i++){
-              const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(b.x, b.y, '#2e8b57', {ang:a, speed:70+Math.random()*80, life:0.6, size:3}));
-            }
-          }
-        }
-
-        // 扩大毒雾特效 - 更明显的扩圈效果
-        shadowMage._shadowMiasmaFx = { r: 0, maxR: expandR, life: 2.5, maxLife: 2.5, intensity: 1.5 };
-
-        // 扩大毒雾爆发粒子 - 强化粒子效果
-        for (let i=0;i<50;i++){
-          const a = (i/50)*Math.PI*2;
-          particles.push(new Particle(shadowMage.x, shadowMage.y, '#3cb371', {ang:a, speed:250+Math.random()*150, life:1.0, size:5}));
-        }
-        // 添加额外的亮绿色粒子
-        for (let i=0;i<25;i++){
-          const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(shadowMage.x, shadowMage.y, '#32cd32', {ang:a, speed:200+Math.random()*100, life:0.8, size:4}));
-        }
+      // ===== 战斗数据追踪：记录击杀 =====
+      if (this.lastAttacker && this.lastAttacker.alive && this.lastAttacker.stats){
+        this.lastAttacker.stats.kills++;
       }
-
       // 时光修复师：友军阵亡时生成时光印记
       // 复活限制：刺客本体可正常复活；刺客分身、召唤师的召唤物（人偶）、忍者替身不享受复活
       if (!this.isDoll && !this.isClone && !this.isDecoy){
@@ -6026,91 +6610,23 @@
         if (this._empPulseFx){
           const fx = this._empPulseFx;
           const a = fx.life / fx.maxLife;
-          const intensity = fx.intensity || 1.0;
-          // 外环 - 增强亮度与冲击力
-          ctx.strokeStyle = rgba('#4da6ff', 1.0 * a * intensity);
-          ctx.lineWidth = 6 * a + 2;
-          ctx.shadowColor = '#4da6ff'; ctx.shadowBlur = 35;
+          // 外环
+          ctx.strokeStyle = rgba('#4da6ff', 0.8 * a);
+          ctx.lineWidth = 4 * a + 1;
+          ctx.shadowColor = '#4da6ff'; ctx.shadowBlur = 25;
           ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.stroke();
-          // 第二外环（增加层次感）
-          ctx.strokeStyle = rgba('#00d4ff', 0.6 * a * intensity);
-          ctx.lineWidth = 3 * a + 1;
-          ctx.shadowBlur = 20;
-          ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.85), 0, Math.PI*2); ctx.stroke();
           // 内环
-          ctx.strokeStyle = rgba('#a8d8ff', 0.7 * a * intensity);
-          ctx.lineWidth = 3;
+          ctx.strokeStyle = rgba('#a8d8ff', 0.5 * a);
+          ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.7), 0, Math.PI*2); ctx.stroke();
-          // 核心闪光
-          const coreRadius = fx.r * (0.3 + 0.2 * (1 - a));
-          const gCore = ctx.createRadialGradient(x, y, 0, x, y, coreRadius);
-          gCore.addColorStop(0, '#ffffff');
-          gCore.addColorStop(0.4, rgba('#a8d8ff', 0.8 * a * intensity));
-          gCore.addColorStop(1, rgba('#4da6ff', 0));
-          ctx.fillStyle = gCore;
-          ctx.beginPath(); ctx.arc(x, y, Math.max(1, coreRadius), 0, Math.PI*2); ctx.fill();
-          // 填充光晕 - 更强烈的辐射效果
+          // 填充光晕
           const gEmp = ctx.createRadialGradient(x, y, fx.r*0.6, x, y, fx.r);
           gEmp.addColorStop(0, rgba('#4da6ff', 0));
-          gEmp.addColorStop(0.6, rgba('#4da6ff', 0.08 * a * intensity));
-          gEmp.addColorStop(0.85, rgba('#00d4ff', 0.15 * a * intensity));
-          gEmp.addColorStop(1, rgba('#a8d8ff', 0.2 * a * intensity));
+          gEmp.addColorStop(0.8, rgba('#4da6ff', 0.06 * a));
+          gEmp.addColorStop(1, rgba('#a8d8ff', 0.12 * a));
           ctx.fillStyle = gEmp;
           ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.fill();
         }
-        ctx.shadowBlur = 0;
-      }
-
-      // 毒雾扩散环
-      if (this._shadowMiasmaFx){
-        const fx = this._shadowMiasmaFx;
-        const a = fx.life / fx.maxLife;
-
-        // 最外层强边界环 - 明显圈出范围
-        ctx.strokeStyle = rgba('#3cb371', 0.9 * a);
-        ctx.lineWidth = 5 * a + 2;
-        ctx.shadowColor = '#3cb371'; ctx.shadowBlur = 40;
-        ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.stroke();
-
-        // 第二外环 - 增加层次感
-        ctx.strokeStyle = rgba('#2e8b57', 0.7 * a);
-        ctx.lineWidth = 3 * a + 1;
-        ctx.shadowBlur = 25;
-        ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.85), 0, Math.PI*2); ctx.stroke();
-
-        // 第三层环 - 细节增强
-        ctx.strokeStyle = rgba('#228b22', 0.5 * a);
-        ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.7), 0, Math.PI*2); ctx.stroke();
-
-        // 最内层核心环
-        ctx.strokeStyle = rgba('#32cd32', 0.6 * a);
-        ctx.lineWidth = 3;
-        ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.55), 0, Math.PI*2); ctx.stroke();
-
-        // 增强填充瘴气 - 更明显的紫色雾气
-        const gMiasma = ctx.createRadialGradient(x, y, fx.r*0.3, x, y, fx.r);
-        gMiasma.addColorStop(0, rgba('#3cb371', 0));
-        gMiasma.addColorStop(0.4, rgba('#2e8b57', 0.08 * a));
-        gMiasma.addColorStop(0.7, rgba('#228b22', 0.12 * a));
-        gMiasma.addColorStop(0.9, rgba('#3cb371', 0.08 * a));
-        gMiasma.addColorStop(1, rgba('#2e8b57', 0.15 * a));
-        ctx.fillStyle = gMiasma;
-        ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.fill();
-
-        // 添加额外的毒雾粒子装饰
-        if (Math.random() < 0.3) {
-          const angle = Math.random() * Math.PI * 2;
-          const dist = fx.r * (0.3 + Math.random() * 0.7);
-          const px = x + Math.cos(angle) * dist;
-          const py = y + Math.sin(angle) * dist;
-
-          ctx.fillStyle = rgba('#3cb371', 0.4 * a);
-          ctx.beginPath();
-          ctx.arc(px, py, 2 + Math.random() * 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
         ctx.shadowBlur = 0;
       }
 
@@ -6127,33 +6643,6 @@
         ctx.font = 'bold 10px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('⚡', x, y - this.size - 10);
-      }
-
-      // 腐蚀状态视觉
-      if (this.corrosionTimer > 0 && this.alive && this.frozenTime <= 0){
-        const ct = this.corrosionTimer;
-        ctx.strokeStyle = rgba('#228b22', 0.7);
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 3]);
-        ctx.beginPath(); ctx.arc(x, y, this.size + 5 + Math.sin(Date.now()*0.008)*2, 0, Math.PI*2); ctx.stroke();
-        ctx.setLineDash([]);
-        // 腐蚀标记
-        ctx.fillStyle = rgba('#228b22', 0.9);
-        ctx.font = 'bold 10px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('☠️', x, y - this.size - 10);
-        // 防御削减标记
-        if (this.defReduce > 0){
-          ctx.fillStyle = '#ff6b6b';
-          ctx.font = 'bold 8px sans-serif';
-          ctx.fillText('-DEF' + this.defReduce, x + this.size + 8, y);
-        }
-        // 治疗削弱标记
-        if (this.healReduce > 0){
-          ctx.fillStyle = '#ffa94d';
-          ctx.font = 'bold 8px sans-serif';
-          ctx.fillText('-HEAL' + Math.round(this.healReduce*100) + '%', x - this.size - 8, y);
-        }
       }
 
       // 漏电标记视觉（被电磁脉冲师普攻叠加）
@@ -6176,6 +6665,126 @@
         ctx.font = 'bold 9px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('⚡×' + this.leakStacks, x, y - this.size - 10);
+      }
+
+      // 雷霆主宰视觉：雷电体+蓄雷值+雷暴就绪
+      if (this.cls === 'thunderLord' && this.alive){
+        const tt = Date.now() * 0.004;
+        const chargeRatio = this.thunderCharge / (this.params.maxCharge || 10);
+        const pulse = 0.4 + 0.3 * Math.sin(tt * 2 + this.bobPhase);
+        // 雷电光环
+        const auraR = this.size + 8 + Math.sin(tt*1.5)*2;
+        const gradT = ctx.createRadialGradient(x, y, this.size * 0.3, x, y, auraR + 12);
+        gradT.addColorStop(0, rgba('#1a75ff', 0));
+        gradT.addColorStop(0.5, rgba('#1a75ff', 0.2 * pulse * (1 + chargeRatio)));
+        gradT.addColorStop(0.8, rgba('#5aa8ff', 0.12 * pulse));
+        gradT.addColorStop(1, rgba('#1a75ff', 0));
+        ctx.fillStyle = gradT;
+        ctx.beginPath(); ctx.arc(x, y, auraR + 12, 0, Math.PI*2); ctx.fill();
+        // 蓄雷就绪时强烈闪烁（冷却中则暗淡）
+        if (this.thunderStormReady){
+          const onCD = this.thunderJumpCD > 0;
+          const flashR = this.size + 6 + Math.sin(tt*8)*4;
+          ctx.strokeStyle = rgba('#5aa8ff', onCD ? 0.35 : 0.8);
+          ctx.lineWidth = onCD ? 2 : 3;
+          ctx.shadowColor = '#1a75ff'; ctx.shadowBlur = onCD ? 10 : 25;
+          ctx.beginPath(); ctx.arc(x, y, flashR, 0, Math.PI*2); ctx.stroke();
+          ctx.strokeStyle = rgba('#ffffff', onCD ? 0.2 : 0.5);
+          ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(x, y, flashR + 5, 0, Math.PI*2); ctx.stroke();
+          // 冷却中显示CD数字
+          if (onCD){
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = rgba('#5aa8ff', 0.8);
+            ctx.font = 'bold 10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(this.thunderJumpCD.toFixed(1), x, y - this.size - 8);
+          }
+        }
+        // 表面电弧线
+        ctx.strokeStyle = rgba('#5aa8ff', 0.6 + 0.3 * chargeRatio);
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#1a75ff'; ctx.shadowBlur = 12;
+        for (let i=0;i<4;i++){
+          const a0 = tt * (1+i*0.3) + i * 1.6;
+          const a1 = a0 + 0.7 + Math.sin(tt*4+i)*0.3;
+          ctx.beginPath();
+          ctx.moveTo(x + Math.cos(a0)*this.size*0.5, y + Math.sin(a0)*this.size*0.5);
+          ctx.lineTo(x + Math.cos((a0+a1)/2)*this.size*0.9, y + Math.sin((a0+a1)/2)*this.size*0.9);
+          ctx.lineTo(x + Math.cos(a1)*this.size*0.5, y + Math.sin(a1)*this.size*0.5);
+          ctx.stroke();
+        }
+        // 蓄雷值指示（环形进度）
+        if (chargeRatio > 0){
+          ctx.strokeStyle = rgba('#5aa8ff', 0.7);
+          ctx.lineWidth = 3;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(x, y, this.size + 5, -Math.PI/2, -Math.PI/2 + Math.PI*2*chargeRatio);
+          ctx.stroke();
+        }
+        // 雷暴扩散环（复用_empPulseFx）
+        if (this._empPulseFx){
+          const fx = this._empPulseFx;
+          const a = fx.life / fx.maxLife;
+          ctx.strokeStyle = rgba('#1a75ff', 0.9 * a);
+          ctx.lineWidth = 5 * a + 1;
+          ctx.shadowColor = '#1a75ff'; ctx.shadowBlur = 30;
+          ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.stroke();
+          ctx.strokeStyle = rgba('#5aa8ff', 0.5 * a);
+          ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r * 0.75), 0, Math.PI*2); ctx.stroke();
+          const gStorm = ctx.createRadialGradient(x, y, fx.r*0.5, x, y, fx.r);
+          gStorm.addColorStop(0, rgba('#1a75ff', 0));
+          gStorm.addColorStop(0.8, rgba('#1a75ff', 0.05 * a));
+          gStorm.addColorStop(1, rgba('#5aa8ff', 0.1 * a));
+          ctx.fillStyle = gStorm;
+          ctx.beginPath(); ctx.arc(x, y, Math.max(1, fx.r), 0, Math.PI*2); ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+      }
+
+      // 雷霆赋能buff视觉（自身或队友被赋能）
+      if (this.thunderEmpowerTime > 0 && this.alive && this.cls !== 'thunderLord'){
+        const et2 = Date.now() * 0.006;
+        const ePulse = 0.3 + 0.2 * Math.sin(et2 + this.bobPhase);
+        const eAuraR = this.size + 7;
+        const gradE = ctx.createRadialGradient(x, y, this.size * 0.4, x, y, eAuraR + 8);
+        gradE.addColorStop(0, rgba('#5aa8ff', 0));
+        gradE.addColorStop(0.5, rgba('#5aa8ff', 0.15 * ePulse));
+        gradE.addColorStop(1, rgba('#5aa8ff', 0));
+        ctx.fillStyle = gradE;
+        ctx.beginPath(); ctx.arc(x, y, eAuraR + 8, 0, Math.PI*2); ctx.fill();
+        // 电弧环
+        ctx.strokeStyle = rgba('#5aa8ff', 0.5 * ePulse);
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath(); ctx.arc(x, y, this.size + 4, et2, et2 + Math.PI*1.5); ctx.stroke();
+        ctx.setLineDash([]);
+        // 赋能标记
+        ctx.fillStyle = rgba('#5aa8ff', 0.8);
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('⚡', x, y - this.size - 10);
+      }
+
+      // 雷印标记视觉（被雷霆主宰普攻叠加）
+      if (this.thunderMarkStacks > 0 && this.alive && this.frozenTime <= 0){
+        const mt = Date.now() * 0.007;
+        const isVuln = this.thunderMarkStacks >= 3;
+        // 雷印电弧环（最多画6个，避免过多层数时视觉混乱）
+        const arcCount = Math.min(6, this.thunderMarkStacks);
+        for (let i=0;i<arcCount;i++){
+          const a = mt + i * (Math.PI*2/arcCount);
+          const r = this.size + 5;
+          ctx.strokeStyle = isVuln ? rgba('#ff4444', 0.85) : rgba('#5aa8ff', 0.8);
+          ctx.lineWidth = 2.5;
+          ctx.shadowColor = isVuln ? '#ff4444' : '#5aa8ff'; ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(x + Math.cos(a)*r, y + Math.sin(a)*r, 3, a, a + Math.PI*1.4);
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
       }
 
       // 职业图标
@@ -6242,6 +6851,26 @@
         ctx.fillText(frostLabel, x, fly);
         ctx.shadowBlur = 0;
       }
+      // 雷印层数标记（显示在名字下方，瘟疫/霜冻之后）
+      if (this.thunderMarkStacks > 0 && this.frozenTime <= 0){
+        const isVuln = this.thunderMarkStacks >= 3;
+        const thunderLabel = '⚡×' + this.thunderMarkStacks + (isVuln ? '(易伤)' : '');
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const thunderW = ctx.measureText(thunderLabel).width;
+        let thunderOffset = 3;
+        if (this.plagueStacks > 0) thunderOffset = 20;
+        if (this.frostStacks > 0 && this.frozenTime <= 0) thunderOffset += 17;
+        const tly = ny + thunderOffset;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(x - thunderW/2 - 4, tly - 1, thunderW + 8, 15);
+        ctx.fillStyle = isVuln ? '#ff6666' : '#5aa8ff';
+        ctx.shadowColor = isVuln ? '#ff4444' : '#5aa8ff';
+        ctx.shadowBlur = 6;
+        ctx.fillText(thunderLabel, x, tly);
+        ctx.shadowBlur = 0;
+      }
       ctx.restore();
 
       // 血条
@@ -6287,6 +6916,7 @@
 
   // ============== 游戏状态 ==============
   let balls = [], bullets = [], traps = [], aoes = [], healWaves = [], particles = [], frostZones = [], timeMarks = [], ironWalls = [], floatTexts = [];
+  let _thunderLinkTimer = 0; // 雷印雷电链接结算计时器
   let round = 1;
   let resetTimer = 0;
   let paused = false;
@@ -6342,6 +6972,7 @@
 
   function startMatch(){
     balls = []; bullets = []; traps = []; aoes = []; healWaves = []; particles = []; frostZones = []; timeMarks = []; ironWalls = []; floatTexts = [];
+    _thunderLinkTimer = 0;
     if (currentMode === 'battleroyale'){
       brInit();
       brSpawnPlayers();
@@ -6693,6 +7324,32 @@
 
     if (!paused){
       for (const b of balls) b.update(dt, balls, bullets, traps, aoes, healWaves, particles);
+      // 雷印雷电链接：带雷印的敌人互相靠近时产生雷电链接，持续掉血
+      _thunderLinkTimer = (_thunderLinkTimer || 0) - dt;
+      if (_thunderLinkTimer <= 0){
+        _thunderLinkTimer = 0.5; // 每0.5秒结算一次
+        const marked = balls.filter(b => b.alive && b.thunderMarkStacks > 0);
+        for (let i=0;i<marked.length;i++){
+          for (let j=i+1;j<marked.length;j++){
+            const a = marked[i], b = marked[j];
+            if (a.team === b.team) continue; // 只链接敌方之间
+            const dist = Math.hypot(a.x - b.x, a.y - b.y);
+            if (dist < 120){
+              const linkDmg = 2;
+              a.takeDamage(linkDmg, '#5aa8ff', particles, null, true);
+              b.takeDamage(linkDmg, '#5aa8ff', particles, null, true);
+              // 闪电弧粒子
+              const segs = 4;
+              for (let k=0;k<=segs;k++){
+                const t = k / segs;
+                const px = a.x + (b.x-a.x)*t + (Math.random()-0.5)*10;
+                const py = a.y + (b.y-a.y)*t + (Math.random()-0.5)*10;
+                particles.push(new Particle(px, py, '#5aa8ff', {speed:6, life:0.1, size:2}));
+              }
+            }
+          }
+        }
+      }
       // 地形效果
       applyTerrainEffects(dt, balls, particles);
       for (const bul of bullets) bul.update(dt);
@@ -6895,7 +7552,7 @@
     card.className = 'role-card';
     card.style.borderLeftColor = role.color;
     card.dataset.idx = idx;
-    const locked = currentMode === 'survival'; // 生存模式锁定阵容
+    const locked = currentMode === 'survival' || currentMode === 'random'; // 生存/随机模式锁定阵容
 
     const sel = document.createElement('select');
     sel.className = 'r-class';
@@ -7275,6 +7932,7 @@
     $('budgetMode').style.display = mode === 'budget' ? '' : 'none';
     $('survivalMode').style.display = mode === 'survival' ? '' : 'none';
     $('battleroyaleMode').style.display = mode === 'battleroyale' ? '' : 'none';
+    $('randomMode').style.display = mode === 'random' ? '' : 'none';
     if (mode === 'duel'){
       $('duelTitleA').textContent = '队伍 A · ' + CLASSES[duelPick.A].label;
       $('duelTitleA').style.color = CLASSES[duelPick.A].color;
@@ -7290,6 +7948,9 @@
       renderSurvivalRoster();
       const bestEl = $('survivalBest');
       if (bestEl) bestEl.textContent = getSurvivalBest();
+    }
+    if (mode === 'random'){
+      updateRandomPreview();
     }
   }
 
@@ -7365,6 +8026,39 @@
     return teams[team].roles.map(r => CLASSES[r.cls].icon + CLASSES[r.cls].label + '×' + r.count).join(' ') || '空阵容';
   }
 
+  // ===== 战斗数据聚合 + MVP评选 =====
+  function getCombatStats(){
+    const map = {};
+    for (const b of balls){
+      if (b.isDoll || b.isClone || b.isDecoy) continue; // 跳过召唤物/分身/替身
+      if (!b.stats) continue;
+      const key = b.team + '|' + b.cls;
+      if (!map[key]){
+        const cls = CLASSES[b.cls];
+        map[key] = {
+          team: b.team, cls: b.cls,
+          icon: cls ? cls.icon : '?',
+          name: b.name, color: b.color,
+          dmgDealt: 0, dmgTaken: 0, healDone: 0, kills: 0,
+          alive: 0, total: 0
+        };
+      }
+      map[key].dmgDealt += b.stats.dmgDealt;
+      map[key].dmgTaken += b.stats.dmgTaken;
+      map[key].healDone += b.stats.healDone;
+      map[key].kills += b.stats.kills;
+      map[key].total++;
+      if (b.alive) map[key].alive++;
+    }
+    const arr = Object.values(map);
+    // MVP评分：伤害1.0 + 击杀200 + 治疗0.5 - 承伤0.2
+    arr.forEach(s => {
+      s.score = Math.round(s.dmgDealt * 1.0 + s.kills * 200 + s.healDone * 0.5 - s.dmgTaken * 0.2);
+    });
+    arr.sort((a, b) => b.score - a.score);
+    return arr;
+  }
+
   function showResult(winner){
     // 确保队伍详情显示
     $('resultTeamA').style.display = '';
@@ -7421,12 +8115,67 @@
       $('resultTeamB').className = 'result-team ' + (winner === 'B' ? 'winner' : 'loser');
     }
 
+    // ===== 战斗数据 & MVP =====
+    const stats = getCombatStats();
+    const mvpEl = $('resultMvp');
+    const statsEl = $('resultStatsSection');
+    if (stats.length > 0){
+      const mvp = stats[0];
+      mvpEl.classList.remove('hidden');
+      mvpEl.innerHTML = `
+        <div class="mvp-crown">👑</div>
+        <div class="mvp-info">
+          <div class="mvp-label">MVP</div>
+          <div class="mvp-name" style="color:${mvp.color};">${mvp.icon} ${mvp.name}</div>
+          <div class="mvp-detail">
+            <span>伤害 <b>${Math.round(mvp.dmgDealt)}</b></span>
+            <span>击杀 <b>${mvp.kills}</b></span>
+            <span>治疗 <b>${Math.round(mvp.healDone)}</b></span>
+            <span>承伤 <b>${Math.round(mvp.dmgTaken)}</b></span>
+            <span>存活 <b>${mvp.alive}/${mvp.total}</b></span>
+          </div>
+        </div>
+        <div class="mvp-score">${mvp.score}</div>
+      `;
+      // 数据表
+      statsEl.classList.remove('hidden');
+      let rows = stats.map((s, i) => {
+        const teamColor = s.team === 'A' ? teams.A.color : teams.B.color;
+        return `<tr class="${i === 0 ? 'mvp-row' : ''}">
+          <td class="st-name"><span class="st-team" style="background:${teamColor};"></span>${s.icon} ${s.name}</td>
+          <td class="st-dmg">${Math.round(s.dmgDealt)}</td>
+          <td class="st-heal">${Math.round(s.healDone)}</td>
+          <td class="st-kill">${s.kills}</td>
+          <td class="st-taken">${Math.round(s.dmgTaken)}</td>
+          <td class="st-score">${s.score}</td>
+        </tr>`;
+      }).join('');
+      statsEl.innerHTML = `
+        <table class="stats-table">
+          <thead><tr>
+            <th style="text-align:left;">角色</th>
+            <th>伤害</th>
+            <th>治疗</th>
+            <th>击杀</th>
+            <th>承伤</th>
+            <th>评分</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    } else {
+      mvpEl.classList.add('hidden');
+      statsEl.classList.add('hidden');
+    }
+
     $('resultScreen').classList.remove('hidden');
     paused = true;
   }
 
   function hideResult(){
     $('resultScreen').classList.add('hidden');
+    $('resultMvp').classList.add('hidden');
+    $('resultStatsSection').classList.add('hidden');
   }
 
   function startGame(){
@@ -7466,19 +8215,21 @@
       // 大逃杀模式：不需要预设队伍，startMatch中直接生成玩家
       brPlayerCount = parseInt($('brPlayerCount').value) || 12;
       teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
+    } else if (currentMode === 'random'){
+      teams = RANDOM_TEAMS();
     } else {
       teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
     }
     $('startScreen').classList.add('hidden');
-    $('backBtn').style.display = (currentMode === 'custom' || currentMode === 'budget' || currentMode === 'survival' || currentMode === 'battleroyale') ? '' : 'none';
+    $('backBtn').style.display = (currentMode === 'custom' || currentMode === 'budget' || currentMode === 'survival' || currentMode === 'battleroyale' || currentMode === 'random') ? '' : 'none';
     round = 1;
     paused = false;
     resizeCanvas();
     renderRoles('A');
     renderRoles('B');
-    // 生存模式锁定配置面板：隐藏添加按钮
+    // 生存/随机模式锁定配置面板：隐藏添加按钮
     document.querySelectorAll('.btn-add').forEach(btn => {
-      btn.style.display = currentMode === 'survival' ? 'none' : '';
+      btn.style.display = (currentMode === 'survival' || currentMode === 'random') ? 'none' : '';
     });
     // 大逃杀模式隐藏配置面板
     $('teamCfgA').style.display = currentMode === 'battleroyale' ? 'none' : '';
@@ -7493,6 +8244,16 @@
   $('brStartBtn').addEventListener('click', startGame);
   $('brPlayerCount').addEventListener('input', (e) => {
     $('brPlayerCountLabel').textContent = e.target.value;
+  });
+  // 随机抽选模式事件
+  $('randomTeamSize').addEventListener('input', (e) => {
+    randomTeamSize = parseInt(e.target.value);
+    updateRandomPreview();
+  });
+  $('randomStartBtn').addEventListener('click', startRandomDraw);
+  $('drawStartBtn').addEventListener('click', () => {
+    $('drawOverlay').classList.add('hidden');
+    startGame();
   });
   $('budgetClearBtn').addEventListener('click', () => {
     budgetRoster = [];
@@ -7510,6 +8271,11 @@
       renderRoles('B');
       syncLabels();
     }
+    // 随机抽选模式：再来一局时重新抽选
+    if (currentMode === 'random'){
+      startRandomDraw();
+      return;
+    }
     round++;
     paused = false;
     startMatch();
@@ -7517,6 +8283,8 @@
   $('backToMenuBtn').addEventListener('click', () => {
     hideResult();
     $('startScreen').classList.remove('hidden');
+    $('drawOverlay').classList.add('hidden');
+    drawAnimating = false;
     paused = true;
     round = 1;
     // 重置生存模式状态
@@ -7529,6 +8297,8 @@
   });
   $('backBtn').addEventListener('click', () => {
     $('startScreen').classList.remove('hidden');
+    $('drawOverlay').classList.add('hidden');
+    drawAnimating = false;
     paused = true;
     round = 1;
     // 重置生存模式状态
