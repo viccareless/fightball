@@ -449,8 +449,6 @@
     .start-title { font-size: 26px; letter-spacing: 2px; }
     .start-subtitle { font-size: 11px; letter-spacing: 1px; }
     .start-section-title { font-size: 13px; }
-    /* 模式标签栏：移动端更紧凑 */
-    .mode-tab { font-size: 12px; padding: 7px 10px; }
 
     /* 预设卡片 */
     .preset-options { grid-template-columns: 1fr; gap: 6px; }
@@ -547,7 +545,7 @@
     .codex-entry-sub { display: none; }
     .global-controls { flex-direction: column; align-items: stretch; }
     .btn { width: 100%; text-align: center; }
-    .mode-tab { font-size: 12px; padding: 7px 10px; }
+    .mode-tabs.carousel .mode-tab { font-size: 13px; padding: 8px 12px; flex-basis: 68%; }
   }
 
   /* ===== 开始界面 ===== */
@@ -890,6 +888,20 @@
   .mode-tabs::-webkit-scrollbar { height: 4px; }
   .mode-tabs::-webkit-scrollbar-track { background: transparent; }
   .mode-tabs::-webkit-scrollbar-thumb { background: rgba(180,140,255,0.3); border-radius: 2px; }
+  /* 轮播模式：标签溢出时自动启用 */
+  .mode-tabs.carousel {
+    scroll-snap-type: x mandatory;
+    gap: 6px;
+    padding: 6px 4px;
+    scroll-behavior: smooth;
+  }
+  .mode-tabs.carousel .mode-tab {
+    flex: 0 0 62%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
   .mode-tab {
     flex: 1 0 auto;
     white-space: nowrap;
@@ -7936,6 +7948,17 @@
     document.querySelectorAll('.mode-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.mode === mode);
     });
+    // 轮播模式：选中标签自动居中
+    if (modeTabsEl && modeTabsEl.classList.contains('carousel')){
+      const activeTab = document.querySelector('.mode-tab.active');
+      if (activeTab){
+        modeIsAutoScroll = true;
+        const c = activeTab.parentElement;
+        const target = activeTab.offsetLeft - (c.clientWidth - activeTab.offsetWidth) / 2;
+        c.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+        setTimeout(() => { modeIsAutoScroll = false; }, 500);
+      }
+    }
     $('duelMode').style.display = mode === 'duel' ? '' : 'none';
     $('customMode').style.display = mode === 'custom' ? '' : 'none';
     $('budgetMode').style.display = mode === 'budget' ? '' : 'none';
@@ -8020,6 +8043,40 @@
 
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.addEventListener('click', () => switchMode(tab.dataset.mode));
+  });
+
+  // 移动端横向滑动切换模式：标签溢出时启用轮播
+  const modeTabsEl = document.querySelector('.mode-tabs');
+  let modeScrollTimer = null;
+  let modeIsAutoScroll = false;
+
+  function checkModeTabsOverflow(){
+    if (modeTabsEl.scrollWidth > modeTabsEl.clientWidth + 10){
+      modeTabsEl.classList.add('carousel');
+    } else {
+      modeTabsEl.classList.remove('carousel');
+    }
+  }
+  window.addEventListener('resize', checkModeTabsOverflow);
+  setTimeout(checkModeTabsOverflow, 100); // 初始检测（等字体加载后）
+
+  modeTabsEl.addEventListener('scroll', () => {
+    if (modeIsAutoScroll) return;
+    if (!modeTabsEl.classList.contains('carousel')) return;
+    clearTimeout(modeScrollTimer);
+    modeScrollTimer = setTimeout(() => {
+      const tabs = modeTabsEl.querySelectorAll('.mode-tab');
+      const center = modeTabsEl.scrollLeft + modeTabsEl.clientWidth / 2;
+      let closest = null, closestDist = Infinity;
+      tabs.forEach(tab => {
+        const tabCenter = tab.offsetLeft + tab.offsetWidth / 2;
+        const dist = Math.abs(tabCenter - center);
+        if (dist < closestDist) { closestDist = dist; closest = tab; }
+      });
+      if (closest && !closest.classList.contains('active')) {
+        closest.click();
+      }
+    }, 150);
   });
 
   // 地形选择
