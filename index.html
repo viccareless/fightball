@@ -820,6 +820,32 @@
     font-weight: 700;
     text-align: center;
     letter-spacing: 2px;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px 12px;
+    background: rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .duel-side-title:hover {
+    border-color: rgba(180,140,255,0.4);
+    background: rgba(180,140,255,0.08);
+  }
+  .duel-side-title .arrow {
+    font-size: 10px;
+    color: #8b7bb8;
+    transition: transform 0.3s;
+  }
+  .duel-side-title.collapsed .arrow {
+    transform: rotate(-90deg);
+  }
+  .duel-class-picker.collapsed {
+    display: none;
   }
   .duel-class-picker {
     display: grid;
@@ -1801,15 +1827,15 @@
       <div id="duelMode" style="display:none;">
         <div class="duel-selector active" id="duelSelector">
           <div class="duel-side">
-            <div class="duel-side-title" id="duelTitleA">队伍 A</div>
-            <div class="duel-class-picker" id="duelPickerA">
+            <div class="duel-side-title collapsed" id="duelTitleA">队伍 A <span class="arrow">▼</span></div>
+            <div class="duel-class-picker collapsed" id="duelPickerA">
               <!-- JS 动态生成 -->
             </div>
           </div>
           <div class="duel-vs">VS</div>
           <div class="duel-side">
-            <div class="duel-side-title" id="duelTitleB">队伍 B</div>
-            <div class="duel-class-picker" id="duelPickerB">
+            <div class="duel-side-title collapsed" id="duelTitleB">队伍 B <span class="arrow">▼</span></div>
+            <div class="duel-class-picker collapsed" id="duelPickerB">
               <!-- JS 动态生成 -->
             </div>
           </div>
@@ -7794,6 +7820,14 @@
   // ============== 开始界面逻辑 ==============
   function renderDuelPicker(side){
     const picker = $('duelPicker' + side);
+    // 更新标题显示当前选中角色
+    const titleEl = $('duelTitle' + side);
+    if (titleEl){
+      const isCollapsed = titleEl.classList.contains('collapsed');
+      titleEl.innerHTML = '队伍 ' + side + ' · ' + CLASSES[duelPick[side]].label + ' <span class="arrow">▼</span>';
+      titleEl.style.color = CLASSES[duelPick[side]].color;
+      if (isCollapsed) titleEl.classList.add('collapsed');
+    }
     picker.innerHTML = '';
     Object.entries(CLASSES).forEach(([k,v]) => {
       const btn = document.createElement('div');
@@ -7966,9 +8000,9 @@
     $('battleroyaleMode').style.display = mode === 'battleroyale' ? '' : 'none';
     $('randomMode').style.display = mode === 'random' ? '' : 'none';
     if (mode === 'duel'){
-      $('duelTitleA').textContent = '队伍 A · ' + CLASSES[duelPick.A].label;
+      $('duelTitleA').innerHTML = '队伍 A · ' + CLASSES[duelPick.A].label + ' <span class="arrow">▼</span>';
       $('duelTitleA').style.color = CLASSES[duelPick.A].color;
-      $('duelTitleB').textContent = '队伍 B · ' + CLASSES[duelPick.B].label;
+      $('duelTitleB').innerHTML = '队伍 B · ' + CLASSES[duelPick.B].label + ' <span class="arrow">▼</span>';
       $('duelTitleB').style.color = CLASSES[duelPick.B].color;
     }
     if (mode === 'budget'){
@@ -8043,6 +8077,17 @@
 
   document.querySelectorAll('.mode-tab').forEach(tab => {
     tab.addEventListener('click', () => switchMode(tab.dataset.mode));
+  });
+
+  // 单挑模式：点击标题展开/折叠职业选择
+  document.querySelectorAll('.duel-side-title').forEach(title => {
+    title.addEventListener('click', () => {
+      const picker = title.nextElementSibling;
+      if (picker && picker.classList.contains('duel-class-picker')){
+        picker.classList.toggle('collapsed');
+        title.classList.toggle('collapsed');
+      }
+    });
   });
 
   // 移动端横向滑动切换模式：标签溢出时启用轮播
