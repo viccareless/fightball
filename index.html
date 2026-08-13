@@ -2309,9 +2309,9 @@
       stats: { atk: 6, def: 4, spd: 11, rng: 5, sup: 2, ctrl: 5 },
       codex: '来去如风的游击战士，不断变换位置躲避伤害，弹射攻击同时打击多个对手，带动全队机动性。每隔数秒向前短距离冲刺位移规避来袭弹道，普通攻击可在敌人之间弹射（伤害逐次衰减），自身移动时小幅提升周围友军移动速度。',
       params: [
-        { key: 'dmg', label: '弹射伤害', min: 3, max: 20, step: 1, def: 8, int: true },
-        { key: 'rate', label: '射速/秒', min: 0.4, max: 2.5, step: 0.1, def: 1.2, int: false },
-        { key: 'dashCd', label: '冲刺冷却秒', min: 1, max: 4, step: 0.2, def: 2, int: false },
+        { key: 'dmg', label: '弹射伤害', min: 3, max: 20, step: 1, def: 5, int: true },
+        { key: 'rate', label: '射速/秒', min: 0.4, max: 2.5, step: 0.1, def: 1.5, int: false },
+        { key: 'dashCd', label: '冲刺冷却秒', min: 1, max: 4, step: 0.2, def: 0.45, int: false },
         { key: 'bounceDecay', label: '弹射衰减%', min: 10, max: 60, step: 5, def: 30, int: true },
         { key: 'allySpd', label: '友军移速加成%', min: 5, max: 40, step: 5, def: 15, int: true }
       ]
