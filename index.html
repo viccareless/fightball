@@ -2438,13 +2438,13 @@
         { key: 'spikeCD', label: '木遁棘刺冷却/秒', min: 3, max: 15, step: 0.5, def: 10, int: false },
         { key: 'rootDur', label: '束缚禁锢时长/秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
         { key: 'rootMax', label: '同时束缚上限', min: 1, max: 5, step: 1, def: 2, int: true },
-        { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 4, max: 15, step: 1, def: 4, int: true },
+        { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 4, max: 15, step: 1, def: 2, int: true },
         { key: 'kamuiDur', label: '虚化持续时间/秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
         { key: 'fireAoe', label: '爆风乱舞AOE范围', min: 80, max: 300, step: 10, def: 250, int: true },
         { key: 'burnDmg', label: '灼烧伤害/秒', min: 2, max: 15, step: 1, def: 5, int: true },
         { key: 'atkInterval', label: '普攻释放间隔/秒', min: 0.5, max: 3, step: 0.1, def: 4, int: false },
         { key: 'spikeDmg', label: '木棘伤害', min: 3, max: 25, step: 1, def: 2, int: true },
-        { key: 'fireDmg', label: '爆风乱舞伤害', min: 3, max: 25, step: 1, def: 10, int: true }
+        { key: 'fireDmg', label: '爆风乱舞伤害', min: 3, max: 25, step: 1, def: 15, int: true }
       ]
     }
   };
@@ -6602,7 +6602,7 @@
         return;
       }
       // 宇智波带土：受击触发神威完美虚化（消耗全部瞳力，在扣血前判断）
-      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra > 0 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
+      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra > 5 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
         this.obitoKamuiTriggered = true;
         this.obitoKamuiTime = this.params.kamuiDur || 3;
         // 虚化特效
