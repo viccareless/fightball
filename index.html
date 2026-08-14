@@ -4431,6 +4431,72 @@
                 this.x += (tdx/td) * blinkDist;
                 this.y += (tdy/td) * blinkDist;
               }
+              // ===== 带土虚化结束·神威漩涡现身特效（火影动漫风格） =====
+              const cx = this.x, cy = this.y;
+              // 1. 三层螺旋臂粒子（模拟万花筒写轮眼的三角风车漩涡）
+              for (let arm=0; arm<3; arm++){
+                const armOffset = (arm/3)*Math.PI*2;
+                for (let i=0;i<18;i++){
+                  const t = i/18; // 0→1，从内到外
+                  const spiralR = 6 + t*42; // 螺旋半径渐增
+                  const spiralAng = armOffset + t*Math.PI*1.8; // 螺旋扭转角度
+                  const px = cx + Math.cos(spiralAng)*spiralR;
+                  const py = cy + Math.sin(spiralAng)*spiralR;
+                  // 沿螺旋切线方向向外运动（模拟漩涡旋转扩散）
+                  const tangentAng = spiralAng + Math.PI/2 + 0.3;
+                  particles.push(new Particle(px, py, i%3===0 ? '#b484ff' : '#6b2473', {
+                    ang: tangentAng,
+                    speed: 50 + t*120 + Math.random()*40,
+                    life: 0.5 + t*0.3,
+                    size: 2 + t*2.5
+                  }));
+                }
+              }
+              // 2. 漩涡中心黑暗空间粒子（深紫近黑，模拟神威空间）
+              for (let i=0;i<20;i++){
+                const ang = Math.random()*Math.PI*2;
+                const r = Math.random()*12;
+                particles.push(new Particle(cx + Math.cos(ang)*r, cy + Math.sin(ang)*r, '#3a1250', {
+                  ang: ang + Math.PI/2,
+                  speed: 30+Math.random()*50,
+                  life: 0.4+Math.random()*0.3,
+                  size: 3+Math.random()*3
+                }));
+              }
+              // 3. 漩涡边缘旋转光粒（淡紫色，模拟空间扭曲的光芒）
+              for (let i=0;i<30;i++){
+                const ang = Math.random()*Math.PI*2;
+                const r = 20 + Math.random()*25;
+                particles.push(new Particle(cx + Math.cos(ang)*r, cy + Math.sin(ang)*r, '#d4b8ff', {
+                  ang: ang + Math.PI/2 + (Math.random()-0.5)*0.5,
+                  speed: 80+Math.random()*80,
+                  life: 0.35+Math.random()*0.25,
+                  size: 1.5+Math.random()*1.5
+                }));
+              }
+              // 4. 中心爆发闪光（带土现身瞬间的白光）
+              for (let i=0;i<15;i++){
+                const ang = Math.random()*Math.PI*2;
+                particles.push(new Particle(cx, cy, '#ffffff', {
+                  ang: ang,
+                  speed: 70+Math.random()*90,
+                  life: 0.25+Math.random()*0.2,
+                  size: 2+Math.random()*2
+                }));
+              }
+              // 5. 径向扩散环（模拟漩涡打开瞬间的空间波纹）
+              for (let i=0;i<16;i++){
+                const ang = (i/16)*Math.PI*2;
+                particles.push(new Particle(cx, cy, '#9966ff', {
+                  ang: ang,
+                  speed: 160+Math.random()*40,
+                  life: 0.4,
+                  size: 2.5
+                }));
+              }
+              // 现身瞬间屏幕震动 + 文字提示
+              shake = Math.max(shake, 5);
+              floatTexts.push(new FloatText(cx, cy - this.size - 22, '神威', '#b484ff', {life: 0.9, size: 14}));
               // 神威抓取：造成伤害+眩晕
               const kamuiDmg = this.params.kamuiDmg || 25;
               target.takeDamage(kamuiDmg, '#6b2473', particles, this);
@@ -6602,7 +6668,7 @@
         return;
       }
       // 宇智波带土：受击触发神威完美虚化（消耗全部瞳力，在扣血前判断）
-      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra > 5 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
+      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra >= 5 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
         this.obitoKamuiTriggered = true;
         this.obitoKamuiTime = this.params.kamuiDur || 3;
         // 虚化特效
