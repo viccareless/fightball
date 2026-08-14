@@ -2845,10 +2845,10 @@
   // 应用玩家强化到队伍（基于原始队伍重新计算，避免累积）
   function applySurvivalUpgrades(){
     if (!survivalOriginalTeam) return;
-    const hpMul = 1 + survivalUpgrades.hp * 0.15;
-    const dmgMul = 1 + survivalUpgrades.dmg * 0.12;
-    const spdMul = 1 + survivalUpgrades.spd * 0.08;
-    const cdMul = 1 - survivalUpgrades.cd * 0.06; // 冷却减少
+    const hpMul = 1 + survivalUpgrades.hp * 0.0015;
+    const dmgMul = 1 + survivalUpgrades.dmg * 0.0012;
+    const spdMul = 1 + survivalUpgrades.spd * 0.0008;
+    const cdMul = 1 - survivalUpgrades.cd * 0.0006; // 冷却减少
     // 深拷贝原始队伍
     const team = JSON.parse(JSON.stringify(survivalOriginalTeam));
     team.roles.forEach(r => {
