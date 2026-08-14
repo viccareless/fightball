@@ -2380,14 +2380,16 @@
       label: '白厄', icon: '🔥', maxHp: 165, color: '#f7c236', cost: 7, ballSpeed: 110,
       desc: '蓄能变身爆发·残局战神',
       stats: { atk: 9, def: 4, spd: 6, rng: 4, sup: 3, ctrl: 7 },
-      codex: '背负轮回命运的救世主，不断积蓄火种完成蜕变。常态输出平平，变身之后一人成军，越是友军倒下的绝境，爆发越为恐怖。造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，攻击力暴涨、移速加快、攻击附带范围溅射；变身结束后进入虚弱期，攻击与移速下降，需重新积攒火种。场上每阵亡一名友方，火种获取速度提升。',
+      codex: '背负轮回命运的救世主，不断积蓄火种完成蜕变。常态输出平平，变身之后一人成军，越是友军倒下的绝境，爆发越为恐怖。造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，变身瞬间恢复大量血量，期间攻击力暴涨、移速加快、攻击附带范围溅射，并获得一定比例的伤害减免；变身结束后进入虚弱期，攻击与移速下降，需重新积攒火种。场上每阵亡一名友方，火种获取速度提升。',
       params: [
         { key: 'emberGainRate', label: '火种获取速率', min: 0.5, max: 3, step: 0.1, def: 1.0, int: false },
         { key: 'transformDur', label: '变身持续秒', min: 3, max: 12, step: 0.5, def: 6, int: false },
         { key: 'transformAtkMul', label: '变身攻击倍率', min: 1.5, max: 5, step: 0.1, def: 2.5, int: false },
         { key: 'weakDur', label: '虚弱持续秒', min: 1, max: 8, step: 0.5, def: 3, int: false },
         { key: 'baseDmg', label: '普攻伤害', min: 5, max: 30, step: 1, def: 10, int: true },
-        { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.5, step: 0.1, def: 1.0, int: false }
+        { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.5, step: 0.1, def: 1.0, int: false },
+        { key: 'transformDmgReduce', label: '变身免伤%', min: 0, max: 80, step: 5, def: 40, int: true },
+        { key: 'transformHealRatio', label: '变身回血%', min: 0, max: 50, step: 5, def: 25, int: true }
       ]
     }
   };
@@ -4076,7 +4078,14 @@
           this.emberShockwaveTime = 0.5;
           const hpRatio = this.hp / this.maxHp;
           this.maxHp = Math.ceil(this.emberBaseMaxHp * 1.2);
-          this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio) + Math.ceil(this.emberBaseMaxHp * 0.1));
+          const healAmount = Math.ceil(this.emberBaseMaxHp * (this.params.transformHealRatio || 25) / 100);
+          this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio) + healAmount);
+          // 变身回血飘字与粒子
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '+' + healAmount + ' 🔥', '#7fff7f', {life: 1.0, size: 14}));
+          for (let i=0;i<15;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#7fff7f', {ang:a, speed:40+Math.random()*60, life:0.6+Math.random()*0.4, size:2+Math.random()*2}));
+          }
           for (let i=0;i<40;i++){
             const a = Math.random()*Math.PI*2;
             const sp = 100+Math.random()*200;
@@ -6231,6 +6240,14 @@
       if (!isDot && this.moltenShellStacks > 0){
         const reduce = this.moltenShellStacks * (this.params.shellDefBonus || 3) / 100;
         dmg *= (1 - reduce);
+      }
+      // 白厄变身【卡厄斯兰那】：期间获得免伤（灼烧/毒素穿透免伤）
+      if (!isDot && this.cls === 'whiteEmber' && this.emberTransformTime > 0){
+        const reduce = (this.params.transformDmgReduce || 40) / 100;
+        dmg *= (1 - reduce);
+        if (Math.random() < 0.3){
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '🔥减伤', '#ffd76b', {life: 0.5, size: 10}));
+        }
       }
       this.hp -= dmg;
       this.hitFlash = 0.15;
