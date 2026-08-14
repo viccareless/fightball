@@ -2868,7 +2868,7 @@
     survivalBetweenWaves = true;
     paused = true;
     // 通关奖励金币
-    const bonusGold = 5 + survivalWave;
+    const bonusGold = 3;
     survivalGold += bonusGold;
 
     let upgradePicked = false;
@@ -6555,7 +6555,7 @@
       // ===== 生存模式：击杀敌人掉落金币 =====
       if (currentMode === 'survival' && this.team === 'B' && !this.isDoll && !this.isClone && !this.isDecoy){
         const isBoss = this.size >= 28;
-        const gold = isBoss ? (15 + Math.floor(Math.random()*11)) : (2 + Math.floor(Math.random()*3));
+        const gold = isBoss ? (8 + Math.floor(Math.random()*5)) : (1 + Math.floor(Math.random()*2));
         survivalGold += gold;
         floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '+' + gold + '💰', '#ffd700', {life: 1.0, size: 14}));
       }
