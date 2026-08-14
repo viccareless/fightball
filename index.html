@@ -1469,6 +1469,42 @@
   .survival-shop-card .icon { font-size: 18px; }
   .survival-shop-card .name { font-size: 10px; color: #d0c4f0; margin-top: 2px; }
   .survival-shop-card .cost { font-size: 9px; color: #ffd700; margin-top: 1px; }
+  .survival-shop-card.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+  }
+  /* 波次间商店卡片 */
+  .sv-shop-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 4px;
+  }
+  .sv-shop-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .sv-shop-card:hover:not(.disabled) {
+    background: rgba(255,215,0,0.12);
+    border-color: rgba(255,215,0,0.5);
+    transform: translateY(-1px);
+  }
+  .sv-shop-card.disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+  }
+  .sv-shop-card .ssc-icon { font-size: 20px; }
+  .sv-shop-card .ssc-name { font-size: 10px; color: #d0c4f0; margin-top: 2px; }
+  .sv-shop-card .ssc-price { font-size: 10px; color: #ffd700; margin-top: 2px; font-weight: 600; }
   .survival-roster-item {
     background: rgba(120,80,255,0.15);
     border: 1px solid rgba(180,140,255,0.3);
@@ -1887,8 +1923,9 @@
         <div style="font-size:12px;color:#8b7bb8;margin-bottom:10px;line-height:1.6;">
           单支队伍持续闯关，共<b style="color:#ff9148;">50波</b>敌人，每波强度递增。每波结束可<b style="color:#44ff88;">永久强化全队</b>，每10波出现<b style="color:#ff4444;">精英BOSS</b>。团灭则结束，记录最高波次。
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <span style="font-size:13px;color:#fff;">选择你的战队（最多5人）</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+          <span style="font-size:13px;color:#fff;">选择你的战队（最多5人，不可重复）</span>
+          <span id="survivalCost" style="font-size:12px;color:#c9b8ff;">造价 <b style="color:#ffd700;">0</b> / 20 · 剩余 <b style="color:#44ff88;">20</b></span>
           <span style="font-size:12px;color:#ffd700;">🏆 最高记录：<span id="survivalBest">0</span> 波</span>
         </div>
         <div id="survivalShopGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto;padding:2px;"></div>
@@ -2657,7 +2694,17 @@
   let survivalWaveTimer = 0; // 波次间隔计时
   let survivalEnemiesSpawned = false; // 当前波敌人是否已生成
   let survivalGameOver = false; // 游戏是否结束
+  let survivalGold = 0; // 生存模式金币
   const SURVIVAL_BEST_KEY = 'ballgame_survival_best';
+  const SURVIVAL_BUDGET_TOTAL = 20; // 生存模式总造价上限
+  const SURVIVAL_MAX_ROSTER = 5; // 生存模式最大人数
+
+  function survivalUsed(){
+    return survivalRoster.reduce((s, k) => s + (CLASSES[k].cost || 0), 0);
+  }
+  function survivalRemaining(){
+    return SURVIVAL_BUDGET_TOTAL - survivalUsed();
+  }
 
   // ===== 大逃杀模式 =====
   let brPlayerCount = 12; // 参赛人数
@@ -2695,16 +2742,24 @@
     const grid = $('survivalShopGrid');
     if (!grid) return;
     grid.innerHTML = '';
+    const remaining = survivalRemaining();
     Object.entries(CLASSES).forEach(([k, c]) => {
       const card = document.createElement('div');
-      card.className = 'survival-shop-card';
+      const alreadyPicked = survivalRoster.includes(k);
+      const affordable = (c.cost || 0) <= remaining;
+      const canPick = !alreadyPicked && affordable && survivalRoster.length < SURVIVAL_MAX_ROSTER;
+      card.className = 'survival-shop-card' + (canPick ? '' : ' disabled');
       card.innerHTML = `<div class="icon">${c.icon}</div><div class="name">${c.label}</div><div class="cost">造价${c.cost}</div>`;
-      card.addEventListener('click', () => {
-        if (survivalRoster.length >= 5){ alert('最多5人！'); return; }
-        survivalRoster.push(k);
-        renderSurvivalShop();
-        renderSurvivalRoster();
-      });
+      if (canPick){
+        card.addEventListener('click', () => {
+          if (survivalRoster.length >= SURVIVAL_MAX_ROSTER){ alert('最多' + SURVIVAL_MAX_ROSTER + '人！'); return; }
+          if (survivalRoster.includes(k)){ alert('该角色已在阵容中，不能重复选择！'); return; }
+          if ((c.cost || 0) > survivalRemaining()){ alert('造价不足！'); return; }
+          survivalRoster.push(k);
+          renderSurvivalShop();
+          renderSurvivalRoster();
+        });
+      }
       grid.appendChild(card);
     });
   }
@@ -2713,6 +2768,13 @@
     const list = $('survivalRosterList');
     if (!list) return;
     list.innerHTML = '';
+    // 更新造价显示
+    const costEl = $('survivalCost');
+    if (costEl){
+      const used = survivalUsed();
+      const rem = survivalRemaining();
+      costEl.innerHTML = `造价 <b style="color:#ffd700;">${used}</b> / ${SURVIVAL_BUDGET_TOTAL} · 剩余 <b style="color:${rem >= 0 ? '#44ff88' : '#ff6b6b'};">${rem}</b>`;
+    }
     if (survivalRoster.length === 0){
       list.innerHTML = '<div style="font-size:11px;color:#8b7bb8;">点击上方职业加入战队</div>';
       return;
@@ -2721,7 +2783,7 @@
       const c = CLASSES[k];
       const item = document.createElement('div');
       item.className = 'survival-roster-item';
-      item.innerHTML = `${c.icon} ${c.label} <span style="color:#ff8585;margin-left:2px;">✕</span>`;
+      item.innerHTML = `${c.icon} ${c.label} <span style="color:#ffd700;font-size:10px;">¥${c.cost}</span> <span style="color:#ff8585;margin-left:2px;">✕</span>`;
       item.addEventListener('click', () => {
         survivalRoster.splice(idx, 1);
         renderSurvivalShop();
@@ -2805,21 +2867,85 @@
   function showUpgradeSelection(){
     survivalBetweenWaves = true;
     paused = true;
+    // 通关奖励金币
+    const bonusGold = 5 + survivalWave;
+    survivalGold += bonusGold;
+
+    let upgradePicked = false;
     const overlay = document.createElement('div');
     overlay.className = 'upgrade-overlay';
     overlay.id = 'upgradeOverlay';
-    const options = [
+
+    const upgradeOptions = [
       { key: 'hp', icon: '❤️', name: '生命强化', desc: '全队最大生命值+15%', level: survivalUpgrades.hp },
       { key: 'dmg', icon: '⚔️', name: '攻击强化', desc: '全队伤害+12%', level: survivalUpgrades.dmg },
       { key: 'spd', icon: '💨', name: '速度强化', desc: '全队移速+8%', level: survivalUpgrades.spd },
       { key: 'cd', icon: '⏱️', name: '冷却强化', desc: '全队攻速/技能冷却-6%', level: survivalUpgrades.cd }
     ];
+
+    function renderShopHTML(){
+      const ownedKeys = survivalOriginalTeam.roles.map(r => r.cls);
+      return Object.entries(CLASSES).map(([k, c]) => {
+        const price = (c.cost || 3) * 2;
+        const owned = ownedKeys.includes(k);
+        const affordable = survivalGold >= price;
+        const canBuy = !owned && affordable;
+        return `
+          <div class="sv-shop-card ${canBuy ? '' : 'disabled'}" data-cls="${k}" data-price="${price}">
+            <div class="ssc-icon">${c.icon}</div>
+            <div class="ssc-name">${c.label}</div>
+            <div class="ssc-price">${owned ? '已拥有' : '💰' + price}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function refreshOverlay(){
+      const goldEl = overlay.querySelector('.sv-gold-display');
+      if (goldEl) goldEl.innerHTML = `💰 ${survivalGold}`;
+      const shopGrid = overlay.querySelector('.sv-shop-grid');
+      if (shopGrid) shopGrid.innerHTML = renderShopHTML();
+      bindShopCards();
+      const continueBtn = overlay.querySelector('.sv-continue-btn');
+      if (continueBtn) continueBtn.disabled = !upgradePicked;
+      if (continueBtn) continueBtn.style.opacity = upgradePicked ? '1' : '0.5';
+    }
+
+    function bindShopCards(){
+      overlay.querySelectorAll('.sv-shop-card').forEach(card => {
+        card.addEventListener('click', () => {
+          if (card.classList.contains('disabled')) return;
+          const cls = card.dataset.cls;
+          const price = parseInt(card.dataset.price);
+          if (survivalGold < price) return;
+          const ownedKeys = survivalOriginalTeam.roles.map(r => r.cls);
+          if (ownedKeys.includes(cls)) return;
+          // 扣除金币，添加角色
+          survivalGold -= price;
+          const c = CLASSES[cls];
+          const params = {};
+          c.params.forEach(p => { params[p.key] = p.def; });
+          survivalOriginalTeam.roles.push({
+            cls: cls, name: c.label, color: c.color,
+            params: params, count: 1, size: 18, speed: 120
+          });
+          // 重新应用强化
+          applySurvivalUpgrades();
+          floatTexts.push(new FloatText(VIEW.w/2, VIEW.h/2, '招募 ' + c.label + '!', '#ffd700', {life: 1.2, size: 16}));
+          refreshOverlay();
+        });
+      });
+    }
+
     overlay.innerHTML = `
-      <div class="upgrade-panel">
+      <div class="upgrade-panel" style="max-width:560px;">
         <div class="upgrade-title">🎉 第 ${survivalWave} 波通关！</div>
-        <div class="upgrade-subtitle">选择一项永久强化（当前等级已标注）</div>
-        <div class="upgrade-options">
-          ${options.map(o => `
+        <div class="upgrade-subtitle">
+          通关奖励 +${bonusGold}💰 · 当前金币 <span class="sv-gold-display" style="color:#ffd700;font-weight:700;">💰 ${survivalGold}</span>
+        </div>
+        <div style="font-size:12px;color:#c9b8ff;margin:8px 0 4px;">⬇️ 选择一项永久强化（必选）</div>
+        <div class="upgrade-options" id="svUpgradeOptions">
+          ${upgradeOptions.map(o => `
             <div class="upgrade-card" data-key="${o.key}">
               <div class="up-icon">${o.icon}</div>
               <div class="up-name">${o.name}</div>
@@ -2828,24 +2954,47 @@
             </div>
           `).join('')}
         </div>
+        <div style="font-size:12px;color:#c9b8ff;margin:12px 0 4px;">🛒 波次间商店（用金币招募新角色，不可重复）</div>
+        <div class="sv-shop-grid">
+          ${renderShopHTML()}
+        </div>
+        <button class="sv-continue-btn" disabled style="margin-top:14px;width:100%;padding:12px;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#b484ff);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,0.4);opacity:0.5;transition:opacity .2s;">
+          选择强化后继续下一波 →
+        </button>
       </div>
     `;
     document.body.appendChild(overlay);
+
+    // 绑定强化卡片点击
     overlay.querySelectorAll('.upgrade-card').forEach(card => {
       card.addEventListener('click', () => {
+        if (upgradePicked) return;
         const key = card.dataset.key;
         survivalUpgrades[key]++;
-        document.body.removeChild(overlay);
-        survivalBetweenWaves = false;
-        paused = false;
-        survivalWave++;
-        // 生成新一波敌人
-        teams.B = survivalSpawnEnemies(survivalWave);
-        // 应用强化到玩家队伍（基于原始队伍重新计算）
+        upgradePicked = true;
+        // 高亮已选
+        overlay.querySelectorAll('.upgrade-card').forEach(c => {
+          c.style.opacity = c === card ? '1' : '0.4';
+          c.style.outline = c === card ? '2px solid #ffd700' : 'none';
+        });
         applySurvivalUpgrades();
-        resetTimer = 0;
-        startMatch();
+        refreshOverlay();
       });
+    });
+
+    bindShopCards();
+
+    // 继续按钮
+    overlay.querySelector('.sv-continue-btn').addEventListener('click', () => {
+      if (!upgradePicked) return;
+      document.body.removeChild(overlay);
+      survivalBetweenWaves = false;
+      paused = false;
+      survivalWave++;
+      teams.B = survivalSpawnEnemies(survivalWave);
+      applySurvivalUpgrades();
+      resetTimer = 0;
+      startMatch();
     });
   }
 
@@ -6403,6 +6552,13 @@
       if (this.lastAttacker && this.lastAttacker.alive && this.lastAttacker.stats){
         this.lastAttacker.stats.kills++;
       }
+      // ===== 生存模式：击杀敌人掉落金币 =====
+      if (currentMode === 'survival' && this.team === 'B' && !this.isDoll && !this.isClone && !this.isDecoy){
+        const isBoss = this.size >= 28;
+        const gold = isBoss ? (15 + Math.floor(Math.random()*11)) : (2 + Math.floor(Math.random()*3));
+        survivalGold += gold;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '+' + gold + '💰', '#ffd700', {life: 1.0, size: 14}));
+      }
       // 时光修复师：友军阵亡时生成时光印记
       // 复活限制：刺客本体可正常复活；刺客分身、召唤师的召唤物（人偶）、忍者替身不享受复活
       if (!this.isDoll && !this.isClone && !this.isDecoy){
@@ -8148,6 +8304,9 @@
     // 生存模式HUD
     if (currentMode === 'survival' && !survivalGameOver){
       const enemyCount = balls.filter(b => b.team==='B' && b.alive).length;
+      ctx.fillStyle = '#ffd700';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('💰 ' + survivalGold, 12, 42);
       const playerCount = balls.filter(b => b.team==='A' && b.alive).length;
       ctx.save();
       ctx.font = 'bold 16px sans-serif';
@@ -8954,6 +9113,7 @@
       survivalWaveTimer = 0;
       survivalEnemiesSpawned = false;
       survivalGameOver = false;
+      survivalGold = 0;
       // 玩家队伍
       const playerRoles = survivalRoster.map(k => {
         const c = CLASSES[k];
