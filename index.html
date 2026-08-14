@@ -2428,6 +2428,24 @@
         { key: 'transformDmgReduce', label: '变身免伤%', min: 0, max: 80, step: 5, def: 60, int: true },
         { key: 'transformHealRatio', label: '变身回血%', min: 0, max: 50, step: 5, def: 25, int: true }
       ]
+    },
+    obito: {
+      label: '宇智波带土', icon: '🌑', maxHp: 170, color: '#6b2473', cost: 8,
+      desc: '木火交织·暴走绝命',
+      stats: { atk: 7, def: 5, spd: 7, rng: 4, sup: 2, ctrl: 9 },
+      codex: '投掷木棘锁住猎物，烈火紧随其后焚烧。以瞳力开启神威完美虚化，躯体化作空间虚影，于虚实之间完成猎杀。',
+      params: [
+        { key: 'spikeCD', label: '木遁棘刺冷却/秒', min: 3, max: 15, step: 0.5, def: 10, int: false },
+        { key: 'rootDur', label: '束缚禁锢时长/秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
+        { key: 'rootMax', label: '同时束缚上限', min: 1, max: 5, step: 1, def: 2, int: true },
+        { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 4, max: 15, step: 1, def: 4, int: true },
+        { key: 'kamuiDur', label: '虚化持续时间/秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'fireAoe', label: '爆风乱舞AOE范围', min: 80, max: 300, step: 10, def: 250, int: true },
+        { key: 'burnDmg', label: '灼烧伤害/秒', min: 2, max: 15, step: 1, def: 5, int: true },
+        { key: 'atkInterval', label: '普攻释放间隔/秒', min: 0.5, max: 3, step: 0.1, def: 4, int: false },
+        { key: 'spikeDmg', label: '木棘伤害', min: 3, max: 25, step: 1, def: 2, int: true },
+        { key: 'fireDmg', label: '爆风乱舞伤害', min: 3, max: 25, step: 1, def: 10, int: true }
+      ]
     }
   };
 
@@ -3633,6 +3651,58 @@
     }
   }
 
+  // 扇形AOE视觉（用于爆风乱舞范围框）
+  class FanAOE {
+    constructor(x, y, angle, halfAngle, radius, color){
+      this.x=x; this.y=y;
+      this.angle=angle; this.halfAngle=halfAngle;
+      this.radius=radius; this.color=color;
+      this.life=0.5; this.maxLife=0.5;
+    }
+    update(dt){ this.life -= dt; }
+    draw(ctx){
+      const a = Math.max(0, this.life/this.maxLife);
+      const r = this.radius;
+      const startAng = this.angle - this.halfAngle;
+      const endAng = this.angle + this.halfAngle;
+      ctx.save();
+      // 扇形半透明填充
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.arc(this.x, this.y, r, startAng, endAng);
+      ctx.closePath();
+      const g = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,r);
+      g.addColorStop(0, rgba(this.color, 0.35*a));
+      g.addColorStop(0.7, rgba(this.color, 0.2*a));
+      g.addColorStop(1, rgba(this.color, 0));
+      ctx.fillStyle = g;
+      ctx.fill();
+      // 扇形外弧线边框（发光）
+      ctx.strokeStyle = rgba('#ffaa00', 0.95*a);
+      ctx.lineWidth = 3;
+      ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, r, startAng, endAng);
+      ctx.stroke();
+      // 左边线边框
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x + Math.cos(startAng)*r, this.y + Math.sin(startAng)*r);
+      ctx.stroke();
+      // 右边线边框
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(this.x + Math.cos(endAng)*r, this.y + Math.sin(endAng)*r);
+      ctx.stroke();
+      // 顶点高亮
+      ctx.fillStyle = rgba('#ffff00', 0.8*a);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 5, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
   // 持续冰霜区域
   class FrostZone {
     constructor(x, y, color, radius, duration, team, dmg, slowRatio, freezeTime, source){
@@ -3938,6 +4008,22 @@
       this.windDashCD = 1; // 冲刺位移冷却（开局1秒后可首次冲刺）
       this.windDashing = 0; // 冲刺位移剩余时间
       this.windDashDirX = 0; this.windDashDirY = 0; // 冲刺方向
+      // ===== 宇智波带土相关状态 =====
+      this.obitoSpikeCD = 3; // 木遁棘刺冷却（开局3秒后可首次释放）
+      this.obitoChakra = 1; // 瞳力点数（初始1点，保证开局可触发虚化）
+      this.obitoChakraTimer = 0; // 瞳力积蓄计时
+      this.obitoKamuiTime = 0; // 神威虚化剩余时间
+      this.obitoAtkCD = 0; // 普攻冷却
+      this.obitoRootedList = []; // 被木棘束缚的目标引用列表
+      this.obitoKamuiTriggered = false; // 本次受击是否已触发虚化（防抖）
+      // 宇智波带土相关状态
+      this.woodSpikeCD = 3; // 木遁棘刺冷却（开局3秒后可首次释放）
+      this.chakra = 0; // 瞳力点数
+      this.chakraTimer = 0; // 瞳力积蓄计时
+      this.kamuiTime = 0; // 神威虚化剩余时间
+      this.kamuiCooldown = 0; // 虚化冷却（防止连续触发）
+      this.obitoAtkCD = 0; // 普攻冷却
+      this.isKamui = false; // 是否处于虚化状态
       this.windSpeedBuff = 0; // 来自己方风舞游侠的移速加成
       // 电磁脉冲师相关状态
       this.silenceTime = 0; // 被EMP沉默时间
@@ -4316,6 +4402,58 @@
         if (this.hp <= 0 && this.alive){ this.die(particles); return; }
       }
 
+      // 宇智波带土：瞳力积蓄 + 虚化时间递减
+      if (this.cls === 'obito' && !this.isDoll && !this.isClone){
+        // 瞳力积蓄（非虚化期间）
+        if (this.obitoKamuiTime <= 0){
+          this.obitoChakraTimer += dt;
+          const interval = this.params.chakraInterval || 8;
+          if (this.obitoChakraTimer >= interval){
+            this.obitoChakraTimer = 0;
+            if (this.obitoChakra < 5){
+              this.obitoChakra += 1;
+              floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '瞳力+1', '#b484ff', {life: 0.8, size: 11}));
+            }
+          }
+        }
+        // 虚化时间递减
+        if (this.obitoKamuiTime > 0){
+          this.obitoKamuiTime -= dt;
+          // 虚化结束：瞬移到敌人脸上 + 神威抓取
+          if (this.obitoKamuiTime <= 0){
+            this.obitoKamuiTime = 0;
+            const target = this.nearestEnemy(balls);
+            if (target && target.alive){
+              const tdx = target.x - this.x, tdy = target.y - this.y;
+              const td = Math.max(1, Math.hypot(tdx, tdy));
+              const blinkDist = td - target.size - this.size - 2;
+              if (blinkDist > 0){
+                this.x += (tdx/td) * blinkDist;
+                this.y += (tdy/td) * blinkDist;
+              }
+              // 神威抓取：造成伤害+眩晕
+              const kamuiDmg = this.params.kamuiDmg || 25;
+              target.takeDamage(kamuiDmg, '#6b2473', particles, this);
+              target.stun = Math.max(target.stun, 1.5);
+              // 神威抓取特效
+              for (let i=0;i<30;i++){
+                const ang = Math.random()*Math.PI*2;
+                particles.push(new Particle(target.x, target.y, '#6b2473', {ang, speed:60+Math.random()*150, life:0.5+Math.random()*0.4, size:3+Math.random()*3}));
+              }
+              for (let i=0;i<10;i++){
+                particles.push(new Particle(this.x, this.y, '#ffffff', {speed:100, life:0.3, size:2}));
+              }
+              shake = Math.max(shake, 6);
+              floatTexts.push(new FloatText(target.x, target.y - target.size - 10, '神威!', '#b484ff', {life: 1.0, size: 14}));
+            }
+            // 清空瞳力，重置触发标志
+            this.obitoChakra = 0;
+            this.obitoChakraTimer = 0;
+            this.obitoKamuiTriggered = false;
+          }
+        }
+      }
+
       // 眩晕：无法移动和攻击
       if (this.stun > 0){
         this.stun -= dt;
@@ -4446,6 +4584,7 @@
           else this.aiMolten(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
           break;
         case 'whiteEmber': this.aiWhiteEmber(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
+        case 'obito': this.aiObito(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
       }
       }
 
@@ -6217,6 +6356,156 @@
       }
     }
 
+    // ===== 宇智波带土 AI =====
+    aiObito(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles){
+      const p = this.params;
+      // 虚化期间：可以自由移动，但不能释放技能（木棘/爆风乱舞）
+      if (this.obitoKamuiTime > 0){
+        // 正常移动逻辑（向敌人靠近/风筝）
+        const ideal = 180;
+        if (d > ideal + 40){
+          this.vx += dirX * this.baseSpeed * spdMul * dt * 3;
+          this.vy += dirY * this.baseSpeed * spdMul * dt * 3;
+        } else if (d < ideal - 60){
+          this.vx -= dirX * this.baseSpeed * spdMul * dt * 3.5;
+          this.vy -= dirY * this.baseSpeed * spdMul * dt * 3.5;
+        } else {
+          const side = Math.sin(Date.now()*0.002 + this.bobPhase) > 0 ? 1 : -1;
+          this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2.5;
+          this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2.5;
+        }
+        // 虚化空间粒子特效（空间扭曲吸入感）
+        if (Math.random() < 0.7){
+          const a = Math.random()*Math.PI*2;
+          const r = this.size + 5 + Math.random()*25;
+          // 向心吸入粒子（速度方向指向身体中心）
+          const inAng = a + Math.PI; // 反方向，指向中心
+          particles.push(new Particle(
+            this.x + Math.cos(a)*r, this.y + Math.sin(a)*r,
+            Math.random() < 0.6 ? '#9d4edd' : '#1a0a1f',
+            {ang:inAng, speed:40+Math.random()*50, life:0.35+Math.random()*0.25, size:2+Math.random()*2.5}
+          ));
+        }
+        // 远处空间碎片被吸入（偶尔生成）
+        if (Math.random() < 0.15){
+          const a = Math.random()*Math.PI*2;
+          const r = 60 + Math.random()*40;
+          const inAng = a + Math.PI;
+          particles.push(new Particle(
+            this.x + Math.cos(a)*r, this.y + Math.sin(a)*r,
+            '#c77dff',
+            {ang:inAng, speed:80+Math.random()*60, life:0.5+Math.random()*0.3, size:1.5+Math.random()*1.5}
+          ));
+        }
+        return; // 虚化期间不释放技能
+      }
+
+      // 清理已失效的束缚目标引用
+      this.obitoRootedList = this.obitoRootedList.filter(r => r && r.alive && r.stun > 0);
+
+      // 优先瞄准被束缚的敌人
+      let target = enemy;
+      const rootedEnemies = this.obitoRootedList.filter(r => r && r.alive);
+      if (rootedEnemies.length > 0){
+        // 选最近的被束缚敌人
+        let bestD = Infinity, bestT = null;
+        for (const r of rootedEnemies){
+          const dd = Math.hypot(r.x - this.x, r.y - this.y);
+          if (dd < bestD){ bestD = dd; bestT = r; }
+        }
+        if (bestT) target = bestT;
+      }
+      const tdx = target.x - this.x, tdy = target.y - this.y;
+      const td = Math.max(1, Math.hypot(tdx, tdy));
+      const tdirX = tdx/td, tdirY = tdy/td;
+
+      // 移动逻辑：中距离风筝（保持200左右距离）
+      const ideal = 200;
+      if (d > ideal + 40){
+        this.vx += dirX * this.baseSpeed * spdMul * dt * 3;
+        this.vy += dirY * this.baseSpeed * spdMul * dt * 3;
+      } else if (d < ideal - 60){
+        this.vx -= dirX * this.baseSpeed * spdMul * dt * 3.5;
+        this.vy -= dirY * this.baseSpeed * spdMul * dt * 3.5;
+      } else {
+        const side = Math.sin(Date.now()*0.002 + this.bobPhase) > 0 ? 1 : -1;
+        this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2.5;
+        this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2.5;
+      }
+
+      // 技能1：木遁棘刺投射（远程束缚）
+      this.obitoSpikeCD -= dt;
+      const rootedCount = this.obitoRootedList.length;
+      const rootMax = p.rootMax || 2;
+      if (this.obitoSpikeCD <= 0 && d < 420 && rootedCount < rootMax){
+        this.obitoSpikeCD = p.spikeCD || 6;
+        const bs = 360;
+        const adx = enemy.x - this.x, ady = enemy.y - this.y;
+        const ad = Math.max(1, Math.hypot(adx, ady));
+        const bul = new Bullet(
+          this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
+          (adx/ad)*bs, (ady/ad)*bs,
+          p.spikeDmg || 8, '#4a7c3a', this.team, this
+        );
+        bul.isWoodSpike = true;
+        bul.size = 7;
+        bullets.push(bul);
+        // 发射特效
+        for (let i=0;i<6;i++){
+          const a = Math.atan2(ady, adx) + (Math.random()-0.5)*0.8;
+          particles.push(new Particle(this.x, this.y, '#4a7c3a', {ang:a, speed:60+Math.random()*60, life:0.3, size:2.5}));
+        }
+      }
+
+      // 普攻：火遁爆风乱舞（在带土面前呈扇形释放，优先打被束缚目标）
+      this.obitoAtkCD -= dt;
+      if (this.obitoAtkCD <= 0 && td < 320){
+        this.obitoAtkCD = p.atkInterval || 1.2;
+        const aoeR = p.fireAoe || 70;
+        const fireDmg = p.fireDmg || 7;
+        const burnDmg = p.burnDmg || 5;
+        const fireAng = Math.atan2(tdy, tdx); // 朝向目标的角度
+        // 以带土为顶点，向目标方向呈扇形AOE（角度±60度，距离aoeR）
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const bdx = b.x - this.x, bdy = b.y - this.y;
+          const dd = Math.hypot(bdx, bdy);
+          const bAng = Math.atan2(bdy, bdx);
+          let angDiff = Math.abs(bAng - fireAng);
+          if (angDiff > Math.PI) angDiff = 2*Math.PI - angDiff;
+          if (dd < aoeR + b.size && angDiff < Math.PI*35/360){
+            b.takeDamage(fireDmg, '#ff6b1a', particles, this);
+            b.burnDmg = Math.max(b.burnDmg, burnDmg);
+            b.burnTime = Math.max(b.burnTime, 3);
+          }
+        }
+        // 扇形范围框：用FanAOE绘制清晰的扇形边界
+        const fxAng = fireAng;
+        const halfAng = Math.PI*35/360; // 扇形半角17.5度（总角35度）
+        aoes.push(new FanAOE(this.x, this.y, fxAng, halfAng, aoeR, '#ff6600'));
+        // 火焰喷射粒子（动态效果）
+        for (let i=0;i<24;i++){
+          const t = i/24;
+          const a = fxAng - halfAng + t * (2*halfAng);
+          particles.push(new Particle(
+            this.x + Math.cos(a)*this.size*0.8,
+            this.y + Math.sin(a)*this.size*0.8,
+            Math.random() < 0.5 ? '#ff6b1a' : '#ffcc00',
+            {ang:a, speed:120+Math.random()*100, life:0.45+Math.random()*0.25, size:3+Math.random()*4}
+          ));
+        }
+        // 扇形中心热浪
+        for (let i=0;i<8;i++){
+          const a = fxAng + (Math.random()-0.5)*0.5;
+          particles.push(new Particle(
+            this.x + Math.cos(fxAng)*this.size,
+            this.y + Math.sin(fxAng)*this.size,
+            '#ff3300', {ang:a, speed:180+Math.random()*80, life:0.35, size:4+Math.random()*3}
+          ));
+        }
+      }
+    }
+
     // ===== 人偶 AI =====
     aiDoll(dt, enemy, d, dirX, dirY, spdMul, bullets, particles){
       const hpRatio = this.hp / this.maxHp;
@@ -6310,6 +6599,21 @@
         for (let i=0;i<4;i++){
           particles.push(new Particle(this.x, this.y, '#bfefff', {speed:180, life:0.28, size:2}));
         }
+        return;
+      }
+      // 宇智波带土：受击触发神威完美虚化（消耗全部瞳力，在扣血前判断）
+      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra > 0 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
+        this.obitoKamuiTriggered = true;
+        this.obitoKamuiTime = this.params.kamuiDur || 3;
+        // 虚化特效
+        for (let i=0;i<20;i++){
+          const ang = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#6b2473', {ang, speed:80+Math.random()*120, life:0.5+Math.random()*0.3, size:3+Math.random()*2}));
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 15, '神威·虚化!', '#b484ff', {life: 1.0, size: 13}));
+      }
+      // 宇智波带土：虚化期间完全免疫伤害（在扣血前return）
+      if (this.cls === 'obito' && this.obitoKamuiTime > 0){
         return;
       }
       // 铁壁屏障：屏障内友方减伤（持续灼烧/毒素类伤害无视减伤，直接穿透防线）
@@ -6690,6 +6994,123 @@
       // 隐身：整体半透明 + 闪烁
       if (this.invisible){
         ctx.globalAlpha = 0.28 + 0.12 * Math.sin(Date.now()*0.012);
+      }
+      // 宇智波带土：神威完美虚化（万花筒写轮眼+空间扭曲不真实感）
+      if (this.cls === 'obito' && this.obitoKamuiTime > 0){
+        const t = Date.now();
+        // 剧烈的时隐时现（多频率叠加，制造不真实的闪烁感）
+        ctx.globalAlpha = 0.35 + 0.12 * Math.sin(t*0.02) + 0.08 * Math.sin(t*0.047);
+
+        // 空间扭曲光环（多层反向旋转的不规则虚线环，像空间被撕裂扭曲）
+        ctx.save();
+        ctx.translate(x, y);
+        for (let layer=0; layer<3; layer++){
+          const r = this.size * (1.6 + layer*0.7);
+          const dir = layer % 2 === 0 ? 1 : -1;
+          const spd = dir * (0.0025 + layer*0.0018);
+          ctx.save();
+          ctx.rotate(t * spd);
+          ctx.strokeStyle = rgba('#9d4edd', 0.28 - layer*0.07);
+          ctx.lineWidth = 1.5 + layer*0.5;
+          ctx.setLineDash([10, 5, 3, 7, 2, 6]);
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI*2);
+          ctx.stroke();
+          ctx.restore();
+        }
+        // 空间吸入螺旋线（从外向内的扭曲轨迹）
+        ctx.save();
+        ctx.rotate(t * 0.003);
+        ctx.strokeStyle = rgba('#c77dff', 0.2);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        for (let a=0; a<Math.PI*4; a+=0.15){
+          const sr = this.size * 2.5 - a * 6;
+          if (sr < this.size*0.5) break;
+          const px = Math.cos(a)*sr, py = Math.sin(a)*sr;
+          if (a === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        ctx.restore();
+        ctx.restore();
+
+        // 重影虚影（左右偏移的半透明分身，海市蜃楼般的不真实感）
+        for (let ghost=0; ghost<2; ghost++){
+          const gx = (ghost === 0 ? 1 : -1) * (4 + Math.sin(t*0.008 + ghost*2)*3);
+          const gy = Math.cos(t*0.006 + ghost) * 2;
+          ctx.save();
+          ctx.globalAlpha = 0.12 + 0.05 * Math.sin(t*0.015 + ghost);
+          ctx.fillStyle = '#6b2473';
+          ctx.beginPath();
+          ctx.arc(x + gx, y + gy, this.size * 0.95, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 万花筒写轮眼
+        ctx.save();
+        ctx.translate(x, y);
+        const eyeR = this.size * 1.9;
+        // 写轮眼红色虹膜（外圈深红，内圈亮红）
+        const irisGrad = ctx.createRadialGradient(0, 0, eyeR*0.3, 0, 0, eyeR);
+        irisGrad.addColorStop(0, '#ff2222');
+        irisGrad.addColorStop(0.6, '#cc0000');
+        irisGrad.addColorStop(1, '#660000');
+        ctx.fillStyle = irisGrad;
+        ctx.beginPath(); ctx.arc(0, 0, eyeR, 0, Math.PI*2); ctx.fill();
+        // 虹膜外发光
+        ctx.shadowColor = '#ff0000';
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = rgba('#ff3333', 0.8);
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(0, 0, eyeR, 0, Math.PI*2); ctx.stroke();
+        ctx.shadowBlur = 0;
+        // 旋转的万花筒图案（三勾玉风车状）
+        ctx.rotate(Date.now() * 0.004);
+        ctx.fillStyle = '#000000';
+        for (let i=0;i<3;i++){
+          ctx.save();
+          ctx.rotate((i/3)*Math.PI*2);
+          // 每个勾玉：从中心向外的弯曲刀刃形状
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(eyeR*0.5, -eyeR*0.15, eyeR*0.85, -eyeR*0.35);
+          ctx.quadraticCurveTo(eyeR*0.6, -eyeR*0.05, eyeR*0.45, eyeR*0.25);
+          ctx.quadraticCurveTo(eyeR*0.25, eyeR*0.1, 0, 0);
+          ctx.fill();
+          // 勾玉尖端小圆点
+          ctx.beginPath();
+          ctx.arc(eyeR*0.85, -eyeR*0.35, eyeR*0.12, 0, Math.PI*2);
+          ctx.fill();
+          ctx.restore();
+        }
+        // 中心黑色瞳孔
+        ctx.fillStyle = '#000000';
+        ctx.beginPath(); ctx.arc(0, 0, eyeR*0.28, 0, Math.PI*2); ctx.fill();
+        // 瞳孔中心红点
+        ctx.fillStyle = '#ff0000';
+        ctx.beginPath(); ctx.arc(0, 0, eyeR*0.1, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+
+        // 身体边缘碎裂溶解效果（不规则的边缘缺口）
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.globalAlpha = 0.4;
+        ctx.fillStyle = '#1a0a1f';
+        for (let i=0;i<6;i++){
+          const ang = (i/6)*Math.PI*2 + t*0.002;
+          const wobble = Math.sin(t*0.005 + i*1.7) * 3;
+          const cx = Math.cos(ang) * (this.size + wobble);
+          const cy = Math.sin(ang) * (this.size + wobble);
+          ctx.beginPath();
+          ctx.arc(cx, cy, 3 + Math.sin(t*0.008+i)*1.5, 0, Math.PI*2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // 小球本体半透明（虚化状态，更剧烈闪烁）
+        ctx.globalAlpha = 0.25 + 0.1 * Math.sin(t*0.025) + 0.05 * Math.sin(t*0.06);
       }
       // 外发光
       const glow = ctx.createRadialGradient(x,y,this.size*0.3,x,y,this.size*2.4);
@@ -7574,6 +7995,25 @@
         ctx.fillText(moltenLabel, x, mly);
         ctx.shadowBlur = 0;
       }
+      // 宇智波带土：瞳力点数显示
+      if (this.cls === 'obito'){
+        let chakraOffset = 3;
+        if (this.plagueStacks > 0) chakraOffset = 20;
+        if (this.frostStacks > 0 && this.frozenTime <= 0) chakraOffset += 17;
+        if (this.thunderMarkStacks > 0 && this.frozenTime <= 0) chakraOffset += 17;
+        const chakraLabel = '🔮 ' + this.obitoChakra + '/5';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const chakraW = ctx.measureText(chakraLabel).width;
+        const cly = ny + chakraOffset;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(x - chakraW/2 - 4, cly - 1, chakraW + 8, 15);
+        ctx.fillStyle = '#c77dff';
+        ctx.shadowColor = '#9d4edd'; ctx.shadowBlur = 6;
+        ctx.fillText(chakraLabel, x, cly);
+        ctx.shadowBlur = 0;
+      }
       ctx.restore();
 
       // 血条
@@ -7938,6 +8378,8 @@
       }
       for (const b of balls){
         if (!b.alive || b.team === bul.team) continue;
+        // 宇智波带土神威虚化期间：子弹穿过身体，不命中
+        if (b.cls === 'obito' && b.obitoKamuiTime > 0) continue;
         const d = Math.hypot(bul.x - b.x, bul.y - b.y);
         if (d < b.size + bul.size){
           // 弹射炮手炮弹/风舞游侠弹射弹：先去重，避免同一弹反复命中同一敌人
@@ -7948,6 +8390,23 @@
           // 电磁脉冲师电弧弹：叠加漏电标记，满层眩晕
           if (bul.isEmpBolt && bul.owner){
             b.applyLeak(1, bul.owner.params.maxStacks || 3, bul.owner.params.stunTime || 0.8, bul.owner, particles);
+          }
+          // 宇智波带土木遁棘刺：命中后束缚敌人
+          if (bul.isWoodSpike && bul.owner && bul.owner.cls === 'obito'){
+            const rootMax = bul.owner.params.rootMax || 2;
+            const rootedCount = bul.owner.obitoRootedList.filter(r => r && r.alive && r.stun > 0).length;
+            if (rootedCount < rootMax){
+              b.stun = Math.max(b.stun, bul.owner.params.rootDur || 2.5);
+              if (!bul.owner.obitoRootedList.includes(b)){
+                bul.owner.obitoRootedList.push(b);
+              }
+              // 木棘缠绕特效
+              for (let i=0;i<12;i++){
+                const ang = (i/12)*Math.PI*2;
+                particles.push(new Particle(b.x, b.y, '#4a7c3a', {ang, speed:50+Math.random()*40, life:0.5, size:3}));
+              }
+              floatTexts.push(new FloatText(b.x, b.y - b.size - 10, '束缚!', '#4a7c3a', {life: 0.8, size: 11}));
+            }
           }
           // 风舞游侠弹射弹：穿透+敌方弹射（追踪最近敌人，伤害衰减）
           if (bul.isWindBounce){
