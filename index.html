@@ -2247,13 +2247,14 @@
     summoner: {
       label: '召唤师', icon: '🪆', maxHp: 95, color: '#a266ff', cost: 6,
       desc: '人偶人海·全队增伤',
-      stats: { atk: 4, def: 5, spd: 4, rng: 7, sup: 10, ctrl: 3 },
-      codex: '人海战术构筑者，源源不断召唤人偶协同作战，全队输出增幅光环，人海碾压单体高伤单位。每隔数秒召唤1个低血量远程人偶（最多同时存在4个），全队友军（包含人偶）获得伤害增幅光环；人偶死亡时爆炸造成小范围魔法伤害；本体远程弹攻击标记敌人，人偶会集火标记目标。',
+      stats: { atk: 6, def: 5, spd: 4, rng: 7, sup: 10, ctrl: 3 },
+      codex: '人海战术构筑者，一次性召唤三个人偶协同作战，全队输出增幅光环，人海碾压单体高伤单位。每次召唤3个中血量远程人偶（最多同时存在6个），全队友军（包含人偶）获得伤害增幅光环；本体远程弹攻击标记敌人，人偶会集火标记目标。',
       params: [
-        { key: 'dollHp', label: '人偶血量', min: 10, max: 60, step: 5, def: 30, int: true },
+        { key: 'dollHp', label: '人偶血量', min: 20, max: 80, step: 5, def: 42, int: true },
         { key: 'dollDmg', label: '人偶伤害', min: 1, max: 15, step: 1, def: 5, int: true },
-        { key: 'summonCD', label: '召唤冷却秒', min: 1, max: 8, step: 0.5, def: 4, int: false },
-        { key: 'auraBonus', label: '光环增伤%', min: 5, max: 50, step: 5, def: 15, int: true }
+        { key: 'summonCD', label: '召唤冷却秒', min: 2, max: 10, step: 0.5, def: 5, int: false },
+        { key: 'auraBonus', label: '光环增伤%', min: 5, max: 50, step: 5, def: 18, int: true },
+        { key: 'baseDmg', label: '本体弹伤害', min: 3, max: 15, step: 1, def: 8, int: true }
       ]
     },
     plague: {
@@ -5276,7 +5277,7 @@
         const bul = new Bullet(
           this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
           (adx/ad)*bs, (ady/ad)*bs,
-          4, this.color, this.team, this
+          this.params.baseDmg || 8, this.color, this.team, this
         );
         bul.marks = true;
         bullets.push(bul);
@@ -5284,31 +5285,39 @@
           particles.push(new Particle(this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size, this.color, {speed:80, life:0.3, size:2}));
         }
       }
-      // 召唤人偶
+      // 召唤人偶（一次3个）
       this.summonCD -= dt;
       if (this.summonCD <= 0){
         const dollCount = balls.filter(b => b.alive && b.team === this.team && b.isDoll && b.owner === this).length;
-        if (dollCount < 4){
-          this.summonCD = this.params.summonCD || 4;
-          const ang = Math.random() * Math.PI * 2;
-          const dr = this.size + 20;
-          const dx = Math.max(this.size*0.7, Math.min(VIEW.w - this.size*0.7, this.x + Math.cos(ang)*dr));
-          const dy = Math.max(this.size*0.7, Math.min(VIEW.h - this.size*0.7, this.y + Math.sin(ang)*dr));
-          const doll = new Ball(this.team, this.cls, dx, dy, {
-            name: this.name + '·人偶',
-            color: this.color,
-            size: Math.max(7, this.size * 0.55),
-            speed: 100,
-            params: {...this.params}
-          });
-          doll.isDoll = true;
-          doll.owner = this;
-          doll.maxHp = this.params.dollHp || 25;
-          doll.hp = doll.maxHp;
-          balls.push(doll);
-          for (let i=0;i<10;i++){
-            const a2 = (i/10)*Math.PI*2;
-            particles.push(new Particle(dx, dy, this.color, {ang:a2, speed:90, life:0.4, size:2.5}));
+        if (dollCount < 6){
+          this.summonCD = this.params.summonCD || 5;
+          const summonNum = Math.min(3, 6 - dollCount);
+          for (let s=0; s<summonNum; s++){
+            const ang = (s/summonNum)*Math.PI*2 + Math.random()*0.5;
+            const dr = this.size + 20 + s*5;
+            const dx = Math.max(this.size*0.7, Math.min(VIEW.w - this.size*0.7, this.x + Math.cos(ang)*dr));
+            const dy = Math.max(this.size*0.7, Math.min(VIEW.h - this.size*0.7, this.y + Math.sin(ang)*dr));
+            const doll = new Ball(this.team, this.cls, dx, dy, {
+              name: this.name + '·人偶',
+              color: this.color,
+              size: Math.max(7, this.size * 0.55),
+              speed: 100,
+              params: {...this.params}
+            });
+            doll.isDoll = true;
+            doll.owner = this;
+            doll.maxHp = this.params.dollHp || 42;
+            doll.hp = doll.maxHp;
+            balls.push(doll);
+            for (let i=0;i<8;i++){
+              const a2 = (i/8)*Math.PI*2;
+              particles.push(new Particle(dx, dy, this.color, {ang:a2, speed:90, life:0.4, size:2.5}));
+            }
+          }
+          // 三连召唤中心爆发
+          for (let i=0;i<16;i++){
+            const a2 = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a2, speed:120+Math.random()*80, life:0.35, size:3}));
           }
         } else {
           this.summonCD = 0.5; // 满额时快速重试
@@ -6597,33 +6606,7 @@
 
     // ===== 人偶 AI =====
     aiDoll(dt, enemy, d, dirX, dirY, spdMul, bullets, particles){
-      const hpRatio = this.hp / this.maxHp;
-      // 半血以下：取消远程，冲向敌人自爆
-      if (hpRatio <= 0.5){
-        this.suicideCharge = true;
-      }
-      if (this.suicideCharge){
-        // 高速冲刺向敌人
-        const chargeSpeed = this.baseSpeed * 2.2;
-        this.vx += dirX * chargeSpeed * spdMul * dt * 5;
-        this.vy += dirY * chargeSpeed * spdMul * dt * 5;
-        // 限制速度
-        const sp = Math.hypot(this.vx, this.vy);
-        if (sp > chargeSpeed){
-          this.vx = this.vx/sp * chargeSpeed;
-          this.vy = this.vy/sp * chargeSpeed;
-        }
-        // 冲锋拖尾特效
-        if (Math.random() < 0.5){
-          particles.push(new Particle(this.x, this.y, this.color, {speed:30, life:0.3, size:3}));
-        }
-        // 贴近敌人时自爆
-        if (d < this.size + enemy.size + 8){
-          this.hp = 0; // 触发die()自爆
-        }
-        return;
-      }
-      // 半血以上：正常远程风筝
+      // 全程远程风筝（取消自爆机制）
       const ideal = 170;
       if (d > ideal + 25){
         this.vx += dirX * this.baseSpeed * spdMul * dt * 4;
@@ -6647,7 +6630,7 @@
         bullets.push(new Bullet(
           this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
           (adx/ad)*bs, (ady/ad)*bs,
-          this.params.dollDmg || 4, this.color, this.team, this.owner || this
+          this.params.dollDmg || 5, this.color, this.team, this.owner || this
         ));
         particles.push(new Particle(this.x, this.y, this.color, {speed:60, life:0.25, size:2}));
       }
@@ -6974,42 +6957,13 @@
           timeMage.reviveAuraCD = timeMage.params.reviveCd || 10;
         }
       }
-      // 人偶死亡爆炸：小范围魔法伤害
-      if (this.isDoll && this._balls){
-        const exDmg = Math.max(2, Math.ceil((this.params.dollDmg || 3) * 1.5));
-        const exR = 55;
-        for (const b of this._balls){
-          if (!b.alive || b.team === this.team) continue;
-          const dd = Math.hypot(b.x - this.x, b.y - this.y);
-          if (dd < exR + b.size) b.takeDamage(exDmg, this.color, particles, this.owner || this);
-        }
-        // 爆炸核心：大量放射粒子
-        for (let i=0;i<30;i++){
-          const ang = (i/30)*Math.PI*2 + (Math.random()-0.5)*0.3;
-          const sp = 150 + Math.random()*180;
-          particles.push(new Particle(this.x, this.y, this.color, {ang, speed:sp, life:0.5+Math.random()*0.3, size:3+Math.random()*3}));
-        }
-        // 白色高光爆发
-        for (let i=0;i<12;i++){
+      // 人偶死亡：消散特效（取消自爆机制）
+      if (this.isDoll){
+        for (let i=0;i<14;i++){
           const ang = Math.random()*Math.PI*2;
-          const sp = 80 + Math.random()*180;
-          particles.push(new Particle(this.x, this.y, '#ffffff', {ang, speed:sp, life:0.3+Math.random()*0.3, size:3+Math.random()*4}));
+          particles.push(new Particle(this.x, this.y, this.color, {ang, speed:60+Math.random()*80, life:0.4+Math.random()*0.3, size:2+Math.random()*2}));
         }
-        // 冲击波环：快速扩散的大粒子环
-        for (let i=0;i<24;i++){
-          const ang = (i/24)*Math.PI*2;
-          particles.push(new Particle(this.x, this.y, this.color, {ang, speed:320+Math.random()*60, life:0.35, size:5+Math.random()*3}));
-        }
-        // 紫色烟雾余烬
-        for (let i=0;i<18;i++){
-          const ang = Math.random()*Math.PI*2;
-          const sp = 20 + Math.random()*70;
-          particles.push(new Particle(this.x, this.y, '#7a3dd6', {ang, speed:sp, life:0.7+Math.random()*0.5, size:4+Math.random()*5}));
-        }
-        // 中心闪光
-        particles.push(new Particle(this.x, this.y, '#ffffff', {speed:0, life:0.25, size:12}));
-        // 屏幕震动
-        shake = Math.max(shake, 8);
+        particles.push(new Particle(this.x, this.y, '#ffffff', {speed:0, life:0.2, size:8}));
       }
       // 熔火卫士阵亡：迸发火焰AOE + 本体获得熔火壳
       if (this.isMoltenGuard && this._balls){
