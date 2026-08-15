@@ -2455,7 +2455,7 @@
       ]
     },
     pain: {
-      label: '佩恩六道', icon: '👁', maxHp: 45, color: '#707070', cost: 10, ballSpeed: 100,
+      label: '佩恩六道', icon: '👁', maxHp: 250, color: '#707070', cost: 10, ballSpeed: 100,
       desc: '六道轮转·神罚现世',
       stats: { atk: 8, def: 6, spd: 5, rng: 6, sup: 7, ctrl: 10 },
       codex: '五具痛苦之躯往复轮转，耗尽之后，轮回之真正力量方才降临。天道超携神罚现世，神罗天征涤荡万物，地爆天星囚禁世间一切生灵。',
@@ -3154,7 +3154,7 @@
       if (Math.random() < 0.02){
         floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 10, '-' + Math.round(dmg * 10), '#ff4444', {life: 0.6, size: 11}));
       }
-      if (ball.hp <= 0 && ball.alive){
+      if (ball.hp <= 0 && ball.alive && !(ball.cls === 'pain' && !ball.isPainBeast && !ball.painTenduoActive)){
         ball.die(particles);
       }
     }
@@ -3739,6 +3739,48 @@
     }
   }
 
+  // 技能范围圈（持续显示的虚线/实线圈）
+  class SkillCircle {
+    constructor(x, y, radius, color, life, opts = {}){
+      this.x = x; this.y = y; this.radius = radius;
+      this.color = color; this.life = life; this.maxLife = life;
+      this.dash = opts.dash !== false;
+      this.fillAlpha = opts.fillAlpha || 0.06;
+      this.lineWidth = opts.lineWidth || 2;
+      this.rotate = 0;
+    }
+    update(dt){ this.life -= dt; this.rotate += dt * 2; }
+    draw(ctx){
+      const a = Math.max(0, this.life / this.maxLife);
+      const pulseR = this.radius + Math.sin(this.rotate * 3) * 3;
+      ctx.save();
+      // 半透明填充
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, pulseR);
+      g.addColorStop(0, rgba(this.color, this.fillAlpha * a));
+      g.addColorStop(0.85, rgba(this.color, this.fillAlpha * 0.5 * a));
+      g.addColorStop(1, rgba(this.color, 0));
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(this.x, this.y, pulseR, 0, Math.PI * 2); ctx.fill();
+      // 外圈线条
+      ctx.strokeStyle = rgba(this.color, 0.85 * a);
+      ctx.lineWidth = this.lineWidth;
+      ctx.shadowColor = this.color;
+      ctx.shadowBlur = 12;
+      if (this.dash){
+        ctx.setLineDash([10, 6]);
+        ctx.lineDashOffset = -this.rotate * 20;
+      }
+      ctx.beginPath(); ctx.arc(this.x, this.y, pulseR, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      // 内圈装饰
+      ctx.strokeStyle = rgba(this.color, 0.35 * a);
+      ctx.lineWidth = 1;
+      ctx.shadowBlur = 0;
+      ctx.beginPath(); ctx.arc(this.x, this.y, pulseR * 0.7, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+  }
+
   // 扇形AOE视觉（用于爆风乱舞范围框）
   class FanAOE {
     constructor(x, y, angle, halfAngle, radius, color){
@@ -4128,8 +4170,9 @@
       // ===== 佩恩六道相关状态 =====
       this.painForm = Math.floor(Math.random() * 5); // 当前躯体: 随机起始 0修罗 1饿鬼 2人间 3地狱 4畜生 5天道超
       this.painSwitchCD = 0; // 轮转冷却
-      this.painFormsHP = [45, 45, 45, 45, 45]; // 五道各自血量
+      this.painFormsHP = [50, 50, 50, 50, 50]; // 兼容字段（不再使用）
       this.painFormsAlive = [true, true, true, true, true]; // 五道是否存活
+      this.painTotalMaxHp = 250; // 五道总血量（用于计算死亡阈值）
       this.painChakra = 0; // 查克拉印记
       this.painAtkCD = 0; // 普攻冷却
       this.painSkillCD = 0; // 技能冷却
@@ -4492,7 +4535,26 @@
           this.hitFlash = Math.max(this.hitFlash, 0.08);
         }
       }
-      if (this.hp <= 0 && this.alive){ this.die(particles); return; }
+      // 佩恩六道：总血量阈值检测（在通用死亡判定之前）
+      if (this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive && this.alive){
+        while (true){
+          const defeatedCount = this.painFormsAlive.filter(a => !a).length;
+          const segment = this.painTotalMaxHp / 5;
+          const deathThreshold = this.painTotalMaxHp - (defeatedCount + 1) * segment;
+          if (this.hp <= deathThreshold){
+            this.painFormsAlive[this.painForm] = false;
+            const allDead = this.painFormsAlive.every(a => !a);
+            if (allDead){
+              this._painAwakenTenduo(balls, particles, floatTexts);
+              break;
+            } else {
+              this._painSwitchForm(balls, particles, floatTexts, true);
+              this.hp += segment * 0.5; // 回部分血
+            }
+          } else break;
+        }
+      }
+      if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)){ this.die(particles); return; }
 
       // 灼烧伤害
       if (this.burnTime > 0){
@@ -4505,7 +4567,7 @@
             '#ff6b3d', {speed:40, life:0.4, size:2.5}
           ));
         }
-        if (this.hp <= 0 && this.alive){ this.die(particles); return; }
+        if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)){ this.die(particles); return; }
       }
 
       // 宇智波带土：瞳力积蓄 + 虚化时间递减
@@ -4586,26 +4648,6 @@
         if (this.painShinraCD > 0) this.painShinraCD -= dt;
         if (this.painChibakuCD > 0) this.painChibakuCD -= dt;
         if (this.painPandaShieldTime > 0) this.painPandaShieldTime -= dt;
-
-        // 非天道超状态：仅死亡后切换，不再自动轮转
-
-        // 检测当前躯体是否被击破
-        if (this.hp <= 0 && this.alive){
-          if (!this.painTenduoActive){
-            // 记录当前道损毁
-            this.painFormsAlive[this.painForm] = false;
-            this.painFormsHP[this.painForm] = 0;
-            // 检查是否五道全灭
-            const allDead = this.painFormsAlive.every(a => !a);
-            if (allDead){
-              // 觉醒天道超
-              this._painAwakenTenduo(balls, particles, floatTexts);
-            } else {
-              // 强制轮转到下一道
-              this._painSwitchForm(balls, particles, floatTexts, true);
-            }
-          }
-        }
       }
 
       // 眩晕：无法移动和攻击
@@ -4637,7 +4679,7 @@
         if (this.hitFlash>0) this.hitFlash -= dt;
         for (const a of this.afterimages) a.life -= dt;
         this.afterimages = this.afterimages.filter(a => a.life > 0);
-        if (this.hp <= 0 && this.alive) this.die(particles);
+        if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)) this.die(particles);
         return;
       }
 
@@ -4762,7 +4804,7 @@
         if (this._empPulseFx.life <= 0) this._empPulseFx = null;
       }
 
-      if (this.hp <= 0 && this.alive) this.die(particles);
+      if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)) this.die(particles);
     }
 
     _integrate(dt){
@@ -5410,10 +5452,6 @@
     _painSwitchForm(balls, particles, floatTexts, forced){
       const p = this.params;
       const formNames = ['修罗道', '饿鬼道', '人间道', '地狱道', '畜生道'];
-      // 保存当前道血量
-      if (this.painForm < 5 && this.painFormsAlive[this.painForm]){
-        this.painFormsHP[this.painForm] = Math.max(0, this.hp);
-      }
       // 找下一个存活的道
       let next = -1;
       for (let i = 1; i <= 5; i++){
@@ -5422,8 +5460,8 @@
       }
       if (next < 0) return;
       this.painForm = next;
-      this.hp = this.painFormsHP[next];
-      this.maxHp = 45;
+      // 总血量制：maxHp保持不变，HP由调用方负责回血
+      this.maxHp = this.painTotalMaxHp;
       this.painSwitchCD = p.switchCD || 6;
       this.painAtkCD = 0.3;
       // 黑棒碎裂特效
@@ -5446,8 +5484,8 @@
     _painAwakenTenduo(balls, particles, floatTexts){
       this.painTenduoActive = true;
       this.painForm = 5;
-      this.maxHp = 180;
-      this.hp = 180;
+      this.maxHp = 300;
+      this.hp = 230; // 恢复大量HP但不回满
       this.alive = true;
       this.color = '#c0a050';
       this.painShinraCD = 2;
@@ -5510,14 +5548,16 @@
             particles.push(new Particle(this.x, this.y, '#c0a050', {speed:60, life:0.25, size:2}));
           }
         }
-        // 神罗天征
-        if (this.painShinraCD <= 0 && d < 250){
+        // 神罗天征（5秒冷却，每次释放叠加1层查克拉）
+        if (this.painShinraCD <= 0 && d < 280){
           this._painShinraTensei(balls, particles, p);
+          this.painShinraCD = 5;
           this.painChakra = Math.min((p.chakraMax || 9), this.painChakra + 1);
         }
-        // 地爆天星（查克拉满时）
-        if (this.painChibakuCD <= 0 && this.painChakra >= (p.chakraMax || 9)){
+        // 地爆天星（查克拉满9层时触发，无冷却）
+        if (this.painChakra >= (p.chakraMax || 9)){
           this._painChibakuTensei(enemy, balls, particles, aoes, p);
+          this.painChakra = 0;
         }
         // 天道超身体表面雷电+查克拉环特效
         if (Math.random() < 0.2){
@@ -5619,83 +5659,193 @@
     _painShinraTensei(balls, particles, p){
       this.painShinraCD = p.shinraCD || 7;
       const dmg = p.shinraDmg || 25;
-      const radius = 220;
+      const radius = 240;
+      const sx = this.x, sy = this.y;
+      // 飘字
+      floatTexts.push(new FloatText(sx, sy - this.size - 20, '神罗天征', '#ffd700', {life: 1.5, size: 18, vy: -20}));
+      // 轮回眼波纹（蓄力瞬间）
+      for (let ring = 0; ring < 4; ring++){
+        const r = 20 + ring * 15;
+        aoes.push(new AOE(sx, sy, ring === 0 ? '#ffffff' : '#9a7ec0', r));
+      }
+      // 伤害+击退
       for (const b of balls){
         if (!b.alive || b.team === this.team) continue;
-        const dd = Math.hypot(b.x - this.x, b.y - this.y);
+        const dd = Math.hypot(b.x - sx, b.y - sy);
         if (dd < radius + b.size){
           b.takeDamage(dmg, '#c0a050', particles, this);
-          // 强击退
-          const kx = (b.x - this.x) / Math.max(1, dd);
-          const ky = (b.y - this.y) / Math.max(1, dd);
-          b.vx += kx * 400;
-          b.vy += ky * 400;
-          b.silenceTime = Math.max(b.silenceTime, 0.5); // 打断
+          const kx = (b.x - sx) / Math.max(1, dd);
+          const ky = (b.y - sy) / Math.max(1, dd);
+          b.vx += kx * 500;
+          b.vy += ky * 500;
+          b.silenceTime = Math.max(b.silenceTime, 0.8);
         }
       }
-      // 斥力冲击波特效：多层扩散环
-      aoes.push(new AOE(this.x, this.y, '#c0a050', radius));
-      for (let ring = 0; ring < 3; ring++){
-        for (let i=0;i<24;i++){
-          const a = (i/24)*Math.PI*2;
-          const sp = 200 + ring*80;
-          particles.push(new Particle(this.x, this.y, ring===0?'#ffffff':'#c0a050', {ang:a, speed:sp, life:0.4+ring*0.1, size:4-ring}));
+      // 中心爆闪
+      particles.push(new Particle(sx, sy, '#ffffff', {speed: 0, life: 0.3, size: 30}));
+      particles.push(new Particle(sx, sy, '#ffd700', {speed: 0, life: 0.4, size: 20}));
+      // 多层斥力冲击波（不同速度扩散）
+      for (let layer = 0; layer < 5; layer++){
+        const layerDelay = layer * 60;
+        const layerColor = ['#ffffff', '#ffd700', '#c0a050', '#ffaa33', '#ffffff'][layer];
+        const layerRadius = radius + layer * 15;
+        setTimeout(() => {
+          if (!this.alive) return;
+          aoes.push(new AOE(sx, sy, layerColor, layerRadius));
+          // 冲击波前沿粒子环
+          const count = 32 + layer * 6;
+          for (let i = 0; i < count; i++){
+            const a = (i / count) * Math.PI * 2;
+            const sp = 250 + layer * 60 + Math.random() * 80;
+            particles.push(new Particle(sx, sy, layerColor, {ang: a, speed: sp, life: 0.5 + layer * 0.08, size: 5 - layer * 0.5}));
+          }
+          shake = Math.max(shake, 12 + layer * 2);
+        }, layerDelay);
+      }
+      // 地面碎裂飞溅（暗色碎片，带重力）
+      for (let i = 0; i < 40; i++){
+        const a = Math.random() * Math.PI * 2;
+        const sp = 120 + Math.random() * 200;
+        particles.push(new Particle(sx, sy, i % 3 === 0 ? '#8B4513' : '#696969', {ang: a, speed: sp, life: 0.8 + Math.random() * 0.4, size: 2 + Math.random() * 3, gravity: 200}));
+      }
+      // 金色查克拉余波
+      for (let i = 0; i < 25; i++){
+        const a = Math.random() * Math.PI * 2;
+        particles.push(new Particle(sx, sy, '#ffd700', {ang: a, speed: 80 + Math.random() * 120, life: 0.6 + Math.random() * 0.3, size: 2 + Math.random() * 2}));
+      }
+      shake = Math.max(shake, 16);
+      // 延迟余震
+      setTimeout(() => {
+        if (!this.alive) return;
+        aoes.push(new AOE(sx, sy, '#c0a050', radius * 0.6));
+        for (let i = 0; i < 20; i++){
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(sx, sy, '#c0a050', {ang: a, speed: 100 + Math.random() * 80, life: 0.4, size: 3}));
         }
-      }
-      for (let i=0;i<30;i++){
-        const a = Math.random()*Math.PI*2;
-        particles.push(new Particle(this.x, this.y, '#ffd700', {ang:a, speed:150+Math.random()*150, life:0.5, size:3}));
-      }
-      shake = Math.max(shake, 8);
+        shake = Math.max(shake, 6);
+      }, 500);
     }
 
     // ===== 佩恩：地爆天星 =====
     _painChibakuTensei(enemy, balls, particles, aoes, p){
-      this.painChibakuCD = 12;
-      this.painChakra = 0;
       const radius = p.chibakuR || 200;
       const dur = p.chibakuDur || 2;
       const cx = enemy.x, cy = enemy.y;
-      // 生成引力黑球
-      aoes.push(new AOE(cx, cy, '#1a0a2e', radius));
-      // 拉扯+禁锢所有范围内敌人
-      for (const b of balls){
-        if (!b.alive || b.team === this.team) continue;
-        const dd = Math.hypot(b.x - cx, b.y - cy);
-        if (dd < radius + b.size){
-          // 拉扯到中心
-          b.x = cx + (Math.random()-0.5)*30;
-          b.y = cy + (Math.random()-0.5)*30;
-          b.stun = Math.max(b.stun, dur);
-          b.takeDamage(15, '#1a0a2e', particles, this);
-        }
+      // 飘字
+      floatTexts.push(new FloatText(cx, cy - 40, '地爆天星', '#9a4adf', {life: 2.0, size: 20, vy: -15}));
+      // 技能范围圈（持续显示整个技能期间）
+      aoes.push(new SkillCircle(cx, cy, radius, '#9a4adf', 1.5, {fillAlpha: 0.08, lineWidth: 2.5}));
+      // 初始引力波纹
+      aoes.push(new AOE(cx, cy, '#4a1a6e', radius * 0.4));
+      aoes.push(new AOE(cx, cy, '#6a2a9e', radius * 0.7));
+      shake = Math.max(shake, 6);
+
+      // ===== 第一阶段：粒子向中心汇聚（6波，半径递减）=====
+      const convColors = ['#9a4adf', '#6a2a9e', '#c0a0ff', '#4a1a6e', '#7a3adf', '#aa5aff'];
+      for (let wave = 0; wave < 6; wave++){
+        setTimeout(() => {
+          if (!this.alive) return;
+          const waveR = radius * (1.0 - wave * 0.13); // 半径递减：200→174→148→122→96→70
+          const count = 18 + wave * 3;
+          for (let i = 0; i < count; i++){
+            const a = (i / count) * Math.PI * 2 + Math.random() * 0.15;
+            const r = waveR + (Math.random() - 0.5) * 30;
+            const px = cx + Math.cos(a) * r;
+            const py = cy + Math.sin(a) * r;
+            // 方向直接指向中心
+            const toCenterAng = a + Math.PI;
+            // 高速以确保粒子能到达中心（克服0.92衰减）
+            const sp = 700 + Math.random() * 300;
+            particles.push(new Particle(px, py, convColors[wave % convColors.length], {
+              ang: toCenterAng, speed: sp, life: 0.35 + Math.random() * 0.15, size: 3 + Math.random() * 2
+            }));
+          }
+          // 每波附带碎石碎片
+          if (wave < 4){
+            for (let i = 0; i < 8; i++){
+              const a = Math.random() * Math.PI * 2;
+              const r = waveR + (Math.random() - 0.5) * 40;
+              const px = cx + Math.cos(a) * r;
+              const py = cy + Math.sin(a) * r;
+              const rockColor = ['#5c3d1e', '#8b6332', '#696969'][i % 3];
+              particles.push(new Particle(px, py, rockColor, {
+                ang: a + Math.PI, speed: 500 + Math.random() * 200, life: 0.4, size: 2 + Math.random() * 2
+              }));
+            }
+          }
+          shake = Math.max(shake, 3 + wave);
+        }, wave * 130);
       }
-      // 黑球特效：暗色核心+紫色漩涡
-      for (let i=0;i<50;i++){
-        const a = Math.random()*Math.PI*2;
-        const r = Math.random()*radius;
-        particles.push(new Particle(cx + Math.cos(a)*r, cy + Math.sin(a)*r, '#4a1a6e', {ang:a+Math.PI, speed:80+Math.random()*60, life:0.8, size:3}));
-      }
-      for (let i=0;i<20;i++){
-        const a = Math.random()*Math.PI*2;
-        particles.push(new Particle(cx, cy, '#000000', {ang:a, speed:30+Math.random()*30, life:1.0, size:5}));
-      }
-      // 延迟爆炸
+
+      // ===== 第二阶段：包裹敌方（汇聚完成，黑球成形）=====
       setTimeout(() => {
         if (!this.alive) return;
+        // 拉扯+禁锢范围内敌人到中心
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const dd = Math.hypot(b.x - cx, b.y - cy);
+          if (dd < radius + b.size){
+            b.x = cx + (Math.random() - 0.5) * 25;
+            b.y = cy + (Math.random() - 0.5) * 25;
+            b.stun = Math.max(b.stun, dur);
+            b.takeDamage(15, '#1a0a2e', particles, this);
+          }
+        }
+        // 黑球包裹（多层AOE模拟实心黑球）
+        aoes.push(new AOE(cx, cy, '#000000', 35));
+        aoes.push(new AOE(cx, cy, '#1a0a2e', 60));
+        aoes.push(new AOE(cx, cy, '#4a1a6e', 90));
+        // 球体表面紫色电弧
+        for (let i = 0; i < 24; i++){
+          const a = (i / 24) * Math.PI * 2;
+          const r = 40;
+          particles.push(new Particle(cx + Math.cos(a) * r, cy + Math.sin(a) * r, '#9a4adf', {
+            ang: a + Math.PI / 2, speed: 60, life: 0.4, size: 3
+          }));
+        }
+        floatTexts.push(new FloatText(cx, cy - 50, '封印！', '#c0a0ff', {life: 0.8, size: 14, vy: -20}));
+        shake = Math.max(shake, 10);
+      }, 850);
+
+      // ===== 第三阶段：爆炸 =====
+      setTimeout(() => {
+        if (!this.alive) return;
+        // 中心爆闪
+        particles.push(new Particle(cx, cy, '#ffffff', {speed: 0, life: 0.25, size: 40}));
+        particles.push(new Particle(cx, cy, '#c0a0ff', {speed: 0, life: 0.35, size: 50}));
+        // 终爆伤害+击退
         for (const b of balls){
           if (!b.alive || b.team === this.team) continue;
           const dd = Math.hypot(b.x - cx, b.y - cy);
           if (dd < radius + b.size){
             b.takeDamage(35, '#6a2a9e', particles, this);
+            const kx = (b.x - cx) / Math.max(1, dd);
+            const ky = (b.y - cy) / Math.max(1, dd);
+            b.vx += kx * 250;
+            b.vy += ky * 250;
           }
         }
-        for (let i=0;i<40;i++){
-          const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(cx, cy, '#9a4adf', {ang:a, speed:200+Math.random()*150, life:0.6, size:4}));
+        // 多层爆炸冲击波
+        for (let layer = 0; layer < 4; layer++){
+          const layerColor = ['#ffffff', '#c0a0ff', '#9a4adf', '#4a1a6e'][layer];
+          aoes.push(new AOE(cx, cy, layerColor, radius * 0.5 + layer * 40));
         }
-        shake = Math.max(shake, 12);
-      }, dur * 1000);
+        // 爆炸碎片（向外飞射）
+        for (let i = 0; i < 60; i++){
+          const a = (i / 60) * Math.PI * 2 + Math.random() * 0.2;
+          const sp = 200 + Math.random() * 250;
+          const c = i % 3 === 0 ? '#ffffff' : (i % 3 === 1 ? '#c0a0ff' : '#9a4adf');
+          particles.push(new Particle(cx, cy, c, {ang: a, speed: sp, life: 0.6 + Math.random() * 0.3, size: 3 + Math.random() * 2}));
+        }
+        // 暗物质碎块（带重力下落）
+        for (let i = 0; i < 20; i++){
+          const a = Math.random() * Math.PI * 2;
+          const sp = 150 + Math.random() * 180;
+          particles.push(new Particle(cx, cy, '#2a1a3e', {ang: a, speed: sp, life: 0.9, size: 3 + Math.random() * 3, gravity: 200}));
+        }
+        floatTexts.push(new FloatText(cx, cy - 30, '碎星！', '#c0a0ff', {life: 1.0, size: 16, vy: -25}));
+        shake = Math.max(shake, 18);
+      }, 1300);
     }
 
     // ===== 佩恩：通灵兽召唤（周边生成） =====
@@ -5730,7 +5880,7 @@
       beastBall.beastType = beast;
       beastBall.beastName = beastNames[beast];
       beastBall.owner = this;
-      beastBall.maxHp = beast === 'rhino' || beast === 'panda' ? 50 : 35;
+      beastBall.maxHp = beast === 'rhino' ? 65 : beast === 'panda' ? 55 : beast === 'hellDog' ? 45 : 35;
       beastBall.hp = beastBall.maxHp;
       beastBall.painBeastAtkCD = 0;
       balls.push(beastBall);
@@ -6782,6 +6932,7 @@
 
     // ===== 通灵兽 AI（召唤物）=====
     aiPainBeast(dt, enemy, d, dirX, dirY, spdMul, balls, particles){
+      // 通灵兽无被动回血
       // 追击敌人
       const chargeSpeed = this.baseSpeed;
       if (d > this.size + enemy.size + 8){
@@ -7266,6 +7417,7 @@
           floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '🔥减伤', '#ffd76b', {life: 0.5, size: 10}));
         }
       }
+      // 通灵兽：无减伤（脆皮召唤物）
       // 佩恩饿鬼道：吸收伤害转化回血
       if (this.cls === 'pain' && !this.isPainBeast && this.painForm === 1 && !this.painTenduoActive && !isDot){
         const absorbRate = (this.params.absorbRate || 25) / 100;
@@ -7282,17 +7434,7 @@
       }
       this.hp -= dmg;
       this.hitFlash = 0.15;
-      // 佩恩六道：当前躯体被击破，立即轮转或觉醒天道超
-      if (this.cls === 'pain' && !this.isPainBeast && this.hp <= 0 && this.alive && !this.painTenduoActive){
-        this.painFormsAlive[this.painForm] = false;
-        this.painFormsHP[this.painForm] = 0;
-        const allDead = this.painFormsAlive.every(a => !a);
-        if (allDead){
-          this._painAwakenTenduo(balls, particles, floatTexts);
-        } else {
-          this._painSwitchForm(balls, particles, floatTexts, true);
-        }
-      }
+      // 佩恩六道：总血量阈值切换由update方法统一处理
       // ===== 战斗数据追踪 =====
       this.stats.dmgTaken += dmg;
       if (attacker && attacker.stats){
@@ -7369,7 +7511,7 @@
           particles.push(new Particle(attacker.x, attacker.y, '#44ff44', {ang:a, speed:sp, life:0.5+Math.random()*0.3, size:2.5+Math.random()*2}));
         }
       }
-      if (this.hp <= 0 && this.alive) this.die(particles);
+      if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)) this.die(particles);
     }
 
     // 霜冻叠层
@@ -9072,6 +9214,11 @@
           b.takeDamage(bul.dmg, bul.color, particles, bul.owner);
           if (bul.marks) b.markTime = 3;
           if (bul.plague && bul.owner) b.applyPlague(1, bul.owner, particles, balls);
+          // 天道超黑棒命中：叠加查克拉印记
+          if (bul.isBlackRod && bul.owner && bul.owner.alive){
+            const cm = bul.owner.params.chakraMax || 9;
+            bul.owner.painChakra = Math.min(cm, bul.owner.painChakra + 1);
+          }
           // 电磁脉冲师电弧弹：叠加漏电标记，满层眩晕
           if (bul.isEmpBolt && bul.owner){
             b.applyLeak(1, bul.owner.params.maxStacks || 3, bul.owner.params.stunTime || 0.8, bul.owner, particles);
