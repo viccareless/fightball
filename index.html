@@ -2453,6 +2453,26 @@
         { key: 'comboFireDmg', label: '木火连击附加伤害', min: 3, max: 30, step: 1, def: 12, int: true },
         { key: 'comboRootExtend', label: '连击控制延长/秒', min: 0.5, max: 3, step: 0.5, def: 1, int: false }
       ]
+    },
+    pain: {
+      label: '佩恩六道', icon: '👁', maxHp: 45, color: '#707070', cost: 10, ballSpeed: 100,
+      desc: '六道轮转·神罚现世',
+      stats: { atk: 8, def: 6, spd: 5, rng: 6, sup: 7, ctrl: 10 },
+      codex: '五具痛苦之躯往复轮转，耗尽之后，轮回之真正力量方才降临。天道超携神罚现世，神罗天征涤荡万物，地爆天星囚禁世间一切生灵。',
+      params: [
+        { key: 'switchCD', label: '轮转冷却/秒', min: 3, max: 12, step: 0.5, def: 6, int: false },
+        { key: 'chakraMax', label: '查克拉印记上限', min: 5, max: 15, step: 1, def: 9, int: true },
+        { key: 'shinraCD', label: '神罗天征冷却/秒', min: 4, max: 12, step: 0.5, def: 7, int: false },
+        { key: 'shinraDmg', label: '神罗天征伤害', min: 10, max: 50, step: 1, def: 25, int: true },
+        { key: 'chibakuR', label: '地爆天星范围', min: 100, max: 300, step: 10, def: 200, int: true },
+        { key: 'chibakuDur', label: '地爆天星禁锢/秒', min: 1, max: 4, step: 0.5, def: 2, int: false },
+        { key: 'beastCD', label: '通灵兽释放冷却/秒', min: 2, max: 8, step: 0.5, def: 2.5, int: false },
+        { key: 'hellHeal', label: '地狱道回血比例%', min: 10, max: 50, step: 5, def: 25, int: true },
+        { key: 'absorbRate', label: '饿鬼道吸收转化率%', min: 10, max: 50, step: 5, def: 25, int: true },
+        { key: 'silenceDur', label: '人间道沉默/秒', min: 0.3, max: 2, step: 0.1, def: 0.8, int: false },
+        { key: 'missileDmg', label: '修罗道导弹伤害', min: 5, max: 30, step: 1, def: 12, int: true },
+        { key: 'tenduoDmg', label: '天道超黑棒伤害', min: 8, max: 40, step: 1, def: 18, int: true }
+      ]
     }
   };
 
@@ -3553,7 +3573,6 @@
           ctx.stroke();
         }
       } else if (this.isWoodSpike){
-        // 木棘：飞旋的尖锐树枝
         const flyAng = Math.atan2(this.vy, this.vx);
         const len = this.size * 3.2;
         ctx.save();
@@ -4106,6 +4125,24 @@
       this.thunderCharge = 0; // 蓄雷值（仅雷霆主宰自身）
       this.thunderStormReady = false; // 蓄雷满层标记
       this.thunderJumpCD = 0; // 雷霆跳跃冷却
+      // ===== 佩恩六道相关状态 =====
+      this.painForm = Math.floor(Math.random() * 5); // 当前躯体: 随机起始 0修罗 1饿鬼 2人间 3地狱 4畜生 5天道超
+      this.painSwitchCD = 0; // 轮转冷却
+      this.painFormsHP = [45, 45, 45, 45, 45]; // 五道各自血量
+      this.painFormsAlive = [true, true, true, true, true]; // 五道是否存活
+      this.painChakra = 0; // 查克拉印记
+      this.painAtkCD = 0; // 普攻冷却
+      this.painSkillCD = 0; // 技能冷却
+      this.painBeastCD = 0; // 通灵兽冷却
+      this.painBeastIndex = 0; // 通灵兽循环索引 0地狱犬 1巨鸟 2犀牛 3熊猫
+      this.painHumanSilenceToggle = true; // 人间道沉默开关：每隔一次攻击沉默
+      this.painShinraCD = 0; // 神罗天征冷却
+      this.painChibakuCD = 0; // 地爆天星冷却
+      this.painTenduoActive = false; // 天道超是否激活
+      this.painAbsorbShield = 0; // 饿鬼道吸收护盾
+      this.painPandaShieldTime = 0; // 熊猫减伤领域时间
+      this.isPainBeast = false; // 是否为通灵兽（召唤物）
+      this.painBeastAtkCD = 0; // 通灵兽攻击冷却
       // 大逃杀模式状态
       this.brAtkBoost = 0; // 攻击增益剩余时间
       this.brShield = 0; // 护盾值
@@ -4538,6 +4575,39 @@
         }
       }
 
+      // 佩恩六道：轮转冷却 + 技能冷却 + 天道超检测
+      if (this.cls === 'pain' && !this.isDoll && !this.isClone && !this.isPainBeast){
+        const p = this.params;
+        // 冷却递减
+        if (this.painSwitchCD > 0) this.painSwitchCD -= dt;
+        if (this.painAtkCD > 0) this.painAtkCD -= dt;
+        if (this.painSkillCD > 0) this.painSkillCD -= dt;
+        if (this.painBeastCD > 0) this.painBeastCD -= dt;
+        if (this.painShinraCD > 0) this.painShinraCD -= dt;
+        if (this.painChibakuCD > 0) this.painChibakuCD -= dt;
+        if (this.painPandaShieldTime > 0) this.painPandaShieldTime -= dt;
+
+        // 非天道超状态：仅死亡后切换，不再自动轮转
+
+        // 检测当前躯体是否被击破
+        if (this.hp <= 0 && this.alive){
+          if (!this.painTenduoActive){
+            // 记录当前道损毁
+            this.painFormsAlive[this.painForm] = false;
+            this.painFormsHP[this.painForm] = 0;
+            // 检查是否五道全灭
+            const allDead = this.painFormsAlive.every(a => !a);
+            if (allDead){
+              // 觉醒天道超
+              this._painAwakenTenduo(balls, particles, floatTexts);
+            } else {
+              // 强制轮转到下一道
+              this._painSwitchForm(balls, particles, floatTexts, true);
+            }
+          }
+        }
+      }
+
       // 眩晕：无法移动和攻击
       if (this.stun > 0){
         this.stun -= dt;
@@ -4669,6 +4739,10 @@
           break;
         case 'whiteEmber': this.aiWhiteEmber(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
         case 'obito': this.aiObito(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'pain':
+          if (this.isPainBeast) this.aiPainBeast(dt, enemy, d, dirX, dirY, spdMul, balls, particles);
+          else this.aiPain(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
+          break;
       }
       }
 
@@ -5329,6 +5403,344 @@
         } else {
           this.summonCD = 0.5; // 满额时快速重试
         }
+      }
+    }
+
+    // ===== 佩恩六道：轮转切换 =====
+    _painSwitchForm(balls, particles, floatTexts, forced){
+      const p = this.params;
+      const formNames = ['修罗道', '饿鬼道', '人间道', '地狱道', '畜生道'];
+      // 保存当前道血量
+      if (this.painForm < 5 && this.painFormsAlive[this.painForm]){
+        this.painFormsHP[this.painForm] = Math.max(0, this.hp);
+      }
+      // 找下一个存活的道
+      let next = -1;
+      for (let i = 1; i <= 5; i++){
+        const idx = (this.painForm + i) % 5;
+        if (this.painFormsAlive[idx]){ next = idx; break; }
+      }
+      if (next < 0) return;
+      this.painForm = next;
+      this.hp = this.painFormsHP[next];
+      this.maxHp = 45;
+      this.painSwitchCD = p.switchCD || 6;
+      this.painAtkCD = 0.3;
+      // 黑棒碎裂特效
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#3a3a3a', {ang:a, speed:60+Math.random()*100, life:0.4+Math.random()*0.3, size:2+Math.random()*2}));
+      }
+      for (let i=0;i<10;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#707070', {ang:a, speed:40+Math.random()*60, life:0.5, size:3}));
+      }
+      floatTexts.push(new FloatText(this.x, this.y - this.size - 12, formNames[next], '#707070', {life:1.0, size:12}));
+      // 畜生道上场立即召唤一只通灵兽
+      if (next === 4){
+        this.painBeastCD = 0;
+      }
+    }
+
+    // ===== 佩恩六道：天道超觉醒 =====
+    _painAwakenTenduo(balls, particles, floatTexts){
+      this.painTenduoActive = true;
+      this.painForm = 5;
+      this.maxHp = 180;
+      this.hp = 180;
+      this.alive = true;
+      this.color = '#c0a050';
+      this.painShinraCD = 2;
+      this.painChibakuCD = 5;
+      this.painAtkCD = 0.5;
+      // 觉醒特效：金色光柱+黑环
+      for (let i=0;i<40;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#c0a050', {ang:a, speed:100+Math.random()*150, life:0.6+Math.random()*0.4, size:3+Math.random()*3}));
+      }
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:80+Math.random()*120, life:0.5, size:4}));
+      }
+      // 上升光柱
+      for (let i=0;i<15;i++){
+        particles.push(new Particle(this.x + (Math.random()-0.5)*20, this.y - i*15, '#ffd700', {speed:0, life:0.8, size:6-i*0.2}));
+      }
+      aoes.push(new AOE(this.x, this.y, '#c0a050', 120));
+      floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '天道超·觉醒!', '#ffd700', {life:1.8, size:16}));
+      shake = Math.max(shake, 10);
+    }
+
+    // ===== 佩恩六道 AI =====
+    aiPain(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles){
+      const p = this.params;
+      if (!enemy || !enemy.alive) return;
+
+      // 天道超形态
+      if (this.painTenduoActive){
+        // 中距离游走
+        const ideal = 180;
+        if (d > ideal + 30){
+          this.vx += dirX * this.baseSpeed * spdMul * dt * 4;
+          this.vy += dirY * this.baseSpeed * spdMul * dt * 4;
+        } else if (d < ideal - 40){
+          this.vx -= dirX * this.baseSpeed * spdMul * dt * 3;
+          this.vy -= dirY * this.baseSpeed * spdMul * dt * 3;
+        } else {
+          const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+          this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2;
+          this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2;
+        }
+        // 普攻：黑棒穿刺
+        this.painAtkCD -= dt;
+        if (this.painAtkCD <= 0 && d < 350){
+          this.painAtkCD = 1.2;
+          const bs = 420;
+          const adx = enemy.x - this.x, ady = enemy.y - this.y;
+          const ad = Math.max(1, Math.hypot(adx, ady));
+          const bul = new Bullet(
+            this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
+            (adx/ad)*bs, (ady/ad)*bs,
+            p.tenduoDmg || 18, '#c0a050', this.team, this
+          );
+          bul.isBlackRod = true;
+          bul.size = 6;
+          bullets.push(bul);
+          for (let i=0;i<5;i++){
+            particles.push(new Particle(this.x, this.y, '#c0a050', {speed:60, life:0.25, size:2}));
+          }
+        }
+        // 神罗天征
+        if (this.painShinraCD <= 0 && d < 250){
+          this._painShinraTensei(balls, particles, p);
+          this.painChakra = Math.min((p.chakraMax || 9), this.painChakra + 1);
+        }
+        // 地爆天星（查克拉满时）
+        if (this.painChibakuCD <= 0 && this.painChakra >= (p.chakraMax || 9)){
+          this._painChibakuTensei(enemy, balls, particles, aoes, p);
+        }
+        // 天道超身体表面雷电+查克拉环特效
+        if (Math.random() < 0.2){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x + Math.cos(a)*this.size, this.y + Math.sin(a)*this.size, '#ffd700', {ang:a+Math.PI, speed:20, life:0.3, size:2}));
+        }
+        return;
+      }
+
+      // 五道形态：根据当前道不同行为
+      const form = this.painForm;
+      const formAtk = [10, 6, 8, 3, 8][form];
+      const formInterval = [1.2, 1.5, 1.6, 2.0, 1.3][form];
+      const formColors2 = ['#c44', '#5a8a5a', '#4a4a8a', '#6b4423', '#556b2f'];
+      const isMelee = form === 0 || form === 1; // 修罗、饿鬼近战
+      const ideal = isMelee ? 50 : (form === 2 ? 180 : 220);
+
+      // 移动
+      if (d > ideal + 20){
+        this.vx += dirX * this.baseSpeed * spdMul * dt * (isMelee ? 5 : 3.5);
+        this.vy += dirY * this.baseSpeed * spdMul * dt * (isMelee ? 5 : 3.5);
+      } else if (d < ideal - 20 && !isMelee){
+        this.vx -= dirX * this.baseSpeed * spdMul * dt * 3;
+        this.vy -= dirY * this.baseSpeed * spdMul * dt * 3;
+      } else {
+        const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+        this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2;
+        this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2;
+      }
+
+      // 普攻
+      this.painAtkCD -= dt;
+      if (this.painAtkCD <= 0 && d < (isMelee ? 70 : 380)){
+        this.painAtkCD = formInterval;
+        const fc2 = formColors2[form] || '#707070';
+        if (isMelee){
+          // 近战攻击
+          enemy.takeDamage(formAtk, fc2, particles, this);
+          for (let i=0;i<10;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, fc2, {ang:a, speed:60+Math.random()*60, life:0.35, size:2.5}));
+          }
+        } else {
+          // 远程攻击
+          const bs = 340;
+          const adx = enemy.x - this.x, ady = enemy.y - this.y;
+          const ad = Math.max(1, Math.hypot(adx, ady));
+          const bul = new Bullet(
+            this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
+            (adx/ad)*bs, (ady/ad)*bs,
+            formAtk, fc2, this.team, this
+          );
+          bul.size = form === 2 ? 6 : 5;
+          if (form === 2 && this.painHumanSilenceToggle) bul.isHumanPath = true; // 人间道沉默（每隔一次）
+          bullets.push(bul);
+          // 发射粒子
+          for (let i=0;i<5;i++){
+            particles.push(new Particle(this.x, this.y, fc2, {speed:50, life:0.25, size:2}));
+          }
+        }
+        // 地狱道：每次攻击给自己回血
+        if (form === 3){
+          const healAmt = 4;
+          this.hp = Math.min(this.maxHp, this.hp + healAmt);
+          if (Math.random() < 0.5){
+            particles.push(new Particle(this.x, this.y - this.size, '#6b4423', {ang:-Math.PI/2, speed:30, life:0.5, size:2.5}));
+          }
+        }
+        // 人间道：每次攻击后翻转沉默开关
+        if (form === 2){
+          this.painHumanSilenceToggle = !this.painHumanSilenceToggle;
+        }
+      }
+      this.painSkillCD -= dt;
+      // 修罗道：导弹
+      if (form === 0 && this.painSkillCD <= 0 && d < 400){
+        this.painSkillCD = 3;
+        const bs = 280;
+        const adx = enemy.x - this.x, ady = enemy.y - this.y;
+        const ad = Math.max(1, Math.hypot(adx, ady));
+        const bul = new Bullet(
+          this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
+          (adx/ad)*bs, (ady/ad)*bs,
+          p.missileDmg || 12, '#ff4400', this.team, this
+        );
+        bul.isPainMissile = true;
+        bul.size = 8;
+        bullets.push(bul);
+        this.painChakra = Math.min((p.chakraMax || 9), this.painChakra + 1);
+      }
+      // 畜生道：通灵兽投射
+      if (form === 4 && this.painBeastCD <= 0){
+        this._painSummonBeast(enemy, balls, particles, p);
+        this.painChakra = Math.min((p.chakraMax || 9), this.painChakra + 1);
+      }
+    }
+
+    // ===== 佩恩：神罗天征 =====
+    _painShinraTensei(balls, particles, p){
+      this.painShinraCD = p.shinraCD || 7;
+      const dmg = p.shinraDmg || 25;
+      const radius = 220;
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        const dd = Math.hypot(b.x - this.x, b.y - this.y);
+        if (dd < radius + b.size){
+          b.takeDamage(dmg, '#c0a050', particles, this);
+          // 强击退
+          const kx = (b.x - this.x) / Math.max(1, dd);
+          const ky = (b.y - this.y) / Math.max(1, dd);
+          b.vx += kx * 400;
+          b.vy += ky * 400;
+          b.silenceTime = Math.max(b.silenceTime, 0.5); // 打断
+        }
+      }
+      // 斥力冲击波特效：多层扩散环
+      aoes.push(new AOE(this.x, this.y, '#c0a050', radius));
+      for (let ring = 0; ring < 3; ring++){
+        for (let i=0;i<24;i++){
+          const a = (i/24)*Math.PI*2;
+          const sp = 200 + ring*80;
+          particles.push(new Particle(this.x, this.y, ring===0?'#ffffff':'#c0a050', {ang:a, speed:sp, life:0.4+ring*0.1, size:4-ring}));
+        }
+      }
+      for (let i=0;i<30;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, '#ffd700', {ang:a, speed:150+Math.random()*150, life:0.5, size:3}));
+      }
+      shake = Math.max(shake, 8);
+    }
+
+    // ===== 佩恩：地爆天星 =====
+    _painChibakuTensei(enemy, balls, particles, aoes, p){
+      this.painChibakuCD = 12;
+      this.painChakra = 0;
+      const radius = p.chibakuR || 200;
+      const dur = p.chibakuDur || 2;
+      const cx = enemy.x, cy = enemy.y;
+      // 生成引力黑球
+      aoes.push(new AOE(cx, cy, '#1a0a2e', radius));
+      // 拉扯+禁锢所有范围内敌人
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        const dd = Math.hypot(b.x - cx, b.y - cy);
+        if (dd < radius + b.size){
+          // 拉扯到中心
+          b.x = cx + (Math.random()-0.5)*30;
+          b.y = cy + (Math.random()-0.5)*30;
+          b.stun = Math.max(b.stun, dur);
+          b.takeDamage(15, '#1a0a2e', particles, this);
+        }
+      }
+      // 黑球特效：暗色核心+紫色漩涡
+      for (let i=0;i<50;i++){
+        const a = Math.random()*Math.PI*2;
+        const r = Math.random()*radius;
+        particles.push(new Particle(cx + Math.cos(a)*r, cy + Math.sin(a)*r, '#4a1a6e', {ang:a+Math.PI, speed:80+Math.random()*60, life:0.8, size:3}));
+      }
+      for (let i=0;i<20;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(cx, cy, '#000000', {ang:a, speed:30+Math.random()*30, life:1.0, size:5}));
+      }
+      // 延迟爆炸
+      setTimeout(() => {
+        if (!this.alive) return;
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const dd = Math.hypot(b.x - cx, b.y - cy);
+          if (dd < radius + b.size){
+            b.takeDamage(35, '#6a2a9e', particles, this);
+          }
+        }
+        for (let i=0;i<40;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(cx, cy, '#9a4adf', {ang:a, speed:200+Math.random()*150, life:0.6, size:4}));
+        }
+        shake = Math.max(shake, 12);
+      }, dur * 1000);
+    }
+
+    // ===== 佩恩：通灵兽召唤（周边生成） =====
+    _painSummonBeast(enemy, balls, particles, p){
+      // 限制场上通灵兽数量
+      const beastCount = balls.filter(b => b.alive && b.team === this.team && b.isPainBeast && b.owner === this).length;
+      if (beastCount >= 3){
+        this.painBeastCD = 1;
+        return;
+      }
+      this.painBeastCD = p.beastCD || 4;
+      const beasts = ['hellDog', 'giantBird', 'rhino', 'panda'];
+      const beast = beasts[this.painBeastIndex % 4];
+      this.painBeastIndex++;
+      const beastNames = {hellDog:'地狱犬', giantBird:'通灵·巨鸟', rhino:'通灵·犀牛', panda:'通灵·熊猫'};
+      const beastColors = {hellDog:'#8b5a2b', giantBird:'#aaa', rhino:'#666', panda:'#556b2f'};
+      const beastSizes = {hellDog:9, giantBird:8, rhino:12, panda:11};
+      const beastSpeeds = {hellDog:170, giantBird:200, rhino:130, panda:120};
+      // 在畜生道周边随机位置生成
+      const ang = Math.random() * Math.PI * 2;
+      const dr = this.size + 25;
+      const bx = Math.max(this.size, Math.min(VIEW.w - this.size, this.x + Math.cos(ang)*dr));
+      const by = Math.max(this.size, Math.min(VIEW.h - this.size, this.y + Math.sin(ang)*dr));
+      const beastBall = new Ball(this.team, this.cls, bx, by, {
+        name: beastNames[beast],
+        color: beastColors[beast],
+        size: beastSizes[beast],
+        speed: beastSpeeds[beast],
+        params: {...this.params}
+      });
+      beastBall.isPainBeast = true;
+      beastBall.beastType = beast;
+      beastBall.beastName = beastNames[beast];
+      beastBall.owner = this;
+      beastBall.maxHp = beast === 'rhino' || beast === 'panda' ? 50 : 35;
+      beastBall.hp = beastBall.maxHp;
+      beastBall.painBeastAtkCD = 0;
+      balls.push(beastBall);
+      // 召唤符文特效
+      for (let i=0;i<12;i++){
+        const a = (i/12)*Math.PI*2;
+        particles.push(new Particle(bx, by, beastColors[beast], {ang:a, speed:90, life:0.45, size:3}));
+      }
+      for (let i=0;i<8;i++){
+        particles.push(new Particle(bx, by, '#ffffff', {ang:Math.random()*Math.PI*2, speed:50, life:0.3, size:2}));
       }
     }
 
@@ -6368,6 +6780,82 @@
       }
     }
 
+    // ===== 通灵兽 AI（召唤物）=====
+    aiPainBeast(dt, enemy, d, dirX, dirY, spdMul, balls, particles){
+      // 追击敌人
+      const chargeSpeed = this.baseSpeed;
+      if (d > this.size + enemy.size + 8){
+        this.vx += dirX * chargeSpeed * spdMul * dt * 5;
+        this.vy += dirY * chargeSpeed * spdMul * dt * 5;
+        const sp = Math.hypot(this.vx, this.vy);
+        if (sp > chargeSpeed){
+          this.vx = this.vx/sp * chargeSpeed;
+          this.vy = this.vy/sp * chargeSpeed;
+        }
+      }
+      // 近战攻击
+      this.painBeastAtkCD -= dt;
+      if (this.painBeastAtkCD <= 0 && d < this.size + enemy.size + 15){
+        if (this.beastType === 'hellDog'){
+          // 地狱犬：溅射伤害+击退
+          this.painBeastAtkCD = 1.2;
+          const aoeR = 60;
+          enemy.takeDamage(10, '#8b5a2b', particles, this.owner || this);
+          for (const eb of balls){
+            if (!eb.alive || eb.team === this.team || eb === enemy) continue;
+            const ed = Math.hypot(eb.x - enemy.x, eb.y - enemy.y);
+            if (ed < aoeR){
+              eb.takeDamage(6, '#8b5a2b', particles, this.owner || this);
+              const kx = (eb.x - enemy.x) / Math.max(1, ed);
+              const ky = (eb.y - enemy.y) / Math.max(1, ed);
+              eb.vx += kx * 120; eb.vy += ky * 120;
+            }
+          }
+          for (let i=0;i<10;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, '#8b5a2b', {ang:a, speed:80+Math.random()*60, life:0.35, size:3}));
+          }
+        } else if (this.beastType === 'giantBird'){
+          // 巨鸟：快速连续啄击
+          this.painBeastAtkCD = 0.6;
+          enemy.takeDamage(5, '#aaa', particles, this.owner || this);
+          for (let i=0;i<6;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, '#ccc', {ang:a, speed:60+Math.random()*40, life:0.3, size:2}));
+          }
+        } else if (this.beastType === 'rhino'){
+          // 犀牛：震荡+眩晕
+          this.painBeastAtkCD = 1.8;
+          const aoeR = 80;
+          enemy.takeDamage(8, '#666', particles, this.owner || this);
+          enemy.stun = Math.max(enemy.stun, 0.6);
+          for (const eb of balls){
+            if (!eb.alive || eb.team === this.team || eb === enemy) continue;
+            const ed = Math.hypot(eb.x - enemy.x, eb.y - enemy.y);
+            if (ed < aoeR){
+              eb.takeDamage(5, '#666', particles, this.owner || this);
+              eb.stun = Math.max(eb.stun, 0.4);
+            }
+          }
+          for (let i=0;i<14;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, '#888', {ang:a, speed:70+Math.random()*80, life:0.4, size:3}));
+          }
+        } else if (this.beastType === 'panda'){
+          // 熊猫：减伤领域（给召唤者）
+          this.painBeastAtkCD = 2.0;
+          enemy.takeDamage(6, '#556b2f', particles, this.owner || this);
+          if (this.owner){
+            this.owner.painPandaShieldTime = 3;
+          }
+          for (let i=0;i<12;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#556b2f', {ang:a, speed:50, life:0.5, size:3}));
+          }
+        }
+      }
+    }
+
     // ===== 白厄 AI =====
     aiWhiteEmber(dt, enemy, d, dirX, dirY, spdMul, balls, particles){
       const p = this.params;
@@ -6778,8 +7266,33 @@
           floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '🔥减伤', '#ffd76b', {life: 0.5, size: 10}));
         }
       }
+      // 佩恩饿鬼道：吸收伤害转化回血
+      if (this.cls === 'pain' && !this.isPainBeast && this.painForm === 1 && !this.painTenduoActive && !isDot){
+        const absorbRate = (this.params.absorbRate || 25) / 100;
+        const absorbed = dmg * absorbRate;
+        dmg = dmg - absorbed;
+        this.hp = Math.min(this.maxHp, this.hp + absorbed);
+        if (Math.random() < 0.4){
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '吸收+' + Math.round(absorbed), '#5a8a5a', {life:0.6, size:10}));
+        }
+      }
+      // 佩恩熊猫减伤领域
+      if (this.cls === 'pain' && !this.isPainBeast && this.painPandaShieldTime > 0 && !isDot){
+        dmg *= 0.7;
+      }
       this.hp -= dmg;
       this.hitFlash = 0.15;
+      // 佩恩六道：当前躯体被击破，立即轮转或觉醒天道超
+      if (this.cls === 'pain' && !this.isPainBeast && this.hp <= 0 && this.alive && !this.painTenduoActive){
+        this.painFormsAlive[this.painForm] = false;
+        this.painFormsHP[this.painForm] = 0;
+        const allDead = this.painFormsAlive.every(a => !a);
+        if (allDead){
+          this._painAwakenTenduo(balls, particles, floatTexts);
+        } else {
+          this._painSwitchForm(balls, particles, floatTexts, true);
+        }
+      }
       // ===== 战斗数据追踪 =====
       this.stats.dmgTaken += dmg;
       if (attacker && attacker.stats){
@@ -7862,6 +8375,82 @@
         ctx.shadowBlur = 0;
       }
 
+      // 佩恩六道视觉
+      if (this.cls === 'pain' && !this.isPainBeast && this.alive){
+        const pt = Date.now() * 0.003;
+        const formColors = ['#8b4513', '#2e8b57', '#4a4a8a', '#6b4423', '#556b2f'];
+        const formNames = ['修罗', '饿鬼', '人间', '地狱', '畜生'];
+        if (this.painTenduoActive){
+          // 天道超：金色查克拉光环+轮回眼波纹+上升粒子
+          const auraR = this.size + 12 + Math.sin(pt*2)*4;
+          const gT = ctx.createRadialGradient(x, y, this.size*0.3, x, y, auraR + 20);
+          gT.addColorStop(0, rgba('#ffd700', 0));
+          gT.addColorStop(0.4, rgba('#c0a050', 0.35));
+          gT.addColorStop(0.7, rgba('#ffd700', 0.15));
+          gT.addColorStop(1, rgba('#c0a050', 0));
+          ctx.fillStyle = gT;
+          ctx.beginPath(); ctx.arc(x, y, auraR + 20, 0, Math.PI*2); ctx.fill();
+          // 轮回眼波纹（多层同心圆）
+          ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 15;
+          for (let r=0; r<3; r++){
+            ctx.strokeStyle = rgba('#c0a050', 0.4 - r*0.1);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(x, y, this.size + 4 + r*5 + Math.sin(pt+r)*1.5, 0, Math.PI*2);
+            ctx.stroke();
+          }
+          // 查克拉环绕粒子
+          for (let i=0;i<6;i++){
+            const a = pt * 1.5 + i * Math.PI/3;
+            const pr = this.size + 10;
+            ctx.fillStyle = rgba('#ffd700', 0.7);
+            ctx.beginPath();
+            ctx.arc(x + Math.cos(a)*pr, y + Math.sin(a)*pr, 2.5, 0, Math.PI*2);
+            ctx.fill();
+          }
+          ctx.shadowBlur = 0;
+          // 天道超标签
+          ctx.fillStyle = rgba('#ffd700', 0.9);
+          ctx.font = 'bold 10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('天道超', x, y + this.size + 22);
+        } else {
+          // 五道：各道颜色环+道名
+          const fc = formColors[this.painForm] || '#707070';
+          ctx.strokeStyle = rgba(fc, 0.6);
+          ctx.lineWidth = 2;
+          ctx.shadowColor = fc; ctx.shadowBlur = 8;
+          ctx.beginPath(); ctx.arc(x, y, this.size + 3, 0, Math.PI*2); ctx.stroke();
+          ctx.shadowBlur = 0;
+          // 道名标签
+          ctx.fillStyle = rgba(fc, 0.85);
+          ctx.font = 'bold 9px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(formNames[this.painForm], x, y + this.size + 20);
+        }
+        // 查克拉印记（小圆点）
+        const cm = this.painChakra;
+        const cmMax = this.params.chakraMax || 9;
+        if (cm > 0){
+          for (let i=0;i<cm;i++){
+            const a = (i / cmMax) * Math.PI * 2 - Math.PI/2;
+            const mr = this.size + 16;
+            ctx.fillStyle = this.painTenduoActive ? rgba('#ffd700', 0.9) : rgba('#707070', 0.7);
+            ctx.beginPath();
+            ctx.arc(x + Math.cos(a)*mr, y + Math.sin(a)*mr, 2, 0, Math.PI*2);
+            ctx.fill();
+          }
+        }
+        // 熊猫减伤领域
+        if (this.painPandaShieldTime > 0){
+          ctx.strokeStyle = rgba('#556b2f', 0.5);
+          ctx.lineWidth = 2;
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath(); ctx.arc(x, y, 50, 0, Math.PI*2); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
       // 雷霆赋能buff视觉（自身或队友被赋能）
       if (this.thunderEmpowerTime > 0 && this.alive && this.cls !== 'thunderLord'){
         const et2 = Date.now() * 0.006;
@@ -7902,6 +8491,27 @@
           ctx.arc(x + Math.cos(a)*r, y + Math.sin(a)*r, 3, a, a + Math.PI*1.4);
           ctx.stroke();
         }
+        ctx.shadowBlur = 0;
+      }
+
+      // 通灵兽视觉：召唤兽光环
+      if (this.isPainBeast && this.alive){
+        const beastColors = {hellDog:'#8b5a2b', giantBird:'#aaa', rhino:'#666', panda:'#556b2f'};
+        const bc = beastColors[this.beastType] || '#8b5a2b';
+        const ft2 = Date.now() * 0.005;
+        const pulse = 0.85 + 0.15 * Math.sin(ft2 + this.bobPhase);
+        const auraR = this.size + 8 + Math.sin(ft2*1.5)*2;
+        const gradBeast = ctx.createRadialGradient(x, y, this.size*0.4, x, y, auraR + 10);
+        gradBeast.addColorStop(0, rgba(bc, 0));
+        gradBeast.addColorStop(0.5, rgba(bc, 0.25 * pulse));
+        gradBeast.addColorStop(1, rgba(bc, 0));
+        ctx.fillStyle = gradBeast;
+        ctx.beginPath(); ctx.arc(x, y, auraR + 10, 0, Math.PI*2); ctx.fill();
+        // 召唤兽身体光晕
+        ctx.shadowColor = bc; ctx.shadowBlur = 15;
+        ctx.strokeStyle = rgba(bc, 0.6 * pulse);
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x, y, this.size * pulse, 0, Math.PI*2); ctx.stroke();
         ctx.shadowBlur = 0;
       }
 
@@ -8511,6 +9121,30 @@
               break;
             }
             continue; // 继续穿透下一个目标
+          }
+          // 佩恩人间道：命中沉默
+          if (bul.isHumanPath && bul.owner){
+            b.silenceTime = Math.max(b.silenceTime, bul.owner.params.silenceDur || 0.8);
+            floatTexts.push(new FloatText(b.x, b.y - b.size - 15, '沉默!', '#4a4a8a', {life:0.8, size:12}));
+            for (let i=0;i<10;i++){
+              particles.push(new Particle(b.x, b.y, '#6a6acc', {ang:Math.random()*Math.PI*2, speed:50+Math.random()*40, life:0.4, size:2.5}));
+            }
+          }
+          // 佩恩修罗道导弹：命中AOE爆炸
+          if (bul.isPainMissile && bul.owner){
+            const aoeR = 60;
+            for (const eb of balls){
+              if (!eb.alive || eb.team === bul.team) continue;
+              const ed = Math.hypot(eb.x - bul.x, eb.y - bul.y);
+              if (ed < aoeR + eb.size){
+                eb.takeDamage(bul.dmg, '#c44', particles, bul.owner);
+              }
+            }
+            aoes.push(new AOE(bul.x, bul.y, '#c44', aoeR));
+            for (let i=0;i<20;i++){
+              particles.push(new Particle(bul.x, bul.y, '#ff6600', {ang:Math.random()*Math.PI*2, speed:100+Math.random()*100, life:0.4, size:3}));
+            }
+            shake = Math.max(shake, 4);
           }
           // 风舞游侠弹射弹：穿透+敌方弹射（追踪最近敌人，伤害衰减）
           if (bul.isWindBounce){
@@ -9512,7 +10146,7 @@
   function getCombatStats(){
     const map = {};
     for (const b of balls){
-      if (b.isDoll || b.isClone || b.isDecoy || b.isMoltenGuard) continue; // 跳过召唤物/分身/替身/熔火卫士
+      if (b.isDoll || b.isClone || b.isDecoy || b.isMoltenGuard || b.isPainBeast) continue; // 跳过召唤物/分身/替身/熔火卫士/通灵兽
       if (!b.stats) continue;
       const key = b.team + '|' + b.cls;
       if (!map[key]){
