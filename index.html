@@ -2441,7 +2441,7 @@
       params: [
         { key: 'spikeCD', label: '木遁棘刺冷却/秒', min: 3, max: 15, step: 0.5, def: 10, int: false },
         { key: 'rootDur', label: '束缚禁锢时长/秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
-        { key: 'rootMax', label: '同时束缚上限', min: 1, max: 5, step: 1, def: 2, int: true },
+        { key: 'rootMax', label: '同时束缚上限', min: 1, max: 5, step: 1, def: 3, int: true },
         { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 4, max: 15, step: 1, def: 1.5, int: true },
         { key: 'kamuiDur', label: '虚化持续时间/秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
         { key: 'fireAoe', label: '爆风乱舞AOE范围', min: 80, max: 300, step: 10, def: 300, int: true },
@@ -6536,6 +6536,8 @@
         );
         bul.isWoodSpike = true;
         bul.size = 7;
+        bul._hitTargets = []; // 穿透：已命中目标
+        bul.pierceMax = 3; // 最多穿透3人
         bullets.push(bul);
         // 发射特效
         for (let i=0;i<6;i++){
@@ -8455,8 +8457,8 @@
         if (b.cls === 'obito' && b.obitoKamuiTime > 0) continue;
         const d = Math.hypot(bul.x - b.x, bul.y - b.y);
         if (d < b.size + bul.size){
-          // 弹射炮手炮弹/风舞游侠弹射弹：先去重，避免同一弹反复命中同一敌人
-          if ((bul.isCannon || bul.isWindBounce) && bul._hitTargets.includes(b)) continue;
+          // 弹射炮手炮弹/风舞游侠弹射弹/木棘：先去重，避免同一弹反复命中同一敌人
+          if ((bul.isCannon || bul.isWindBounce || bul.isWoodSpike) && bul._hitTargets.includes(b)) continue;
           b.takeDamage(bul.dmg, bul.color, particles, bul.owner);
           if (bul.marks) b.markTime = 3;
           if (bul.plague && bul.owner) b.applyPlague(1, bul.owner, particles, balls);
@@ -8489,6 +8491,26 @@
               }
               floatTexts.push(new FloatText(b.x, b.y - b.size - 10, '木棘穿刺!', '#6b9c4a', {life: 0.9, size: 12}));
             }
+          }
+          // 木棘：穿透最多3人，每人都被控制
+          if (bul.isWoodSpike){
+            bul._hitTargets.push(b);
+            // 沿飞行方向推离当前目标避免卡住
+            const sp = Math.hypot(bul.vx, bul.vy) || 360;
+            const nx = bul.vx / sp, ny = bul.vy / sp;
+            bul.x = b.x + nx * (b.size + bul.size + 5);
+            bul.y = b.y + ny * (b.size + bul.size + 5);
+            // 穿透碎屑特效
+            for (let i=0;i<6;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(bul.x, bul.y, '#5c3d1e', {ang, speed:50+Math.random()*60, life:0.3, size:2}));
+            }
+            // 达到穿透上限则消失
+            if (bul._hitTargets.length >= (bul.pierceMax || 3)){
+              bul.life = 0;
+              break;
+            }
+            continue; // 继续穿透下一个目标
           }
           // 风舞游侠弹射弹：穿透+敌方弹射（追踪最近敌人，伤害衰减）
           if (bul.isWindBounce){
