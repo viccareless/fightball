@@ -2455,7 +2455,7 @@
       ]
     },
     pain: {
-      label: '佩恩六道', icon: '👁', maxHp: 250, color: '#707070', cost: 10, ballSpeed: 100,
+      label: '佩恩六道', icon: '👁', maxHp: 250, color: '#707070', cost: 14, ballSpeed: 100,
       desc: '六道轮转·神罚现世',
       stats: { atk: 10, def: 9, spd: 4, rng: 5, sup: 2, ctrl: 10 },
       codex: '五具痛苦之躯往复轮转，耗尽之后，轮回之真正力量方才降临。天道超携神罚现世，神罗天征涤荡万物，地爆天星囚禁世间一切生灵。',
@@ -2471,7 +2471,7 @@
         { key: 'absorbRate', label: '饿鬼道吸收转化率%', min: 10, max: 50, step: 5, def: 25, int: true },
         { key: 'silenceDur', label: '人间道沉默/秒', min: 0.3, max: 2, step: 0.1, def: 0.8, int: false },
         { key: 'missileDmg', label: '修罗道导弹伤害', min: 5, max: 30, step: 1, def: 12, int: true },
-        { key: 'tenduoDmg', label: '天道超黑棒伤害', min: 8, max: 40, step: 1, def: 18, int: true }
+        { key: 'tenduoDmg', label: '天道超黑棒伤害', min: 8, max: 40, step: 1, def: 15, int: true }
       ]
     }
   };
@@ -3442,6 +3442,13 @@
           ctx.beginPath();
           ctx.arc(t.x, t.y, this.size*(i/this.trail.length)*0.6, 0, Math.PI*2);
           ctx.fill();
+        } else if (this.isBlackRod){
+          // 黑棒拖尾：暗紫色残影
+          ctx.fillStyle = i % 2 === 0 ? '#4a0a7a' : '#2a2a2a';
+          ctx.shadowColor = '#6a0dad'; ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, this.size*(i/this.trail.length)*0.5, 0, Math.PI*2);
+          ctx.fill();
         } else {
           ctx.fillStyle = this.color;
           ctx.shadowColor = this.color; ctx.shadowBlur = 12;
@@ -3618,6 +3625,55 @@
         ctx.fillStyle = rgba('#a8e060', 0.85);
         ctx.beginPath();
         ctx.arc(len*0.45, 0, this.size*0.14, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      } else if (this.isBlackRod){
+        // 黑棒：暗金属质感+紫色残影+旋转
+        const flyAng = Math.atan2(this.vy, this.vx);
+        const len = this.size * 3.5;
+        const pulse = 0.85 + 0.15 * Math.sin(Date.now()*0.02);
+        // 外层暗紫色光晕
+        const gAura = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*3);
+        gAura.addColorStop(0, rgba('#6a0dad', 0.35));
+        gAura.addColorStop(0.5, rgba('#4a0a7a', 0.15));
+        gAura.addColorStop(1, rgba('#2a0040', 0));
+        ctx.fillStyle = gAura;
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.size*3,0,Math.PI*2); ctx.fill();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(flyAng);
+        // 棒体（暗金属渐变）
+        const gBody = ctx.createLinearGradient(-len*0.5, 0, len*0.55, 0);
+        gBody.addColorStop(0, '#1a1a1a');
+        gBody.addColorStop(0.3, '#3a3a3a');
+        gBody.addColorStop(0.5, '#555');
+        gBody.addColorStop(0.7, '#3a3a3a');
+        gBody.addColorStop(1, '#0a0a0a');
+        ctx.fillStyle = gBody;
+        ctx.shadowColor = '#6a0dad'; ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(len*0.55, 0);
+        ctx.lineTo(len*0.1, -this.size*0.5);
+        ctx.lineTo(-len*0.45, -this.size*0.4);
+        ctx.lineTo(-len*0.55, 0);
+        ctx.lineTo(-len*0.45, this.size*0.4);
+        ctx.lineTo(len*0.1, this.size*0.5);
+        ctx.closePath();
+        ctx.fill();
+        // 金属高光线
+        ctx.strokeStyle = rgba('#888', 0.6);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-len*0.4, -this.size*0.15);
+        ctx.lineTo(len*0.2, -this.size*0.08);
+        ctx.moveTo(-len*0.4, this.size*0.15);
+        ctx.lineTo(len*0.2, this.size*0.08);
+        ctx.stroke();
+        // 尖端紫色微光
+        ctx.fillStyle = rgba('#9a4adf', 0.7 * pulse);
+        ctx.shadowColor = '#9a4adf'; ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(len*0.45, 0, this.size*0.2, 0, Math.PI*2);
         ctx.fill();
         ctx.restore();
       } else {
@@ -5532,20 +5588,20 @@
         // 普攻：黑棒穿刺
         this.painAtkCD -= dt;
         if (this.painAtkCD <= 0 && d < 350){
-          this.painAtkCD = 1.2;
+          this.painAtkCD = 1.5;
           const bs = 420;
           const adx = enemy.x - this.x, ady = enemy.y - this.y;
           const ad = Math.max(1, Math.hypot(adx, ady));
           const bul = new Bullet(
             this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
             (adx/ad)*bs, (ady/ad)*bs,
-            p.tenduoDmg || 18, '#c0a050', this.team, this
+            p.tenduoDmg || 18, '#2a2a2a', this.team, this
           );
           bul.isBlackRod = true;
           bul.size = 6;
           bullets.push(bul);
           for (let i=0;i<5;i++){
-            particles.push(new Particle(this.x, this.y, '#c0a050', {speed:60, life:0.25, size:2}));
+            particles.push(new Particle(this.x, this.y, '#6a0dad', {speed:60, life:0.25, size:2}));
           }
         }
         // 神罗天征（5秒冷却，每次释放叠加1层查克拉）
@@ -5570,7 +5626,7 @@
       // 五道形态：根据当前道不同行为
       const form = this.painForm;
       const formAtk = [10, 6, 8, 3, 8][form];
-      const formInterval = [1.2, 1.5, 1.6, 2.0, 1.3][form];
+      const formInterval = [1.5, 1.8, 1.9, 2.3, 1.6][form];
       const formColors2 = ['#c44', '#5a8a5a', '#4a4a8a', '#6b4423', '#556b2f'];
       const isMelee = form === 0 || form === 1; // 修罗、饿鬼近战
       const ideal = isMelee ? 50 : (form === 2 ? 180 : 220);
@@ -5588,34 +5644,40 @@
         this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2;
       }
 
-      // 普攻
+      // 普攻：黑棒攻击
       this.painAtkCD -= dt;
       if (this.painAtkCD <= 0 && d < (isMelee ? 70 : 380)){
         this.painAtkCD = formInterval;
         const fc2 = formColors2[form] || '#707070';
         if (isMelee){
-          // 近战攻击
-          enemy.takeDamage(formAtk, fc2, particles, this);
+          // 近战黑棒穿刺
+          enemy.takeDamage(formAtk, '#2a2a2a', particles, this);
           for (let i=0;i<10;i++){
             const a = Math.random()*Math.PI*2;
-            particles.push(new Particle(enemy.x, enemy.y, fc2, {ang:a, speed:60+Math.random()*60, life:0.35, size:2.5}));
+            particles.push(new Particle(enemy.x, enemy.y, i % 2 === 0 ? '#2a2a2a' : '#6a0dad', {ang:a, speed:60+Math.random()*60, life:0.35, size:2.5}));
+          }
+          // 黑棒穿刺冲击波
+          for (let i=0;i<4;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, '#4a0a7a', {ang:a, speed:100+Math.random()*50, life:0.3, size:3}));
           }
         } else {
-          // 远程攻击
+          // 远程黑棒投掷
           const bs = 340;
           const adx = enemy.x - this.x, ady = enemy.y - this.y;
           const ad = Math.max(1, Math.hypot(adx, ady));
           const bul = new Bullet(
             this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
             (adx/ad)*bs, (ady/ad)*bs,
-            formAtk, fc2, this.team, this
+            formAtk, '#2a2a2a', this.team, this
           );
+          bul.isBlackRod = true;
           bul.size = form === 2 ? 6 : 5;
           if (form === 2 && this.painHumanSilenceToggle) bul.isHumanPath = true; // 人间道沉默（每隔一次）
           bullets.push(bul);
-          // 发射粒子
+          // 发射粒子（紫色查克拉残影）
           for (let i=0;i<5;i++){
-            particles.push(new Particle(this.x, this.y, fc2, {speed:50, life:0.25, size:2}));
+            particles.push(new Particle(this.x, this.y, '#6a0dad', {speed:50, life:0.25, size:2}));
           }
         }
         // 地狱道：每次攻击给自己回血
