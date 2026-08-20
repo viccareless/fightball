@@ -2500,6 +2500,27 @@
         { key: 'dashDmg', label: '极速冲锋伤害', min: 5, max: 30, step: 1, def: 14, int: true },
         { key: 'dashCd', label: '极速冲锋冷却秒', min: 2, max: 8, step: 0.5, def: 4, int: false }
       ]
+    },
+    sniper: {
+      label: '狙击手', icon: '🎯', maxHp: 80, color: '#4a9eff', cost: 7, ballSpeed: 115,
+      desc: '蓄力狙击·爆头一击',
+      stats: { atk: 10, def: 2, spd: 6, rng: 10, sup: 2, ctrl: 5 },
+      codex: '战场边缘的沉默猎手，以精准的蓄力狙击统治远程战线。每一发狙击弹都经过精心瞄准，远距离命中触发爆头造成巨额伤害。身边会自动生成诡雷陷阱封锁敌人走位，开枪后的后坐力会让狙击手顺势后撤拉开距离。站定时间越长，专注瞄准带来的伤害加成越高。',
+      params: [
+        { key: 'snipeDmg', label: '狙击伤害百分比', min: 5, max: 50, step: 1, def: 20, int: true },
+        { key: 'snipeCharge', label: '蓄力时间秒', min: 1, max: 5, step: 0.1, def: 2.5, int: false },
+        { key: 'snipeRange', label: '狙击触发距离', min: 200, max: 500, step: 20, def: 280, int: true },
+        { key: 'headshotMul', label: '爆头伤害倍率', min: 1.2, max: 3.5, step: 0.1, def: 1.8, int: false },
+        { key: 'headshotRange', label: '爆头触发距离', min: 150, max: 400, step: 10, def: 260, int: true },
+        { key: 'markDur', label: '标记持续秒', min: 2, max: 10, step: 0.5, def: 5, int: false },
+        { key: 'markVuln', label: '标记易伤比例', min: 0.1, max: 0.5, step: 0.05, def: 0.2, int: false },
+        { key: 'trapDmg', label: '诡雷伤害', min: 8, max: 35, step: 1, def: 15, int: true },
+        { key: 'trapCD', label: '诡雷生成秒', min: 3, max: 15, step: 0.5, def: 6, int: false },
+        { key: 'maxTraps', label: '最大诡雷数', min: 1, max: 5, step: 1, def: 3, int: true },
+        { key: 'dodgeCD', label: '闪避冷却秒', min: 4, max: 12, step: 0.5, def: 8, int: false },
+        { key: 'focusMaxBonus', label: '专注最大增伤', min: 0.1, max: 0.6, step: 0.05, def: 0.25, int: false },
+        { key: 'recoilForce', label: '后坐力力度', min: 200, max: 1500, step: 20, def: 1000, int: true }
+      ]
     }
   };
 
@@ -3792,6 +3813,108 @@
           ctx.beginPath(); ctx.arc(this.x, this.y, this.size*1.8 + Math.sin(Date.now()*0.01)*3, 0, Math.PI*2); ctx.stroke();
           ctx.shadowBlur = 0;
         }
+      } else if (this.isSniper){
+        // 狙击弹：尾翼脱壳穿甲弹造型+炽热核心+能量尾焰
+        const flyAng = Math.atan2(this.vy, this.vx);
+        const len = this.size * 4.5;
+        const pulse = 0.9 + 0.1 * Math.sin(Date.now() * 0.03);
+        // 外层能量光晕（红色冲击波感）
+        const gAura = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*3.5);
+        gAura.addColorStop(0, rgba('#ff4422', 0.5));
+        gAura.addColorStop(0.4, rgba('#ff2211', 0.2));
+        gAura.addColorStop(1, rgba('#cc0000', 0));
+        ctx.fillStyle = gAura;
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.size*3.5,0,Math.PI*2); ctx.fill();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(flyAng);
+        // 尾焰（渐变喷射）
+        const flameLen = len * 1.2;
+        const gFlame = ctx.createLinearGradient(-flameLen, 0, -len*0.3, 0);
+        gFlame.addColorStop(0, rgba('#ff6600', 0));
+        gFlame.addColorStop(0.3, rgba('#ff4400', 0.6));
+        gFlame.addColorStop(0.6, rgba('#ffcc33', 0.9));
+        gFlame.addColorStop(1, '#ffffff');
+        ctx.fillStyle = gFlame;
+        ctx.shadowColor = '#ff4400'; ctx.shadowBlur = 20;
+        ctx.beginPath();
+        ctx.moveTo(-flameLen, 0);
+        ctx.lineTo(-len*0.3, -this.size*0.8);
+        ctx.lineTo(-len*0.2, -this.size*0.5);
+        ctx.lineTo(-len*0.2, this.size*0.5);
+        ctx.lineTo(-len*0.3, this.size*0.8);
+        ctx.closePath();
+        ctx.fill();
+        // 弹体（穿甲弹造型：尖头+圆柱+尾翼）
+        const gBody = ctx.createLinearGradient(len*0.5, -this.size, len*0.5, this.size);
+        gBody.addColorStop(0, '#ffcccc');
+        gBody.addColorStop(0.3, '#ff6644');
+        gBody.addColorStop(0.5, '#cc2211');
+        gBody.addColorStop(0.7, '#991100');
+        gBody.addColorStop(1, '#660000');
+        ctx.fillStyle = gBody;
+        ctx.shadowColor = '#ff2200'; ctx.shadowBlur = 15;
+        ctx.beginPath();
+        // 尖头
+        ctx.moveTo(len*0.55, 0);
+        ctx.lineTo(len*0.2, -this.size*0.55);
+        // 弹身
+        ctx.lineTo(-len*0.25, -this.size*0.7);
+        ctx.lineTo(-len*0.35, -this.size*0.5);
+        ctx.lineTo(-len*0.35, this.size*0.5);
+        ctx.lineTo(-len*0.25, this.size*0.7);
+        ctx.lineTo(len*0.2, this.size*0.55);
+        ctx.closePath();
+        ctx.fill();
+        // 炽热核心（内部发光）
+        const gCore = ctx.createRadialGradient(len*0.05, 0, 0, len*0.05, 0, this.size*0.6);
+        gCore.addColorStop(0, '#ffffff');
+        gCore.addColorStop(0.3, '#ffff88');
+        gCore.addColorStop(0.6, '#ff6633');
+        gCore.addColorStop(1, rgba('#ff3300', 0));
+        ctx.fillStyle = gCore;
+        ctx.shadowColor = '#ffff44'; ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.ellipse(len*0.05, 0, this.size*0.6*pulse, this.size*0.35*pulse, 0, 0, Math.PI*2);
+        ctx.fill();
+        // 尾翼（四片）
+        ctx.fillStyle = '#881100';
+        ctx.shadowBlur = 6;
+        const finLen = len * 0.25;
+        const finW = this.size * 0.3;
+        // 上尾翼
+        ctx.beginPath();
+        ctx.moveTo(-len*0.3, -this.size*0.5);
+        ctx.lineTo(-len*0.3 - finLen, -this.size*0.5 - finW);
+        ctx.lineTo(-len*0.35, -this.size*0.4);
+        ctx.closePath();
+        ctx.fill();
+        // 下尾翼
+        ctx.beginPath();
+        ctx.moveTo(-len*0.3, this.size*0.5);
+        ctx.lineTo(-len*0.3 - finLen, this.size*0.5 + finW);
+        ctx.lineTo(-len*0.35, this.size*0.4);
+        ctx.closePath();
+        ctx.fill();
+        // 尖头高光
+        ctx.fillStyle = rgba('#ffffff', 0.9);
+        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.ellipse(len*0.35, -this.size*0.15, this.size*0.2, this.size*0.1, -0.3, 0, Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.restore();
+        // 飞行方向的冲击波环（前端）
+        const shockDist = len * 0.6;
+        const sx = this.x + Math.cos(flyAng) * shockDist;
+        const sy = this.y + Math.sin(flyAng) * shockDist;
+        ctx.strokeStyle = rgba('#ff4422', 0.4);
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#ff4422'; ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(sx, sy, this.size * 1.2, flyAng - 0.8, flyAng + 0.8);
+        ctx.stroke();
+        ctx.shadowBlur = 0;
       } else {
         const g = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*2);
         g.addColorStop(0, '#ffffff');
@@ -4401,6 +4524,21 @@
       this.wlqSlashHitCD = 0; // 斩击间隔计时
       this.wlqSlashCount = 0; // 已斩击次数
       this.wlqSlashDirX = 0; this.wlqSlashDirY = 0; // 斩击方向
+      // ===== 狙击手相关状态 =====
+      this.sniperFireCD = 0; // 普射冷却
+      this.sniperCharging = false; // 是否在蓄力狙击
+      this.sniperChargeTime = 0; // 已蓄力时间
+      this.sniperDodgeCD = 0; // 闪避冷却
+      this.sniperDodging = 0; // 闪避剩余时间
+      this.sniperDodgeDirX = 0; this.sniperDodgeDirY = 0; // 闪避方向
+      this.sniperTrapCD = 0; // 诡雷冷却
+      this.sniperTrapCount = 0; // 已放置诡雷数量
+      this.sniperMarkCD = 0; // 标记技能冷却
+      this.sniperMarkTarget = null; // 当前标记目标
+      this.sniperConsecutiveHits = 0; // 连续命中计数（被动加成）
+      this.sniperStealthTime = 0; // 潜伏隐身时间
+      this.sniperFocusTime = 0; // 专注瞄准时间（站定叠加）
+      this.sniperLastMoveTime = 0; // 上次移动时间
     }
 
     nearestEnemy(balls){
@@ -4505,6 +4643,11 @@
       }
       // 被标记计时（召唤师标记，人偶集火）
       if (this.markTime > 0) this.markTime -= dt;
+      // 狙击标记计时（被狙击手标记，易伤效果）
+      if (this.sniperMarkTime > 0){
+        this.sniperMarkTime -= dt;
+        if (this.sniperMarkTime <= 0){ this.sniperMarkTime = 0; this.sniperMarkOwner = null; }
+      }
       // 时光修复师复活冷却计时（刻意不受冷却缩减光环影响，保证低频复活）
       if (this.reviveAuraCD > 0) this.reviveAuraCD -= dt;
       // 护盾守卫：碎盾加速与铁壁冷却计时、护盾再生
@@ -4720,6 +4863,43 @@
       for (const tr of traps){
         if (tr.life<=0) continue;
         if (tr.team === this.team) continue;
+        // 狙击手诡雷：触发式爆炸
+        if (tr.isSniperTrap){
+          if (!tr.armed || tr.triggered) continue;
+          const dd = Math.hypot(this.x-tr.x, this.y-tr.y);
+          if (dd < tr.radius + this.size){
+            tr.triggered = true;
+            tr.life = 0;
+            // 爆炸伤害
+            const aoeR = tr.radius + 20;
+            // 对范围内所有敌人造成伤害
+            // 注意：这里只对当前球造成伤害，全局爆炸在陷阱触发时处理
+            this.takeDamage(tr.dmg, '#ff6600', particles, tr.owner);
+            // 减速效果
+            this.slow = Math.max(this.slow, 0.5);
+            this.slowTime = Math.max(this.slowTime || 0, 2);
+            // 诡雷爆炸特效
+            for (let i=0;i<25;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(tr.x, tr.y, '#ff6600', {ang, speed:120+Math.random()*120, life:0.4+Math.random()*0.3, size:3+Math.random()*3}));
+            }
+            for (let i=0;i<15;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(tr.x, tr.y, '#ffaa00', {ang, speed:80+Math.random()*80, life:0.5+Math.random()*0.3, size:2+Math.random()*2}));
+            }
+            for (let i=0;i<10;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(tr.x, tr.y, '#333333', {ang, speed:60+Math.random()*60, life:0.6+Math.random()*0.4, size:4+Math.random()*3}));
+            }
+            shake = Math.max(shake, 6);
+            floatTexts.push(new FloatText(tr.x, tr.y - 10, '诡雷爆炸!', '#ff6600', {life: 0.8, size: 12}));
+            // 减少诡雷计数
+            if (tr.owner && tr.owner.alive){
+              tr.owner.sniperTrapCount = Math.max(0, tr.owner.sniperTrapCount - 1);
+            }
+          }
+          continue;
+        }
         tr.applyPull(this, dt);
         const dd = Math.hypot(this.x-tr.x, this.y-tr.y);
         if (dd < tr.radius + this.size*0.6){
@@ -4860,7 +5040,7 @@
       // 替身无AI（不会移动和攻击）
       if (this.isDecoy){ this.vx*=0.9; this.vy*=0.9; this._integrate(dt); return; }
 
-      const enemy = this.isDoll ? this.markedOrNearestEnemy(balls) : ((this.cls === 'dash' || this.cls === 'ninja' || this.cls === 'berserker') ? this.lowestHpEnemy(balls) : this.nearestEnemy(balls));
+      const enemy = this.isDoll ? this.markedOrNearestEnemy(balls) : ((this.cls === 'dash' || this.cls === 'ninja' || this.cls === 'berserker' || this.cls === 'sniper') ? this.lowestHpEnemy(balls) : this.nearestEnemy(balls));
       if (!enemy){ this.vx*=0.95; this.vy*=0.95; this._integrate(dt); return; }
 
       const dx = enemy.x - this.x;
@@ -4983,6 +5163,7 @@
           break;
         case 'minato': this.aiMinato(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
         case 'wuLiuQi': this.aiWuLiuQi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'sniper':  this.aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
       }
       }
 
@@ -5798,6 +5979,241 @@
         for (let i=0;i<8;i++){
           particles.push(new Particle(this.x, this.y, awaken ? '#ff3366' : this.color, {speed:100, life:0.25, size:2}));
         }
+      }
+    }
+
+    // ===== 狙击手 AI =====
+    aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles){
+      // 诡雷独立计时：无论是否在蓄力/闪避，都可以同时放诡雷
+      this.sniperTrapCD -= dt;
+      if (this.sniperTrapCD <= 0 && this.sniperTrapCount < (this.params.maxTraps || 3)){
+        this.sniperTrapCD = this.params.trapCD || 6;
+        this.sniperTrapCount++;
+        // 在身前扇形区域生成（前方约±60度，距离30-60）
+        const trapAng = Math.atan2(dirY, dirX) + (Math.random() - 0.5) * Math.PI * 0.7;
+        const trapDist = 30 + Math.random() * 30;
+        const trapX = this.x + Math.cos(trapAng) * trapDist;
+        const trapY = this.y + Math.sin(trapAng) * trapDist;
+        const trap = {
+          x: trapX, y: trapY,
+          team: this.team,
+          owner: this,
+          dmg: this.params.trapDmg || 15,
+          radius: 40,
+          armed: false,
+          armTime: 0.8,
+          life: 18,
+          triggered: false,
+          isSniperTrap: true
+        };
+        traps.push(trap);
+        // 生成特效
+        for (let i=0;i<6;i++){
+          particles.push(new Particle(trapX, trapY, '#ff8800', {speed:50, life:0.25, size:2}));
+        }
+      }
+
+      // 闪避状态
+      if (this.sniperDodging > 0){
+        this.sniperDodging -= dt;
+        this.vx = this.sniperDodgeDirX * 450;
+        this.vy = this.sniperDodgeDirY * 450;
+        this.invisible = true;
+        this.invisibleTime = Math.max(this.invisibleTime, 0.05);
+        if (Math.random() < 0.7){
+          particles.push(new Particle(this.x, this.y, this.color, {speed:50, life:0.25, size:2.5}));
+        }
+        return;
+      }
+
+      // 蓄力狙击状态
+      if (this.sniperCharging){
+        this.sniperChargeTime += dt;
+        // 蓄力时站定不动
+        this.vx *= 0.85;
+        this.vy *= 0.85;
+        const chargeRatio = Math.min(1, this.sniperChargeTime / (this.params.snipeCharge || 2.5));
+        const muzzleX = this.x + dirX * this.size;
+        const muzzleY = this.y + dirY * this.size;
+
+        // ===== 简洁蓄力特效 =====
+        // 1. 枪口能量球（呼吸光效）
+        const orbSize = 4 + chargeRatio * 8;
+        particles.push(new Particle(
+          muzzleX, muzzleY,
+          chargeRatio > 0.8 ? '#ff2222' : '#ff6644',
+          {speed: 0, vx: 0, vy: 0, life: 0.08, size: orbSize}
+        ));
+        particles.push(new Particle(
+          muzzleX, muzzleY,
+          '#ffffff',
+          {speed: 0, vx: 0, vy: 0, life: 0.06, size: orbSize * 0.5}
+        ));
+
+        // 2. 红色激光瞄准线（一条简洁的线指向目标）
+        if (chargeRatio > 0.2){
+          const aimPts = Math.floor(8 + chargeRatio * 6);
+          for (let i=0;i<aimPts;i++){
+            const t = i / aimPts;
+            const ax = muzzleX + dirX * (d - this.size - 5) * t;
+            const ay = muzzleY + dirY * (d - this.size - 5) * t;
+            const flicker = 0.7 + 0.3 * Math.sin(t * 15 + Date.now() * 0.015);
+            particles.push(new Particle(
+              ax, ay,
+              '#ff2222',
+              {speed: 0, vx: 0, vy: 0, life: 0.05, size: 1.5 * flicker}
+            ));
+          }
+        }
+
+        // 3. 高蓄力时外圈脉动
+        if (chargeRatio > 0.7){
+          const pulseR = 18 + Math.sin(Date.now() * 0.025) * 4;
+          const pulsePts = 10;
+          for (let i=0;i<pulsePts;i++){
+            const ang = (i / pulsePts) * Math.PI * 2;
+            particles.push(new Particle(
+              muzzleX + Math.cos(ang) * pulseR,
+              muzzleY + Math.sin(ang) * pulseR,
+              '#ff3322',
+              {speed: 0, vx: 0, vy: 0, life: 0.05, size: 2}
+            ));
+          }
+        }
+
+        // 蓄力满发射狙击弹
+        if (this.sniperChargeTime >= (this.params.snipeCharge || 2.5)){
+          this.sniperCharging = false;
+          this.sniperChargeTime = 0;
+          // 专注瞄准增伤
+          const focusBonus = 1 + Math.min(1, this.sniperFocusTime / 3) * (this.params.focusMaxBonus || 0.25);
+          const ss = 800;
+          const snipe = new Bullet(
+            muzzleX, muzzleY,
+            dirX*ss, dirY*ss,
+            0,
+            '#ff4444', this.team, this
+          );
+          snipe.isSniper = true;
+          snipe.isPercentDmg = true;
+          snipe.dmgPercent = (this.params.snipeDmg || 20) / 100;
+          snipe.focusBonus = focusBonus;
+          snipe.size = 8;
+          snipe.life = 1.6;
+          snipe.headshotMultiplier = this.params.headshotMul || 1.8;
+          snipe.snipeStartX = this.x;
+          snipe.snipeStartY = this.y;
+          bullets.push(snipe);
+
+          // ===== 开火特效 =====
+          // 1. 枪口闪光
+          for (let i=0;i<12;i++){
+            particles.push(new Particle(
+              muzzleX + dirX * 12, muzzleY + dirY * 12,
+              i < 4 ? '#ffffff' : '#ffaa33',
+              {speed: 0, vx: 0, vy: 0, life: 0.12, size: 12 - i}
+            ));
+          }
+          // 2. 冲击波环
+          for (let ring=0;ring<2;ring++){
+            const ringPts = 12;
+            for (let i=0;i<ringPts;i++){
+              const rang = (i / ringPts) * Math.PI * 2;
+              particles.push(new Particle(
+                muzzleX, muzzleY,
+                ring === 0 ? '#ffffff' : '#ff5522',
+                {ang: rang, speed: 220 + ring * 40, life: 0.22 + ring * 0.08, size: 2.5 + ring}
+              ));
+            }
+          }
+          // 3. 飞溅火花
+          for (let i=0;i<20;i++){
+            const spAng = Math.atan2(dirY, dirX) + Math.PI + (Math.random() - 0.5) * Math.PI * 0.7;
+            particles.push(new Particle(
+              muzzleX, muzzleY,
+              Math.random() > 0.5 ? '#ffcc33' : '#ff6622',
+              {ang: spAng, speed: 120 + Math.random() * 180, life: 0.25 + Math.random() * 0.2, size: 2 + Math.random() * 2}
+            ));
+          }
+          // 4. 后坐力烟雾
+          for (let i=0;i<8;i++){
+            const smkAng = Math.atan2(dirY, dirX) + Math.PI + (Math.random() - 0.5) * Math.PI * 0.6;
+            particles.push(new Particle(
+              this.x - dirX * 5, this.y - dirY * 5,
+              '#333333',
+              {ang: smkAng, speed: 50 + Math.random() * 50, life: 0.4 + Math.random() * 0.3, size: 4 + Math.random() * 4}
+            ));
+          }
+
+          // 后坐力：开枪后向后退
+          const recoil = this.params.recoilForce || 450;
+          this.vx = -dirX * recoil;
+          this.vy = -dirY * recoil;
+
+          shake = Math.max(shake, 15);
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '狙杀!', '#ff2222', {life:0.9, size:14}));
+          this.sniperFireCD = 0.8;
+          this.sniperFocusTime = 0; // 开火后重置专注
+        }
+        return;
+      }
+
+      // 冷却更新
+      this.sniperFireCD -= dt;
+      this.sniperDodgeCD -= dt;
+
+      // 专注瞄准：站定时叠加增伤buff
+      const moving = Math.hypot(this.vx, this.vy) > 30;
+      if (moving){
+        this.sniperFocusTime = Math.max(0, this.sniperFocusTime - dt * 2);
+      } else {
+        this.sniperFocusTime = Math.min(3, this.sniperFocusTime + dt);
+      }
+
+      // 低血量触发闪避
+      if (this.sniperDodgeCD <= 0 && this.hp / this.maxHp < 0.35 && d < 180){
+        this.sniperDodgeCD = this.params.dodgeCD || 8;
+        this.sniperDodging = 0.25;
+        this.sniperDodgeDirX = -dirX;
+        this.sniperDodgeDirY = -dirY;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '后撤!', this.color, {life:0.6, size:11}));
+        for (let i=0;i<8;i++){
+          particles.push(new Particle(this.x, this.y, this.color, {speed:100, life:0.25, size:2.5}));
+        }
+        return;
+      }
+
+      // 移动：保持中远距离
+      const idealRange = this.params.snipeRange || 280;
+      if (d < idealRange - 50){
+        // 太近，后退
+        this.vx += -dirX * this.baseSpeed * spdMul * dt * 6;
+        this.vy += -dirY * this.baseSpeed * spdMul * dt * 6;
+      } else if (d > idealRange + 80){
+        // 太远，前进
+        this.vx += dirX * this.baseSpeed * spdMul * dt * 4;
+        this.vy += dirY * this.baseSpeed * spdMul * dt * 4;
+      } else {
+        // 合适距离，横向走位
+        const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+        this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2;
+        this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2;
+      }
+
+      // 进入狙击距离且冷却好，开始蓄力
+      if (d >= (this.params.snipeRange || 280) && this.sniperFireCD <= 0){
+        this.sniperCharging = true;
+        this.sniperChargeTime = 0;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '蓄力...', this.color, {life:0.6, size:11}));
+        return;
+      }
+
+      // 中距离也可以蓄力（伤害稍低但节奏更快）
+      if (d >= 180 && d < (this.params.snipeRange || 280) && this.sniperFireCD <= 0){
+        this.sniperCharging = true;
+        this.sniperChargeTime = 0;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '蓄力...', this.color, {life:0.6, size:11}));
+        return;
       }
     }
 
@@ -8082,6 +8498,11 @@
       if (this.thunderMarkStacks >= 3 && this._thunderVulnBonus){
         dmg *= (1 + this._thunderVulnBonus / 100);
       }
+      // 狙击标记易伤：被狙击手标记的目标受到额外伤害
+      if (this.sniperMarkTime > 0 && this.sniperMarkOwner && this.sniperMarkOwner.alive){
+        const vulnBonus = this.sniperMarkOwner.params.markVuln || 0.25;
+        dmg *= (1 + vulnBonus);
+      }
       // 超时空战士跃迁（隐身）期间完全免疫伤害
       if (this.cls === 'chrono' && this.chronoWarpTime > 0){
         // 跃迁免疫时显示时空偏转粒子反馈（无掉血）
@@ -8777,6 +9198,53 @@
         ctx.shadowColor = '#a266ff'; ctx.shadowBlur = 10;
         ctx.beginPath(); ctx.arc(x, y, this.size + 7, mt, mt + Math.PI*1.7); ctx.stroke();
         ctx.setLineDash([]);
+        ctx.shadowBlur = 0;
+      }
+
+      // 被狙击手标记：红色十字瞄准标记+易伤光环
+      if (this.sniperMarkTime > 0){
+        const mt = Date.now() * 0.008;
+        const pulse = 0.7 + 0.3 * Math.sin(mt * 3);
+        // 外圈红色光晕
+        const markR = this.size + 12 + Math.sin(mt * 2) * 2;
+        const grad = ctx.createRadialGradient(x, y, this.size, x, y, markR + 10);
+        grad.addColorStop(0, rgba('#ff2222', 0));
+        grad.addColorStop(0.6, rgba('#ff2222', 0.2 * pulse));
+        grad.addColorStop(1, rgba('#ff2222', 0));
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(x, y, markR + 10, 0, Math.PI*2); ctx.fill();
+        // 十字瞄准线
+        ctx.strokeStyle = rgba('#ff2222', 0.8 * pulse);
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#ff2222'; ctx.shadowBlur = 8;
+        const crossSize = this.size + 10;
+        ctx.beginPath();
+        ctx.moveTo(x - crossSize, y); ctx.lineTo(x - this.size - 3, y);
+        ctx.moveTo(x + crossSize, y); ctx.lineTo(x + this.size + 3, y);
+        ctx.moveTo(x, y - crossSize); ctx.lineTo(x, y - this.size - 3);
+        ctx.moveTo(x, y + crossSize); ctx.lineTo(x, y + this.size + 3);
+        ctx.stroke();
+        // 四个角标
+        const cornerLen = 8;
+        const cornerOffset = this.size + 6;
+        ctx.beginPath();
+        ctx.moveTo(x - cornerOffset, y - cornerOffset);
+        ctx.lineTo(x - cornerOffset + cornerLen, y - cornerOffset);
+        ctx.moveTo(x - cornerOffset, y - cornerOffset);
+        ctx.lineTo(x - cornerOffset, y - cornerOffset + cornerLen);
+        ctx.moveTo(x + cornerOffset, y - cornerOffset);
+        ctx.lineTo(x + cornerOffset - cornerLen, y - cornerOffset);
+        ctx.moveTo(x + cornerOffset, y - cornerOffset);
+        ctx.lineTo(x + cornerOffset, y - cornerOffset + cornerLen);
+        ctx.moveTo(x - cornerOffset, y + cornerOffset);
+        ctx.lineTo(x - cornerOffset + cornerLen, y + cornerOffset);
+        ctx.moveTo(x - cornerOffset, y + cornerOffset);
+        ctx.lineTo(x - cornerOffset, y + cornerOffset - cornerLen);
+        ctx.moveTo(x + cornerOffset, y + cornerOffset);
+        ctx.lineTo(x + cornerOffset - cornerLen, y + cornerOffset);
+        ctx.moveTo(x + cornerOffset, y + cornerOffset);
+        ctx.lineTo(x + cornerOffset, y + cornerOffset - cornerLen);
+        ctx.stroke();
         ctx.shadowBlur = 0;
       }
 
@@ -10071,6 +10539,16 @@
           }
           if (bul.marks) b.markTime = 3;
           if (bul.plague && bul.owner) b.applyPlague(1, bul.owner, particles, balls);
+          // 狙击手普射：命中施加狙击标记（易伤）
+          if (bul.sniperNormal && bul.owner && bul.owner.alive && bul.owner.cls === 'sniper'){
+            const markDur = bul.owner.params.markDur || 5;
+            b.sniperMarkTime = Math.max(b.sniperMarkTime || 0, markDur);
+            b.sniperMarkOwner = bul.owner;
+            // 标记特效
+            for (let i=0;i<4;i++){
+              particles.push(new Particle(b.x, b.y - b.size, '#ff4444', {speed:50, life:0.3, size:2}));
+            }
+          }
           // 天道超黑棒命中：叠加查克拉印记
           if (bul.isBlackRod && bul.owner && bul.owner.alive){
             const cm = bul.owner.params.chakraMax || 9;
@@ -10125,6 +10603,42 @@
               break;
             }
             continue; // 继续穿透下一个目标
+          }
+          // 狙击手：狙击弹（爆头+标记，无穿透）
+          if (bul.isSniper){
+            // 计算飞行距离，判断是否爆头
+            const flyDist = Math.hypot(bul.x - bul.snipeStartX, bul.y - bul.snipeStartY);
+            const headshotRange = bul.owner ? (bul.owner.params.headshotRange || 260) : 260;
+            const isHeadshot = flyDist >= headshotRange;
+            // 百分比伤害：基于目标最大生命值
+            let finalDmg;
+            if (bul.isPercentDmg) {
+              finalDmg = Math.ceil(b.maxHp * bul.dmgPercent * (bul.focusBonus || 1));
+            } else {
+              finalDmg = bul.dmg;
+            }
+            if (isHeadshot){
+              finalDmg = Math.ceil(finalDmg * (bul.headshotMultiplier || 1.8));
+              floatTexts.push(new FloatText(b.x, b.y - b.size - 15, '爆头!', '#ff2222', {life: 0.9, size: 14}));
+            }
+            b.takeDamage(finalDmg, '#ff4444', particles, bul.owner);
+            // 狙击标记：被标记的敌人受到额外伤害（易伤）
+            if (bul.owner && bul.owner.alive){
+              const markDur = bul.owner.params.markDur || 5;
+              b.sniperMarkTime = Math.max(b.sniperMarkTime || 0, markDur);
+              b.sniperMarkOwner = bul.owner;
+            }
+            // 命中特效：血花飞溅
+            for (let i=0;i<14;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(b.x, b.y, isHeadshot ? '#ff1111' : '#ff4444', {ang, speed:90+Math.random()*110, life:0.35+Math.random()*0.25, size:2+Math.random()*3}));
+            }
+            for (let i=0;i<5;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(b.x, b.y, '#ffdd44', {ang, speed:70+Math.random()*60, life:0.2, size:2}));
+            }
+            bul.life = 0;
+            break;
           }
           // 佩恩人间道：命中沉默
           if (bul.isHumanPath && bul.owner){
@@ -10433,7 +10947,18 @@
       // 地形效果
       applyTerrainEffects(dt, balls, particles);
       for (const bul of bullets) bul.update(dt);
-      for (const tr of traps) tr.update(dt);
+      for (const tr of traps) {
+        if (tr.isSniperTrap){
+          // 狙击手诡雷更新
+          tr.life -= dt;
+          if (!tr.armed){
+            tr.armTime -= dt;
+            if (tr.armTime <= 0) tr.armed = true;
+          }
+        } else {
+          tr.update(dt);
+        }
+      }
       for (const a of aoes) a.update(dt);
       for (const w of healWaves) w.update(dt);
       for (const p of particles) p.update(dt);
@@ -10589,7 +11114,49 @@
     }
     // 大逃杀安全圈
     if (currentMode === 'battleroyale') brDrawSafeZone(ctx);
-    for (const tr of traps) tr.draw(ctx);
+    for (const tr of traps) {
+      if (tr.isSniperTrap){
+        // 狙击手诡雷绘制
+        const t = Date.now() * 0.005;
+        const a = Math.max(0, Math.min(1, tr.life / 20));
+        const armed = tr.armed;
+        ctx.save();
+        // 外圈警示范围（虚线）
+        ctx.strokeStyle = rgba('#ff6600', armed ? 0.3 * a : 0.15 * a);
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 6]);
+        ctx.beginPath(); ctx.arc(tr.x, tr.y, tr.radius, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        // 诡雷本体
+        const bombR = armed ? 8 + Math.sin(t * 4) * 1.5 : 7;
+        // 底座
+        ctx.fillStyle = rgba('#333333', 0.9 * a);
+        ctx.shadowColor = armed ? '#ff4400' : '#666666';
+        ctx.shadowBlur = armed ? 12 : 4;
+        ctx.beginPath(); ctx.arc(tr.x, tr.y, bombR, 0, Math.PI*2); ctx.fill();
+        // 顶部LED指示灯
+        const ledColor = armed ? '#ff2200' : '#888888';
+        ctx.fillStyle = rgba(ledColor, armed ? (0.6 + 0.4 * Math.sin(t * 8)) : 0.6);
+        ctx.shadowColor = ledColor;
+        ctx.shadowBlur = armed ? 10 : 2;
+        ctx.beginPath(); ctx.arc(tr.x, tr.y - 2, 3, 0, Math.PI*2); ctx.fill();
+        // 武装状态：周围闪烁的小光点
+        if (armed){
+          ctx.shadowBlur = 6;
+          for (let i=0;i<4;i++){
+            const ang = t * 2 + i * Math.PI / 2;
+            const px = tr.x + Math.cos(ang) * (bombR + 6);
+            const py = tr.y + Math.sin(ang) * (bombR + 6);
+            ctx.fillStyle = rgba('#ffaa00', 0.7 * a);
+            ctx.beginPath(); ctx.arc(px, py, 2, 0, Math.PI*2); ctx.fill();
+          }
+        }
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      } else {
+        tr.draw(ctx);
+      }
+    }
     for (const a of aoes) a.draw(ctx);
     for (const w of healWaves) w.draw(ctx);
     for (const fz of frostZones) fz.draw(ctx);
