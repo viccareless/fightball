@@ -2501,6 +2501,22 @@
         { key: 'dashCd', label: '极速冲锋冷却秒', min: 2, max: 8, step: 0.5, def: 4, int: false }
       ]
     },
+    titan: {
+      label: '泰坦', icon: '⚙️', maxHp: 240, color: '#444b54', cost: 7, ballSpeed: 80,
+      desc: '远近全能·重型战士',
+      stats: { atk: 8, def: 9, spd: 3, rng: 6, sup: 2, ctrl: 5 },
+      codex: '钢铁铸就的巨型重装战士，炮火永不停歇。可在激光穿透与铁拳粉碎之间自由切换，远近攻防兼备，战场上坚不可摧的移动堡垒。',
+      params: [
+        { key: 'cannonCD', label: '火炮冷却秒', min: 2, max: 8, step: 0.5, def: 5, int: false },
+        { key: 'cannonDmg', label: '炮弹伤害', min: 5, max: 30, step: 1, def: 10, int: true },
+        { key: 'laserCD', label: '激光冷却秒', min: 1, max: 5, step: 0.2, def: 2.5, int: false },
+        { key: 'laserDmg', label: '激光穿透伤害', min: 5, max: 35, step: 1, def: 8, int: true },
+        { key: 'meleeDmg', label: '重拳伤害', min: 5, max: 30, step: 1, def: 8, int: true },
+        { key: 'slamRange', label: '震荡波范围', min: 60, max: 180, step: 10, def: 100, int: true },
+        { key: 'shieldReduce', label: '护盾减伤比例', min: 0.1, max: 0.5, step: 0.05, def: 0.20, int: false },
+        { key: 'shieldDur', label: '护盾持续时长秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false }
+      ]
+    },
     sniper: {
       label: '狙击手', icon: '🎯', maxHp: 80, color: '#4a9eff', cost: 7, ballSpeed: 115,
       desc: '蓄力狙击·爆头一击',
@@ -3488,6 +3504,17 @@
           }
         }
       }
+      // 泰坦追踪导弹：自动转向锁定跟踪目标（慢转向，弹道更自然）
+      if (this.isTitanCannon && this.target && this.target.alive){
+        const dx = this.target.x - this.x;
+        const dy = this.target.y - this.y;
+        const dd = Math.hypot(dx, dy);
+        const sp = 300;
+        const tx = dd > 0.01 ? dx/dd : 0;
+        const ty = dd > 0.01 ? dy/dd : 0;
+        this.vx += (tx*sp - this.vx) * Math.min(1, 1.5*dt);
+        this.vy += (ty*sp - this.vy) * Math.min(1, 1.5*dt);
+      }
       // 弹射炮手炮弹：墙体反弹（适配峡谷地形边界）
       if (this.isCannon && this.bounces < this.maxBounces){
         let bounced = false;
@@ -3915,6 +3942,90 @@
         ctx.arc(sx, sy, this.size * 1.2, flyAng - 0.8, flyAng + 0.8);
         ctx.stroke();
         ctx.shadowBlur = 0;
+      } else if (this.isTitanCannon){
+        // 泰坦迫击炮弹：重型发光炮弹+抛射火焰尾
+        const pulse = 0.9 + 0.1 * Math.sin(Date.now()*0.02);
+        // 外层火焰光晕
+        const gAura = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*3.2);
+        gAura.addColorStop(0, rgba('#ff7722', 0.5));
+        gAura.addColorStop(0.5, rgba('#ff5522', 0.18));
+        gAura.addColorStop(1, rgba('#cc3300', 0));
+        ctx.fillStyle = gAura;
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.size*3.2,0,Math.PI*2); ctx.fill();
+        // 弹体（圆形炮弹，亮顶暗底）
+        const gBody = ctx.createRadialGradient(this.x-this.size*0.35, this.y-this.size*0.35, 0, this.x, this.y, this.size);
+        gBody.addColorStop(0, '#fff0d0');
+        gBody.addColorStop(0.3, '#ffcc66');
+        gBody.addColorStop(0.6, '#cc7733');
+        gBody.addColorStop(1, '#5a2a0a');
+        ctx.fillStyle = gBody;
+        ctx.shadowColor = '#ff7722'; ctx.shadowBlur = 22;
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.size*pulse,0,Math.PI*2); ctx.fill();
+        // 高光点
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(this.x-this.size*0.3, this.y-this.size*0.3, this.size*0.28, 0, Math.PI*2); ctx.fill();
+        // 抛射火焰尾（沿速度反方向）
+        const backAng = Math.atan2(this.vy, this.vx) + Math.PI;
+        const flameLen = this.size * 2.6;
+        const fg = ctx.createLinearGradient(
+          this.x - Math.cos(backAng)*flameLen*0.5, this.y - Math.sin(backAng)*flameLen*0.5,
+          this.x + Math.cos(backAng)*flameLen, this.y + Math.sin(backAng)*flameLen
+        );
+        fg.addColorStop(0, rgba('#ffcc44', 0.9));
+        fg.addColorStop(0.5, rgba('#ff6600', 0.5));
+        fg.addColorStop(1, rgba('#ff3300', 0));
+        ctx.fillStyle = fg;
+        ctx.shadowColor = '#ff6600'; ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(this.x + Math.cos(backAng)*flameLen*0.5, this.y + Math.sin(backAng)*flameLen*0.5, this.size*0.6*pulse, 0, Math.PI*2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      } else if (this.isTitanLaser){
+        // 泰坦激光炮束：超长贯穿光束
+        const flyAng = Math.atan2(this.vy, this.vx);
+        const beamLen = 760;
+        const pulse = 0.9 + 0.1 * Math.sin(Date.now()*0.05);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(flyAng);
+        ctx.globalCompositeOperation = 'lighter';
+        // 外层宽光束
+        const gOut = ctx.createLinearGradient(0, -this.size*3, 0, this.size*3);
+        gOut.addColorStop(0, rgba('#ff2200', 0));
+        gOut.addColorStop(0.5, rgba('#ff4422', 0.35));
+        gOut.addColorStop(1, rgba('#ff2200', 0));
+        ctx.fillStyle = gOut;
+        ctx.fillRect(-this.size, -this.size*3, beamLen, this.size*6);
+        // 中层光束
+        const gMid = ctx.createLinearGradient(0, -this.size*1.6, 0, this.size*1.6);
+        gMid.addColorStop(0, rgba('#ff6622', 0.6));
+        gMid.addColorStop(0.5, '#ff8833');
+        gMid.addColorStop(1, rgba('#ff6622', 0.6));
+        ctx.fillStyle = gMid;
+        ctx.shadowColor = '#ff4400'; ctx.shadowBlur = 30;
+        ctx.fillRect(0, -this.size*1.6, beamLen, this.size*3.2);
+        // 核心炽热光线
+        const gCore = ctx.createLinearGradient(0, -this.size*0.6, 0, this.size*0.6);
+        gCore.addColorStop(0, rgba('#ffddee', 0.9));
+        gCore.addColorStop(0.4, '#ffffff');
+        gCore.addColorStop(0.6, '#ffffff');
+        gCore.addColorStop(1, rgba('#ffddee', 0.9));
+        ctx.fillStyle = gCore;
+        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 15;
+        ctx.fillRect(0, -this.size*0.6, beamLen, this.size*1.2);
+        // 前沿脉冲亮点
+        ctx.fillStyle = '#fff';
+        ctx.shadowBlur = 20;
+        for (let i=0;i<5;i++){
+          const step = this.size*3 + (Date.now()*0.006 + i*120) % (beamLen*0.6);
+          const w = (2 - i*0.25) * pulse;
+          ctx.beginPath();
+          ctx.arc(step, 0, Math.max(1, w), 0, Math.PI*2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+        ctx.restore();
       } else {
         const g = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*2);
         g.addColorStop(0, '#ffffff');
@@ -4539,6 +4650,16 @@
       this.sniperStealthTime = 0; // 潜伏隐身时间
       this.sniperFocusTime = 0; // 专注瞄准时间（站定叠加）
       this.sniperLastMoveTime = 0; // 上次移动时间
+      // ===== 泰坦相关状态 =====
+      this.titanCannonCD = 0; // 火炮齐射冷却
+      this.titanWeaponMode = 0; // 0=巨拳重锤, 1=脉冲激光
+      this.titanSwitchCD = 0; // 武器切换冷却
+      this.titanMeleeCD = 0; // 近战攻击冷却
+      this.titanMeleeCount = 0; // 连续近战计数
+      this.titanLaserCD = 2; // 激光冷却
+      this.titanShieldHP = 0; // 护盾值
+      this.titanShieldTime = 0; // 护盾剩余时间
+      this.titanShieldCD = 0; // 护盾冷却
     }
 
     nearestEnemy(balls){
@@ -5164,6 +5285,7 @@
         case 'minato': this.aiMinato(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
         case 'wuLiuQi': this.aiWuLiuQi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
         case 'sniper':  this.aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
+        case 'titan':  this.aiTitan(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
       }
       }
 
@@ -6214,6 +6336,141 @@
         this.sniperChargeTime = 0;
         floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '蓄力...', this.color, {life:0.6, size:11}));
         return;
+      }
+    }
+
+    // ===== 泰坦 AI =====
+    aiTitan(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles){
+      // 冷却更新
+      this.titanCannonCD -= dt;
+      this.titanMeleeCD -= dt;
+      this.titanLaserCD -= dt;
+      if (this.titanShieldTime > 0) this.titanShieldTime -= dt;
+      if (this.titanShieldTime <= 0) this.titanShieldHP = 0;
+      if (this.titanShieldCD > 0) this.titanShieldCD -= dt;
+
+      // 1. 火炮齐射（永久生效，不依赖武器模式）——集束母弹
+      if (this.titanCannonCD <= 0){
+        this.titanCannonCD = this.params.cannonCD || 4;
+        // 收集可追踪目标（敌方存活球体）
+        const targets = [];
+        for (const bb of balls){
+          if (!bb.alive || bb.team === this.team) continue;
+          targets.push(bb);
+        }
+        const motherCount = 2; // 集束母弹数量
+        for (let i = 0; i < motherCount; i++){
+          // 选取目标：多数锁定随机敌方，也有机会锁定最近敌人
+          let tgt = null;
+          if (targets.length){
+            tgt = (Math.random() < 0.7 && targets.length > 1)
+              ? targets[Math.floor(Math.random() * targets.length)]
+              : enemy;
+          }
+          const sx = this.x + dirX * this.size;
+          const sy = this.y + dirY * this.size;
+          let vx, vy;
+          if (tgt){
+            const dx = tgt.x - sx, dy = tgt.y - sy;
+            const dd = Math.hypot(dx, dy) || 1;
+            vx = (dx/dd) * 300; vy = (dy/dd) * 300;
+          } else {
+            const ang = Math.atan2(dirY, dirX) + (Math.random() - 0.5) * 0.3;
+            vx = Math.cos(ang) * 300; vy = Math.sin(ang) * 300;
+          }
+          const bullet = new Bullet(sx, sy, vx, vy, this.params.cannonDmg || 12, '#ff8833', this.team, this);
+          bullet.isTitanCannon = true;
+          bullet.isTitanMother = true; // 集束母弹，发射后定时分裂
+          bullet.initLife = 3.5; // 记录初始生命，用于计算飞行时间
+          bullet.splitTime = 0.15; // 发射后 0.15s 分裂
+          bullet.target = tgt; // 追踪目标
+          bullet.size = 7;
+          bullet.life = 3.5;
+          bullets.push(bullet);
+        }
+        // 开火特效
+        for (let i = 0; i < 8; i++){
+          particles.push(new Particle(this.x, this.y, '#ff8833', {speed: 80, life: 0.2, size: 3}));
+        }
+      }
+
+      // 2. 武器模式决策（根据距离）
+      if (d < 150){
+        // 近战：巨拳重锤
+        this.titanWeaponMode = 0;
+        if (this.titanMeleeCD <= 0 && d < this.size + enemy.size + 40){
+          this.titanMeleeCD = 0.6;
+          this.titanMeleeCount++;
+          const meleeDmg = this.params.meleeDmg || 10;
+          enemy.takeDamage(meleeDmg, '#ff8833', particles, this);
+          // 震退
+          enemy.vx += dirX * 200;
+          enemy.vy += dirY * 200;
+          // 近战特效
+          for (let i = 0; i < 8; i++){
+            particles.push(new Particle(enemy.x, enemy.y, '#ffcc44', {speed: 120, life: 0.25, size: 3}));
+          }
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 15, '重拳!', '#ff8833', {life: 0.5, size: 12}));
+          // 第3次重击：震荡波
+          if (this.titanMeleeCount >= 3){
+            this.titanMeleeCount = 0;
+            const slamRange = this.params.slamRange || 110;
+            for (const b of balls){
+              if (!b.alive || b.team === this.team) continue;
+              const sd = Math.hypot(b.x - this.x, b.y - this.y);
+              if (sd < slamRange + b.size){
+                const slamDmg = Math.ceil(meleeDmg * 1.5);
+                b.takeDamage(slamDmg, '#ff6600', particles, this);
+                const sAng = Math.atan2(b.y - this.y, b.x - this.x);
+                b.vx += Math.cos(sAng) * 300;
+                b.vy += Math.sin(sAng) * 300;
+              }
+            }
+            aoes.push(new AOE(this.x, this.y, '#ff6600', slamRange));
+            shake = Math.max(shake, 8);
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '重击·震荡波!', '#ff6600', {life: 0.8, size: 13}));
+            for (let i = 0; i < 20; i++){
+              const a = Math.random() * Math.PI * 2;
+              particles.push(new Particle(this.x, this.y, '#ff6600', {ang: a, speed: 150 + Math.random() * 100, life: 0.4, size: 3 + Math.random() * 2}));
+            }
+          }
+        }
+      } else {
+        // 远程：脉冲激光炮
+        this.titanWeaponMode = 1;
+        if (this.titanLaserCD <= 0){
+          this.titanLaserCD = this.params.laserCD || 2.5;
+          const laserDmg = this.params.laserDmg || 14;
+          const laser = new Bullet(
+            this.x + dirX * this.size, this.y + dirY * this.size,
+            dirX * 950, dirY * 950,
+            laserDmg, '#ff4444', this.team, this
+          );
+          laser.isTitanLaser = true;
+          laser.size = 6;
+          laser.life = 0.9;
+          laser.pierceMax = 20;
+          bullets.push(laser);
+          // 激光炮口冲击波
+          aoes.push(new AOE(this.x + dirX * this.size, this.y + dirY * this.size, '#ff4444', this.size * 2.2));
+          shake = Math.max(shake, 6);
+          // 激光发射特效
+          for (let i = 0; i < 16; i++){
+            particles.push(new Particle(this.x + dirX * this.size, this.y + dirY * this.size, '#ff4444', {ang: Math.atan2(dirY, dirX) + (Math.random() - 0.5) * 0.2, speed: 260 + Math.random() * 140, life: 0.25, size: 3}));
+          }
+        }
+      }
+
+      // 3. 缓慢移动接近敌人
+      if (d > 80){
+        this.vx += dirX * this.baseSpeed * spdMul * dt * 3;
+        this.vy += dirY * this.baseSpeed * spdMul * dt * 3;
+      }
+      const spd = Math.hypot(this.vx, this.vy);
+      const maxSpd = this.baseSpeed * 1.2;
+      if (spd > maxSpd){
+        this.vx = (this.vx / spd) * maxSpd;
+        this.vy = (this.vy / spd) * maxSpd;
       }
     }
 
@@ -8627,6 +8884,26 @@
       if (this.cls === 'pain' && !this.isPainBeast && this.painPandaShieldTime > 0 && !isDot){
         dmg *= 0.7;
       }
+      // 泰坦重装护甲：单次伤害超过最大血量15%时触发减伤护盾（灼烧/毒素穿透）
+      if (!isDot && this.cls === 'titan' && this.titanShieldCD <= 0 && dmg > this.maxHp * 0.15){
+        this.titanShieldHP = 1;
+        this.titanShieldTime = this.params.shieldDur || 2.5;
+        this.titanShieldCD = (this.params.shieldDur || 2.5) + 3;
+        for (let i = 0; i < 10; i++){
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(this.x, this.y, '#6b7b8b', {ang: a, speed: 100, life: 0.4, size: 3}));
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '重装护盾!', '#6b7b8b', {life: 0.8, size: 12}));
+      }
+      // 泰坦护盾持续期间减伤
+      if (!isDot && this.cls === 'titan' && this.titanShieldTime > 0){
+        const reduce = this.params.shieldReduce || 0.25;
+        const reduced = Math.ceil(dmg * reduce);
+        dmg -= reduced;
+        if (Math.random() < 0.3){
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '⚙️护盾-' + reduced, '#6b7b8b', {life: 0.5, size: 10}));
+        }
+      }
       this.hp -= dmg;
       this.hitFlash = 0.15;
       // 佩恩六道：总血量阈值切换由update方法统一处理
@@ -9042,6 +9319,28 @@
       ctx.strokeStyle = rgba('#ffffff', 0.35);
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.arc(x,y,this.size,0,Math.PI*2); ctx.stroke();
+
+      // 泰坦：重装装甲外环
+      if (this.cls === 'titan'){
+        ctx.save();
+        const armorColor = this.titanShieldTime > 0 ? '#6b7b8b' : '#555b63';
+        // 外装甲环
+        ctx.strokeStyle = rgba(armorColor, 0.6);
+        ctx.lineWidth = 3;
+        ctx.shadowColor = armorColor;
+        ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(x, y, this.size + 2, 0, Math.PI*2); ctx.stroke();
+        // 装甲角点（4个方向的小方块）
+        for (let i=0;i<4;i++){
+          const a = (i/4)*Math.PI*2 + Date.now()*0.001;
+          const px = x + Math.cos(a) * (this.size + 3);
+          const py = y + Math.sin(a) * (this.size + 3);
+          ctx.fillStyle = rgba(armorColor, 0.5);
+          ctx.fillRect(px - 2, py - 2, 4, 4);
+        }
+        ctx.restore();
+      }
+
       // 护盾守卫：硬质护盾环 / 再生进度 / 碎盾加速 / 铁壁冷却指示 / 盾击冲锋
       if (this.cls === 'shieldGuard'){
         // 盾击冲锋中：冲锋方向盾刃光
@@ -10135,6 +10434,48 @@
         ctx.fillText(chakraLabel, x, cly);
         ctx.shadowBlur = 0;
       }
+      // 泰坦：武器模式显示
+      if (this.cls === 'titan'){
+        let modeOffset = 3;
+        if (this.plagueStacks > 0) modeOffset = 20;
+        if (this.frostStacks > 0 && this.frozenTime <= 0) modeOffset += 17;
+        if (this.thunderMarkStacks > 0 && this.frozenTime <= 0) modeOffset += 17;
+        const modeLabel = this.titanWeaponMode === 0 ? '🔨 巨拳重锤' : '⚡ 脉冲激光';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const mw = ctx.measureText(modeLabel).width;
+        const mly = ny + modeOffset;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(x - mw/2 - 4, mly - 1, mw + 8, 15);
+        ctx.fillStyle = this.titanWeaponMode === 0 ? '#ff8833' : '#ff4444';
+        ctx.shadowColor = this.titanWeaponMode === 0 ? '#ff8833' : '#ff4444';
+        ctx.shadowBlur = 6;
+        ctx.fillText(modeLabel, x, mly);
+        ctx.shadowBlur = 0;
+      }
+      // 泰坦：护盾状态指示
+      if (this.cls === 'titan' && this.titanShieldTime > 0){
+        let shieldOffset = 3;
+        if (this.plagueStacks > 0) shieldOffset = 20;
+        if (this.frostStacks > 0 && this.frozenTime <= 0) shieldOffset += 17;
+        if (this.thunderMarkStacks > 0 && this.frozenTime <= 0) shieldOffset += 17;
+        if (this.titanWeaponMode === 0) shieldOffset += 19;
+        else shieldOffset += 19;
+        const shieldLabel = '🛡️ 护盾 ' + Math.ceil(this.titanShieldTime) + 's';
+        ctx.font = 'bold 11px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const sw = ctx.measureText(shieldLabel).width;
+        const sly = ny + shieldOffset;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(x - sw/2 - 4, sly - 1, sw + 8, 15);
+        ctx.fillStyle = '#6b7b8b';
+        ctx.shadowColor = '#6b7b8b';
+        ctx.shadowBlur = 4;
+        ctx.fillText(shieldLabel, x, sly);
+        ctx.shadowBlur = 0;
+      }
       ctx.restore();
 
       // 血条
@@ -10604,6 +10945,36 @@
             }
             continue; // 继续穿透下一个目标
           }
+          // 泰坦火炮炮弹：命中产生AOE爆炸
+          if (bul.isTitanCannon){
+            const aoeR = bul.aoeRadius || 35;
+            for (const eb of balls){
+              if (!eb.alive || eb.team === bul.team) continue;
+              const ed = Math.hypot(eb.x - bul.x, eb.y - bul.y);
+              if (ed < aoeR + eb.size){
+                eb.takeDamage(bul.dmg, '#ff8833', particles, bul.owner);
+              }
+            }
+            aoes.push(new AOE(bul.x, bul.y, '#ff8833', aoeR));
+            // 爆炸火团
+            for (let i=0;i<16;i++){
+              const ang = Math.random()*Math.PI*2;
+              particles.push(new Particle(bul.x, bul.y, '#ff8800', {ang, speed:140+Math.random()*140, life:0.4+Math.random()*0.25, size:3.5+Math.random()*3}));
+            }
+            // 中心闪光
+            for (let i=0;i<10;i++){
+              const ang2 = Math.random()*Math.PI*2;
+              particles.push(new Particle(bul.x, bul.y, '#ffdd66', {ang: ang2, speed:80+Math.random()*80, life:0.25, size:2.5}));
+            }
+            // 烟尘（缓慢扩散沉降）
+            for (let i=0;i<8;i++){
+              const ang3 = Math.random()*Math.PI*2;
+              particles.push(new Particle(bul.x, bul.y, '#8a6a4a', {ang: ang3, speed:45+Math.random()*60, life:0.7, size:5+Math.random()*4, gravity:80}));
+            }
+            shake = Math.max(shake, 9);
+            bul.life = 0;
+            break;
+          }
           // 狙击手：狙击弹（爆头+标记，无穿透）
           if (bul.isSniper){
             // 计算飞行距离，判断是否爆头
@@ -10946,7 +11317,68 @@
       }
       // 地形效果
       applyTerrainEffects(dt, balls, particles);
-      for (const bul of bullets) bul.update(dt);
+      // 更新子弹（泰坦集束母弹发射后定时分裂成子导弹）
+      {
+        const _bn = bullets.length;
+        for (let _bi = 0; _bi < _bn; _bi++){
+          const bul = bullets[_bi];
+          if (bul.isTitanMother && !bul.splitDone){
+            // 母弹发射后按设定时间分裂（默认 0.15s）
+            const flown = (bul.initLife || 3.5) - bul.life;
+            if (flown >= (bul.splitTime || 0.15)){
+              bul.splitDone = true;
+              // 母弹中心集中爆破：主伤害在此保留，不被子导弹分散
+              const coreR = 62;
+              for (const eb of balls){
+                if (!eb.alive || eb.team === bul.team) continue;
+                const ed = Math.hypot(eb.x - bul.x, eb.y - bul.y);
+                if (ed < coreR + eb.size){
+                  eb.takeDamage(bul.dmg, '#ff8833', particles, bul.owner);
+                }
+              }
+              aoes.push(new AOE(bul.x, bul.y, '#ff8833', coreR));
+              for (let i = 0; i < 16; i++){
+                const a = Math.random() * Math.PI * 2;
+                particles.push(new Particle(bul.x, bul.y, '#ff8800', {ang: a, speed: 140 + Math.random() * 130, life: 0.4, size: 3.5}));
+              }
+              // 收集父敌方作为子导弹候选索敌目标
+              const childTargets = [];
+              for (const bb of balls){
+                if (!bb.alive || bb.team === bul.team) continue;
+                childTargets.push(bb);
+              }
+              // 分裂出 3 枚子导弹，各自随机锁敌
+              const sc = 3;
+              for (let k = 0; k < sc; k++){
+                const spreadAng = (k / sc) * Math.PI * 2;
+                const child = new Bullet(
+                  bul.x, bul.y,
+                  Math.cos(spreadAng) * 170 + bul.vx * 0.35,
+                  Math.sin(spreadAng) * 170 + bul.vy * 0.35,
+                  bul.dmg, '#ff8833', bul.team, bul.owner
+                );
+                child.isTitanCannon = true;
+                // 每个子导弹独立索敌（随机锁定一个目标），轨迹更自然
+                child.target = childTargets.length ? childTargets[Math.floor(Math.random() * childTargets.length)] : null;
+                child.size = 5;
+                child.life = 3.2; // 子导弹存活更久，分散后持续追踪不消失
+                child.aoeRadius = 44;
+                bullets.push(child);
+              }
+              // 分裂特效
+              for (let i = 0; i < 16; i++){
+                const a = Math.random() * Math.PI * 2;
+                particles.push(new Particle(bul.x, bul.y, '#ffaa44', {ang: a, speed: 120 + Math.random() * 130, life: 0.3, size: 3}));
+              }
+              for (let i = 0; i < 6; i++){
+                particles.push(new Particle(bul.x, bul.y, '#ffffff', {ang: Math.random()*Math.PI*2, speed: 60 + Math.random() * 60, life: 0.18, size: 2}));
+              }
+              bul.life = 0; // 母弹分裂后消失
+            }
+          }
+          bul.update(dt);
+        }
+      }
       for (const tr of traps) {
         if (tr.isSniperTrap){
           // 狙击手诡雷更新
