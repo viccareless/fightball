@@ -3982,48 +3982,45 @@
         ctx.fill();
         ctx.shadowBlur = 0;
       } else if (this.isTitanLaser){
-        // 泰坦激光炮束：超长贯穿光束
+        // 泰坦激光炮：真实凝聚激光束（细长高能光束 + 轻微光学不稳定）
+        const t = Date.now() * 0.001;
         const flyAng = Math.atan2(this.vy, this.vx);
-        const beamLen = 760;
-        const pulse = 0.9 + 0.1 * Math.sin(Date.now()*0.05);
+        const beamLen = 880;
+        // 光学不稳定：极轻微的位置抖动，激光才是真实凝聚细束
+        const jitter = Math.sin(t*55) * 0.5 + Math.sin(t*97 + 2) * 0.3;
+        const think = this.size * (1.6 + 0.12 * Math.sin(t*41)); // 光束整体更粗，能量涌动微变
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(flyAng);
-        ctx.globalCompositeOperation = 'lighter';
-        // 外层宽光束
-        const gOut = ctx.createLinearGradient(0, -this.size*3, 0, this.size*3);
-        gOut.addColorStop(0, rgba('#ff2200', 0));
-        gOut.addColorStop(0.5, rgba('#ff4422', 0.35));
-        gOut.addColorStop(1, rgba('#ff2200', 0));
-        ctx.fillStyle = gOut;
-        ctx.fillRect(-this.size, -this.size*3, beamLen, this.size*6);
-        // 中层光束
-        const gMid = ctx.createLinearGradient(0, -this.size*1.6, 0, this.size*1.6);
-        gMid.addColorStop(0, rgba('#ff6622', 0.6));
-        gMid.addColorStop(0.5, '#ff8833');
-        gMid.addColorStop(1, rgba('#ff6622', 0.6));
-        ctx.fillStyle = gMid;
-        ctx.shadowColor = '#ff4400'; ctx.shadowBlur = 30;
-        ctx.fillRect(0, -this.size*1.6, beamLen, this.size*3.2);
-        // 核心炽热光线
-        const gCore = ctx.createLinearGradient(0, -this.size*0.6, 0, this.size*0.6);
-        gCore.addColorStop(0, rgba('#ffddee', 0.9));
-        gCore.addColorStop(0.4, '#ffffff');
-        gCore.addColorStop(0.6, '#ffffff');
-        gCore.addColorStop(1, rgba('#ffddee', 0.9));
-        ctx.fillStyle = gCore;
-        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 15;
-        ctx.fillRect(0, -this.size*0.6, beamLen, this.size*1.2);
-        // 前沿脉冲亮点
-        ctx.fillStyle = '#fff';
-        ctx.shadowBlur = 20;
-        for (let i=0;i<5;i++){
-          const step = this.size*3 + (Date.now()*0.006 + i*120) % (beamLen*0.6);
-          const w = (2 - i*0.25) * pulse;
-          ctx.beginPath();
-          ctx.arc(step, 0, Math.max(1, w), 0, Math.PI*2);
-          ctx.fill();
-        }
+        // 核心光束：粗而高能的白线（接近第一版的中层亮度）
+        ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.lineWidth = 4;
+        ctx.shadowColor = '#ff4444'; ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(-this.size, jitter);
+        ctx.lineTo(beamLen, jitter);
+        ctx.stroke();
+        // 内层辉光：紧贴核心的淡红（第一版中层宽度）
+        ctx.strokeStyle = rgba('#ff5555', 0.5);
+        ctx.lineWidth = think;
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.moveTo(-this.size, jitter);
+        ctx.lineTo(beamLen, jitter);
+        ctx.stroke();
+        // 外层弥散晕：更宽的极淡红光（接近第一版外层气浪）
+        ctx.strokeStyle = rgba('#ff4422', 0.16);
+        ctx.lineWidth = think * 2.2;
+        ctx.beginPath();
+        ctx.moveTo(-this.size, jitter);
+        ctx.lineTo(beamLen, jitter);
+        ctx.stroke();
+        // 尖端聚焦灼热点：略大的焦点亮斑
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ff6633'; ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.arc(beamLen - this.size, jitter, 3.6, 0, Math.PI*2);
+        ctx.fill();
         ctx.shadowBlur = 0;
         ctx.restore();
       } else {
@@ -11358,6 +11355,8 @@
                   bul.dmg, '#ff8833', bul.team, bul.owner
                 );
                 child.isTitanCannon = true;
+                // 子导弹伤害降低（母弹的一半），避免分散母弹的主伤害
+                child.dmg = Math.max(1, Math.ceil(bul.dmg * 0.5));
                 // 每个子导弹独立索敌（随机锁定一个目标），轨迹更自然
                 child.target = childTargets.length ? childTargets[Math.floor(Math.random() * childTargets.length)] : null;
                 child.size = 5;
