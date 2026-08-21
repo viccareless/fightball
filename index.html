@@ -2517,6 +2517,31 @@
         { key: 'shieldDur', label: '护盾持续时长秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false }
       ]
     },
+    foehn: {
+      label: '焚风', icon: '🔥', maxHp: 150, color: '#523f38', cost: 6, ballSpeed: 85,
+      desc: '炽焰重机·弹幕压制',
+      stats: { atk: 8, def: 6, spd: 2, rng: 7, sup: 3, ctrl: 4 },
+      codex: '炙热风浪裹挟无尽弹幕，焚尽前路一切阻碍。不息的机炮喷射滚烫的弹雨，超负荷燃起烈焰之火，却要时刻警惕枪管滚烫的极限。以热浪与轰鸣碾碎集群之敌。',
+      params: [
+        { key: 'chainDmg', label: '子弹单段伤害', min: 1, max: 10, step: 0.5, def: 1.5, int: false },
+        { key: 'scatterAngle', label: '子弹散布角度', min: 10, max: 60, step: 2, def: 30, int: true },
+        { key: 'stackMax', label: '流血叠加上限', min: 1, max: 15, step: 1, def: 8, int: true },
+        { key: 'stackDur', label: '流血持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'bleedDps', label: '流血每秒伤害', min: 1, max: 12, step: 0.5, def: 4, int: false },
+        { key: 'burnCD', label: '爆燃冷却秒', min: 6, max: 20, step: 1, def: 12, int: false },
+        { key: 'burnDmgMul', label: '燃烧弹伤害倍率', min: 1, max: 3, step: 0.1, def: 1.6, int: false },
+        { key: 'igniteR', label: '火区范围', min: 30, max: 90, step: 5, def: 55, int: true },
+        { key: 'igniteDps', label: '灼烧每秒伤害', min: 2, max: 15, step: 0.5, def: 6, int: false },
+        { key: 'slowVal', label: '火区减速', min: 0.1, max: 0.5, step: 0.05, def: 0.2, int: false },
+        { key: 'igniteDur', label: '灼烧持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'frenzyRateMul', label: '狂热射速加成', min: 1, max: 3, step: 0.1, def: 1.6, int: false },
+        { key: 'heatHi', label: '高温阈值温度', min: 30, max: 90, step: 5, def: 60, int: true },
+        { key: 'heatMax', label: '极限峰值温度', min: 60, max: 150, step: 5, def: 100, int: true },
+        { key: 'overheatDur', label: '过热锁死秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
+        { key: 'heatUpPerSec', label: '开火生热每秒', min: 5, max: 30, step: 1, def: 14, int: false },
+        { key: 'heatDownPerSec', label: '停火散热每秒', min: 5, max: 40, step: 1, def: 18, int: false }
+      ]
+    },
     sniper: {
       label: '狙击手', icon: '🎯', maxHp: 80, color: '#4a9eff', cost: 7, ballSpeed: 115,
       desc: '蓄力狙击·爆头一击',
@@ -4851,6 +4876,28 @@
         }
       }
 
+      // 焚风：单段子弹受击冷却递减
+      if (this._foehnHitCd > 0) this._foehnHitCd -= dt;
+      // 焚风：炽烈流血（连续命中叠层，每秒按层数结算DOT）
+      if (this._foehnStacks > 0 && this._foehnTimer > 0){
+        this._foehnTimer -= dt;
+        this._foehnBleedAcc = (this._foehnBleedAcc || 0) + dt;
+        if (this._foehnBleedAcc >= 1){
+          this._foehnBleedAcc -= 1;
+          const dps = this._foehnSource ? (this._foehnSource.params.bleedDps || 4) : 4;
+          this.takeDamage(Math.max(1, Math.ceil(dps * this._foehnStacks)), '#ff8844', particles, this._foehnSource, true);
+          // 灼烧溅血粒子
+          for (let i = 0; i < 6; i++){
+            const a = Math.random() * Math.PI * 2;
+            particles.push(new Particle(this.x, this.y, '#ff8844', {ang: a, speed: 40 + Math.random() * 60, life: 0.3, size: 2}));
+          }
+        }
+        if (this._foehnTimer <= 0){
+          this._foehnStacks = 0;
+          this._foehnBleedAcc = 0;
+        }
+      }
+
       // 隐身计时
       if (this.invisibleTime > 0){
         this.invisibleTime -= dt;
@@ -5283,6 +5330,7 @@
         case 'wuLiuQi': this.aiWuLiuQi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
         case 'sniper':  this.aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
         case 'titan':  this.aiTitan(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'foehn':  this.aiFoehn(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
       }
       }
 
@@ -6468,6 +6516,96 @@
       if (spd > maxSpd){
         this.vx = (this.vx / spd) * maxSpd;
         this.vy = (this.vy / spd) * maxSpd;
+      }
+    }
+
+    aiFoehn(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles){
+      const P = this.params;
+      const heatHi = P.heatHi ?? 60;
+      const heatMax = P.heatMax ?? 100;
+      const frenzyMul = P.frenzyRateMul ?? 1.6;
+      const heatUp = P.heatUpPerSec ?? 14;
+      const heatDown = P.heatDownPerSec ?? 18;
+
+      // ===== 温度 & 过热 & 狂热 =====
+      this._foehnHeat = this._foehnHeat || 0;
+      if (this._foehnOverheat > 0) this._foehnOverheat -= dt;
+      if (this._foehnBurnCD > 0) this._foehnBurnCD -= dt;
+      if (this._foehnBurnTime > 0) this._foehnBurnTime -= dt;
+
+      const inRange = d < 430;
+      const locked = this._foehnOverheat > 0;
+      // 自然散热（锁死期间散热翻倍）；开火瞬间的生热单独在真正射出子弹时结算
+      this._foehnHeat -= (locked ? heatDown * 2 : heatDown) * dt;
+      this._foehnHeat = Math.max(0, this._foehnHeat);
+      // 狂热：温度达阈值且未过热锁死
+      this._foehnFrenzy = (!locked && this._foehnHeat >= heatHi) ? 1 : 0;
+
+      // ===== 焚烬爆燃（主动技能，冷却型）=====
+      if (this._foehnBurnCD <= 0 && this._foehnBurnTime <= 0 && inRange && !locked){
+        this._foehnBurnCD = P.burnCD ?? 12;
+        this._foehnBurnTime = 3;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '焚烬爆燃!', '#ff5522', {life: 0.9, size: 13}));
+        aoes.push(new AOE(this.x, this.y, '#ff6622', 42));
+        for (let i = 0; i < 22; i++){
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(this.x, this.y, '#ff7a22', {ang: a, speed: 90 + Math.random() * 140, life: 0.5, size: 3 + Math.random() * 3}));
+        }
+        shake = Math.max(shake, 3);
+      }
+
+      // ===== 链枪扫射（常驻，30° 扇形散布）=====
+      const burn = this._foehnBurnTime > 0;
+      const baseInterval = 0.1;
+      const interval = baseInterval / (this._foehnFrenzy ? frenzyMul : 1);
+      this._foehnFireCD = (this._foehnFireCD || 0) - dt;
+      if (this._foehnFireCD <= 0 && inRange && !locked){
+        this._foehnFireCD = Math.max(0.04, interval);
+        const bspd = 620;
+        const baseAng = Math.atan2(dirY, dirX);
+        const scatter = (P.scatterAngle ?? 30) * Math.PI / 180;
+        const ang = baseAng + (Math.random() * 2 - 1) * (scatter / 2);
+        const dmg = burn ? Math.ceil((P.chainDmg ?? 1.5) * (P.burnDmgMul ?? 1.6)) : (P.chainDmg ?? 1.5);
+        const bul = new Bullet(this.x + dirX * this.size, this.y + dirY * this.size, Math.cos(ang) * bspd, Math.sin(ang) * bspd, dmg, burn ? '#ff6622' : '#ffcc66', this.team, this);
+        bul.isFoehn = true;
+        bul.isFoehnBurn = burn;
+        bul.size = 4;
+        bullets.push(bul);
+        // 真正射出子弹的瞬间才生热（焚烬爆燃模式翻倍）
+        this._foehnHeat += heatUp * baseInterval * 2 * (burn ? 2 : 1);
+        if (this._foehnHeat >= heatMax){
+          this._foehnHeat = heatMax;
+          this._foehnOverheat = P.overheatDur ?? 2.5;
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '过热·锁死!', '#ff8800', {life: 1, size: 13}));
+          shake = Math.max(shake, 4);
+        }
+        // 枪口焰：温度越高越旺
+        const fR = this._foehnHeat / heatMax;
+        for (let i = 0; i < 2 + fR * 2; i++){
+          const pa = ang + (Math.random() * 2 - 1) * 0.35;
+          particles.push(new Particle(this.x + dirX * this.size, this.y + dirY * this.size, burn ? '#ff6633' : (Math.random() < 0.6 ? '#ffd488' : '#ff8a33'), {ang: pa, speed: 160 + Math.random() * 130, life: 0.14 + fR * 0.08, size: 2 + Math.random() * 2.5}));
+        }
+      }
+
+      // ===== 走位：保持中距离，过热锁死时后撤散热 =====
+      let mx = 0, my = 0;
+      if (locked){
+        mx = -dirX; my = -dirY; // 锁死时快速后撤拉开距离
+      } else if (d > 360){
+        mx = dirX; my = dirY;
+      } else if (d < 130){
+        mx = -dirX; my = -dirY;
+      } else {
+        const side = Math.sin(Date.now() * 0.002 + this.bobPhase) > 0 ? 1 : -1;
+        mx = -dirY * side; my = dirX * side;
+      }
+      this.vx += mx * this.baseSpeed * spdMul * dt * 3;
+      this.vy += my * this.baseSpeed * spdMul * dt * 3;
+      const fspd = Math.hypot(this.vx, this.vy);
+      const fmax = this.baseSpeed * 1.2;
+      if (fspd > fmax){
+        this.vx = (this.vx / fspd) * fmax;
+        this.vy = (this.vy / fspd) * fmax;
       }
     }
 
@@ -10527,6 +10665,74 @@
         ctx.shadowBlur = 0;
         ctx.restore();
       }
+      // 焚风：枪管温度条（专属独立设计，位于血条上方，冷→热渐变+阈值刻度+过热警示）
+      if (this.cls === 'foehn'){
+        const fhMax = this.params.heatMax || 100;
+        const fhHi = this.params.heatHi || 60;
+        const fhHeat = Math.max(0, Math.min(fhMax, this._foehnHeat || 0));
+        const fhRatio = fhHeat / fhMax;
+        const fhBw = bw;
+        const fhBy = by - 9; // 血条上方 9px
+        const fhH = 5;
+        ctx.save();
+        // 槽（圆角暗槽）
+        ctx.fillStyle = 'rgba(18,16,14,0.8)';
+        ctx.fillRect(bx - 1, fhBy - 1, fhBw + 2, fhH + 2);
+        // 温度填充：整体分段渐变（青→橙→红）
+        if (fhRatio > 0){
+          const fg = ctx.createLinearGradient(bx, 0, bx + fhBw, 0);
+          fg.addColorStop(0, '#3ecfff');
+          fg.addColorStop(0.45, '#58dd8a');
+          fg.addColorStop(0.72, '#ffb03e');
+          fg.addColorStop(1, '#ff4b3e');
+          ctx.fillStyle = fg;
+          ctx.shadowColor = fhRatio > (fhHi / fhMax) ? '#ff5a3c' : '#3ecfff';
+          ctx.shadowBlur = 6;
+          ctx.fillRect(bx, fhBy, fhBw * fhRatio, fhH);
+          ctx.shadowBlur = 0;
+        }
+        // 高温阈值刻度（金色细线，到达即进入狂热）
+        const fhHiX = bx + fhBw * (fhHi / fhMax);
+        ctx.strokeStyle = 'rgba(255,235,120,0.95)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(fhHiX, fhBy - 1);
+        ctx.lineTo(fhHiX, fhBy + fhH + 1);
+        ctx.stroke();
+        // 过热锁死：危险脉冲闪烁 + 顶部警示
+        if (this._foehnOverheat > 0){
+          const blink = 0.5 + 0.5 * Math.sin(Date.now() * 0.024);
+          ctx.fillStyle = 'rgba(255,60,40,' + (0.35 + 0.35 * blink) + ')';
+          ctx.fillRect(bx, fhBy, fhBw, fhH);
+          ctx.strokeStyle = 'rgba(255,90,45,' + (0.6 + 0.4 * blink) + ')';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(bx - 1, fhBy - 1, fhBw + 2, fhH + 2);
+          ctx.font = '9px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillStyle = 'rgba(255,90,60,' + (0.75 + 0.25 * blink) + ')';
+          ctx.fillText('过热锁死', x, fhBy - 11);
+        } else if (this._foehnFrenzy){
+          // 狂热状态：橙色能量外框脉动
+          const fp = 0.5 + 0.5 * Math.sin(Date.now() * 0.01);
+          ctx.strokeStyle = 'rgba(255,130,60,' + (0.5 + 0.4 * fp) + ')';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(bx - 1, fhBy - 1, fhBw + 2, fhH + 2);
+        }
+        // 温度百分比（置于最上层，过热/狂热覆盖后依然清晰）
+        if (fhBw > 26){
+          ctx.font = '7px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const pctTxt = Math.round(fhRatio * 100) + '%';
+          const pctW = ctx.measureText(pctTxt).width;
+          ctx.fillStyle = 'rgba(0,0,0,0.4)';
+          ctx.fillRect(x - pctW / 2 - 1.5, fhBy - 0.5, pctW + 3, fhH + 1);
+          ctx.fillStyle = fhRatio > (fhHi / fhMax) ? '#ffd9b0' : '#eafcff';
+          ctx.fillText(pctTxt, x, fhBy + fhH / 2 + 0.5);
+        }
+        ctx.restore();
+      }
       // 白厄视觉：火种/变身/虚弱
       if (this.cls === 'whiteEmber' && this.alive){
         const wt = Date.now() * 0.005;
@@ -10855,6 +11061,15 @@
             }
             continue; // 继续穿透，不消失
           }
+          // 焚风：链枪子弹——受击冷却。同一目标在短时间内只结算一次单段直接伤害，
+          // 高速弹幕不会让单发被后续多颗弹重复吃满伤害；流血/灼烧仍正常叠加。
+          if (bul.isFoehn && bul.owner){
+            if ((b._foehnHitCd || 0) > 0){
+              bul.dmg = 0; // 冷却期内：本次不重复造成直接伤害
+            } else {
+              b._foehnHitCd = 0.05; // 受击冷却间隔
+            }
+          }
           b.takeDamage(bul.dmg, bul.color, particles, bul.owner);
           // 波风水门飞雷神苦无：命中敌人留下标记
           if (bul.isKunai && bul.kunaiOwner && bul.kunaiOwner.alive){
@@ -10877,6 +11092,30 @@
           }
           if (bul.marks) b.markTime = 3;
           if (bul.plague && bul.owner) b.applyPlague(1, bul.owner, particles, balls);
+          // 焚风：链枪命中叠炽烈流血；燃烧弹另生成高温火区
+          if (bul.isFoehn && bul.owner){
+            const sm = bul.owner.params.stackMax || 8;
+            const sdur = bul.owner.params.stackDur || 3;
+            b._foehnStacks = Math.min(sm, (b._foehnStacks || 0) + (bul.isFoehnBurn ? 2 : 1));
+            b._foehnTimer = Math.max(b._foehnTimer || 0, sdur);
+            b._foehnSource = bul.owner;
+            if (bul.isFoehnBurn){
+              const fr = bul.owner.params.igniteR || 55;
+              const fdur = bul.owner.params.igniteDur || 3;
+              const fdmg = bul.owner.params.igniteDps || 6;
+              const fslow = bul.owner.params.slowVal || 0.2;
+              aoes.push(new AOE(b.x, b.y, '#ff5522', fr, fdur, bul.team, fdmg, fslow, 0, bul.owner));
+              for (let i = 0; i < 10; i++){
+                const a = Math.random() * Math.PI * 2;
+                particles.push(new Particle(b.x, b.y, '#ff6633', {ang: a, speed: 60 + Math.random() * 70, life: 0.4, size: 3 + Math.random() * 2}));
+              }
+            } else {
+              for (let i = 0; i < 6; i++){
+                const a = Math.random() * Math.PI * 2;
+                particles.push(new Particle(b.x, b.y, '#ffd488', {ang: a, speed: 70 + Math.random() * 80, life: 0.25, size: 2 + Math.random() * 2}));
+              }
+            }
+          }
           // 狙击手普射：命中施加狙击标记（易伤）
           if (bul.sniperNormal && bul.owner && bul.owner.alive && bul.owner.cls === 'sniper'){
             const markDur = bul.owner.params.markDur || 5;
