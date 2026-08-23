@@ -2382,16 +2382,16 @@
         { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.0, step: 0.1, def: 1, int: false },
         { key: 'markDuration', label: '雷印持续秒', min: 3, max: 10, step: 0.5, def: 5, int: false },
         { key: 'chainDecay', label: '连锁衰减%', min: 10, max: 50, step: 5, def: 55, int: true },
-        { key: 'maxCharge', label: '蓄雷满层', min: 6, max: 15, step: 1, def: 13, int: true },
-        { key: 'stormDmg', label: '雷暴伤害', min: 15, max: 60, step: 1, def: 16, int: true },
-        { key: 'paralyzeTime', label: '麻痹秒', min: 0.2, max: 1.5, step: 0.1, def: 0.2, int: false },
+        { key: 'maxCharge', label: '蓄雷满层', min: 6, max: 15, step: 1, def: 11, int: true },
+        { key: 'stormDmg', label: '雷暴伤害', min: 15, max: 60, step: 1, def: 18, int: true },
+        { key: 'paralyzeTime', label: '麻痹秒', min: 0.2, max: 1.5, step: 0.1, def: 0.3, int: false },
         { key: 'slowPerStack', label: '减速%/层', min: 3, max: 15, step: 1, def: 6, int: true },
         { key: 'vulnBonus', label: '易伤%', min: 5, max: 25, step: 1, def: 6, int: true },
         { key: 'empAtk', label: '赋能攻击%', min: 5, max: 30, step: 1, def: 6, int: true },
-        { key: 'empAtkSpd', label: '赋能攻速%', min: 5, max: 40, step: 1, def: 12, int: true },
+        { key: 'empAtkSpd', label: '赋能攻速%', min: 5, max: 40, step: 1, def: 15, int: true },
         { key: 'empDuration', label: '赋能持续秒', min: 2, max: 6, step: 0.5, def: 3, int: false },
         { key: 'healAmount', label: '续航回复', min: 1, max: 10, step: 1, def: 2, int: true },
-        { key: 'jumpDist', label: '跳跃落点间距', min: 0, max: 40, step: 2, def: 7, int: true },
+        { key: 'jumpDist', label: '跳跃落点间距', min: 0, max: 40, step: 2, def: 10, int: true },
         { key: 'jumpCD', label: '跳跃冷却秒', min: 0, max: 10, step: 0.5, def: 2, int: false }
       ]
     },
@@ -2460,18 +2460,17 @@
       stats: { atk: 10, def: 9, spd: 4, rng: 5, sup: 2, ctrl: 10 },
       codex: '五具痛苦之躯往复轮转，耗尽之后，轮回之真正力量方才降临。天道超携神罚现世，神罗天征涤荡万物，地爆天星囚禁世间一切生灵。',
       params: [
-        { key: 'switchCD', label: '轮转冷却/秒', min: 3, max: 12, step: 0.5, def: 6, int: false },
         { key: 'chakraMax', label: '查克拉印记上限', min: 5, max: 15, step: 1, def: 9, int: true },
-        { key: 'shinraCD', label: '神罗天征冷却/秒', min: 4, max: 12, step: 0.5, def: 7, int: false },
-        { key: 'shinraDmg', label: '神罗天征伤害', min: 10, max: 50, step: 1, def: 25, int: true },
-        { key: 'chibakuR', label: '地爆天星范围', min: 100, max: 300, step: 10, def: 200, int: true },
-        { key: 'chibakuDur', label: '地爆天星禁锢/秒', min: 1, max: 4, step: 0.5, def: 2, int: false },
+        { key: 'shinraCD', label: '神罗天征冷却/秒', min: 4, max: 12, step: 0.5, def: 9, int: false },
+        { key: 'shinraDmg', label: '神罗天征伤害', min: 10, max: 50, step: 1, def: 23, int: true },
+        { key: 'chibakuR', label: '地爆天星范围', min: 100, max: 300, step: 10, def: 180, int: true },
+        { key: 'chibakuDur', label: '地爆天星禁锢/秒', min: 1, max: 4, step: 0.5, def: 1.5, int: false },
         { key: 'beastCD', label: '通灵兽释放冷却/秒', min: 2, max: 8, step: 0.5, def: 2.5, int: false },
         { key: 'hellHeal', label: '地狱道回血比例%', min: 10, max: 50, step: 5, def: 25, int: true },
         { key: 'absorbRate', label: '饿鬼道吸收转化率%', min: 10, max: 50, step: 5, def: 25, int: true },
-        { key: 'silenceDur', label: '人间道沉默/秒', min: 0.3, max: 2, step: 0.1, def: 0.8, int: false },
+        { key: 'silenceDur', label: '人间道沉默/秒', min: 0.3, max: 2, step: 0.1, def: 0.6, int: false },
         { key: 'missileDmg', label: '修罗道导弹伤害', min: 5, max: 30, step: 1, def: 12, int: true },
-        { key: 'tenduoDmg', label: '天道超黑棒伤害', min: 8, max: 40, step: 1, def: 15, int: true }
+        { key: 'tenduoDmg', label: '天道超黑棒伤害', min: 8, max: 40, step: 1, def: 12, int: true }
       ]
     },
     minato: {
@@ -2523,7 +2522,7 @@
       stats: { atk: 8, def: 6, spd: 2, rng: 7, sup: 3, ctrl: 4 },
       codex: '炙热风浪裹挟无尽弹幕，焚尽前路一切阻碍。不息的机炮喷射滚烫的弹雨，超负荷燃起烈焰之火，却要时刻警惕枪管滚烫的极限。以热浪与轰鸣碾碎集群之敌。',
       params: [
-        { key: 'chainDmg', label: '子弹单段伤害', min: 1, max: 10, step: 0.5, def: 1.5, int: false },
+        { key: 'chainDmg', label: '子弹单段伤害', min: 1, max: 10, step: 0.5, def: 1, int: false },
         { key: 'scatterAngle', label: '子弹散布角度', min: 10, max: 60, step: 2, def: 30, int: true },
         { key: 'stackMax', label: '流血叠加上限', min: 1, max: 15, step: 1, def: 8, int: true },
         { key: 'stackDur', label: '流血持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
@@ -2539,7 +2538,7 @@
         { key: 'heatMax', label: '极限峰值温度', min: 60, max: 150, step: 5, def: 100, int: true },
         { key: 'overheatDur', label: '过热锁死秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
         { key: 'heatUpPerSec', label: '开火生热每秒', min: 5, max: 30, step: 1, def: 14, int: false },
-        { key: 'heatDownPerSec', label: '停火散热每秒', min: 5, max: 40, step: 1, def: 18, int: false }
+        { key: 'heatDownPerSec', label: '停火散热每秒', min: 5, max: 40, step: 1, def: 16, int: false }
       ]
     },
     sniper: {
