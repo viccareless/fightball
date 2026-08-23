@@ -1830,6 +1830,75 @@
   .draw-action-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(255,107,107,0.6); }
   .draw-action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
   .draw-action-btn.hidden { display: none; }
+  /* ===== 选秀对战 overlay ===== */
+  .draft-ai-toggle { display:flex; align-items:center; gap:6px; font-size:14px; color:#cbd5ff; }
+  .draft-status { display:flex; gap:26px; align-items:stretch; width:100%; max-width:700px; }
+  .draft-team { flex:1; background:rgba(255,255,255,0.03); border-radius:12px; padding:12px; border:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; gap:8px; }
+  .draft-team.a { border-color:rgba(255,122,61,0.3); }
+  .draft-team.b { border-color:rgba(95,212,255,0.3); }
+  .draft-team.is-turn { box-shadow:0 0 18px rgba(255,215,0,0.18); }
+  .draft-team-name { font-size:15px; font-weight:800; }
+  .draft-team-slots { display:flex; flex-wrap:wrap; gap:6px; min-height:52px; align-items:center; }
+  .draft-slot { display:flex; flex-direction:column; align-items:center; background:rgba(0,0,0,0.35); border-radius:8px; padding:6px 8px; min-width:56px; box-shadow:0 0 10px rgba(0,0,0,0.3); }
+  .draft-slot .i { font-size:24px; line-height:1.1; }
+  .draft-slot .n { font-size:9px; color:#cfd6ff; margin-top:2px; white-space:nowrap; }
+  .draft-empty { font-size:12px; color:#5a6480; font-style:italic; }
+  .draft-vs { align-self:center; font-size:15px; font-weight:900; color:#8b7bb8; letter-spacing:2px; writing-mode:vertical-rl; }
+  .draft-hint { margin-top:16px; font-size:14px; color:#cbd5ff; }
+  .draft-hint b { color:#ffd700; }
+  .draft-options { display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:12px; padding:0 10px; max-width:720px; }
+  .draft-opt { width:112px; padding:12px 8px; border-radius:12px; cursor:pointer; text-align:center;
+    background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.1);
+    transition:transform .15s, box-shadow .15s, border-color .15s; }
+  .draft-opt:hover { transform:translateY(-3px); border-color:#ffd700; box-shadow:0 8px 20px rgba(255,215,0,0.15); }
+  .draft-opt .i { font-size:30px; line-height:1; }
+  .draft-opt .n { font-size:12px; font-weight:700; color:#fff; margin-top:6px; }
+  .draft-opt .t { font-size:10px; color:#8ca4c0; margin-top:3px; }
+  .draft-opt.actor-ban { border-color:#ff6b6b; }
+  .draft-opt.actor-pick { border-color:#ffd700; }
+  .draft-opt.disabled { opacity:.35; cursor:default; transform:none !important; }
+  .draft-ban-pool { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:14px; min-height:24px; }
+  .draft-ban-chip { font-size:12px; background:rgba(120,90,60,0.25); color:#ffb27a; border-radius:12px; padding:3px 10px; }
+  /* 选秀界面自适应：小屏完整呈现 + 决策区按需滚动 */
+  #draftOverlay { overflow-y:auto; justify-content:flex-start; padding:18px 12px 26px; }
+  #draftOverlay .draw-title { margin-top:4px; }
+  #draftOverlay .draw-subtitle { margin-bottom:12px; padding:0 12px; text-align:center; }
+  .draft-status { flex-wrap:wrap; }
+  .draft-options { max-height:46vh; overflow-y:auto; align-content:flex-start; padding:6px 4px; }
+  .draft-options::-webkit-scrollbar { width:6px; }
+  .draft-options::-webkit-scrollbar-thumb { background:rgba(180,140,255,0.3); border-radius:3px; }
+  .draft-ban-pool { max-height:96px; overflow-y:auto; }
+  .draft-opt.actor-ban { width:78px; min-width:78px; padding:8px 4px; }
+  .draft-opt.actor-ban .t { display:none; }
+  .draft-opt.actor-pick { width:120px; padding:11px 8px; }
+  /* 三选一：无畏契约商店式翻牌揭示 */
+  .flip-card { perspective:820px; width:128px; height:168px; cursor:pointer; }
+  .flip-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d;
+    transition: transform .6s cubic-bezier(.2,.7,.3,1), box-shadow .4s; }
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back { position:absolute; inset:0; backface-visibility:hidden; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:14px 8px; box-sizing:border-box; }
+  .flip-front { background:linear-gradient(160deg,#232b63,#101231); border:2px solid rgba(255,215,0,.28);
+    box-shadow:0 10px 26px rgba(0,0,0,.45); }
+  .flip-front .fp-q { font-size:42px; opacity:.55; filter:drop-shadow(0 0 10px rgba(255,215,0,.25)); }
+  .flip-front .fp-h { margin-top:10px; font-size:11px; color:#ffd700; letter-spacing:3px; }
+  .flip-back { transform:rotateY(180deg); background:rgba(20,22,45,.96); border:2px solid #ffd700;
+    box-shadow:0 10px 26px rgba(255,215,0,.14); }
+  .flip-card:hover .flip-inner { box-shadow:0 14px 34px rgba(255,215,0,.22); }
+  .flip-back .i { font-size:32px; line-height:1; }
+  .flip-back .n { font-size:13px; font-weight:800; color:#fff; margin-top:7px; white-space:nowrap; }
+  .flip-back .t { font-size:10px; color:#9fb4d0; margin-top:5px; text-align:center; line-height:1.35;
+    max-height:40px; overflow:hidden; }
+  .flip-back .pick-tag { margin-top:8px; font-size:10px; letter-spacing:2px; color:#8c7bff; }
+  /* 翻硬币动画 */
+  .draft-coin-wrap { perspective:700px; margin-top:16px; display:flex; justify-content:center; padding:22px 0 6px; }
+  .draft-coin { position:relative; transform-style:preserve-3d; width:120px; height:120px; }
+  .draft-coin .face { position:absolute; inset:0; backface-visibility:hidden; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:900;
+    box-shadow:0 8px 26px rgba(0,0,0,.5), inset -6px -10px 18px rgba(0,0,0,.25); }
+  .draft-coin .face .side { font-size:14px; text-align:center; line-height:1.2; letter-spacing:1px; }
+  .draft-coin .face.a { background:radial-gradient(circle at 32% 28%,#ffb27a,#ff7a3d 58%,#d6541f); color:#fff; border:3px solid #ffd9b0; }
+  .draft-coin .face.b { background:radial-gradient(circle at 32% 28%,#8fd0ff,#3a9bff 58%,#1366c9); color:#fff; border:3px solid #bfe4ff; transform:rotateY(180deg); }
 </style>
 </head>
 <body>
@@ -1848,6 +1917,7 @@
         <div class="mode-tab" data-mode="survival">无尽生存</div>
         <div class="mode-tab" data-mode="battleroyale">大逃杀</div>
         <div class="mode-tab" data-mode="random">随机抽选</div>
+<div class="mode-tab" data-mode="draft">选秀对战</div>
       </div>
 
       <!-- 地形选择 -->
@@ -1989,6 +2059,18 @@
       </div>
     </div>
 
+    <!-- ===== 选秀对战模式面板 ===== -->
+    <div id="draftMode" style="display:none;">
+      <div class="random-mode-intro">
+        选秀对战：双方轮流<b>禁用</b>与<b>抽取</b>角色，各得 3 名后展开 <b>3v3</b> 对战。流程：双方轮流禁用 → A 首抽(3选1) → B 双抽(3选1×2) → 再次双方轮流禁用 → A 双抽(3选1×2) → B 尾抽(3选1)。
+      </div>
+      <div class="random-size-row">
+        <span class="random-size-label">对手</span>
+        <label class="draft-ai-toggle"><input type="checkbox" id="draftVsAI" checked=""> 与电脑对战（单人，电脑操控队伍 B）</label>
+      </div>
+      <button class="start-btn" id="draftStartBtn" style="width:100%;background:linear-gradient(135deg,#7a5cff,#3ec4ff);box-shadow:0 8px 24px rgba(58,140,255,0.4);">⚔️ 开始选秀</button>
+    </div>
+
     <div class="start-shortcuts">
       <button class="codex-entry-btn" id="codexEntryBtn">
         <span class="codex-entry-icon">📖</span>
@@ -2020,6 +2102,27 @@
       </div>
     </div>
     <button class="draw-action-btn hidden" id="drawStartBtn">开始对战</button>
+  </div>
+
+  <!-- ===== 选秀对战覆盖层 ===== -->
+  <div class="draw-overlay hidden" id="draftOverlay">
+    <div class="draw-title" id="draftTitle">⚔️ 选秀对战</div>
+    <div class="draw-subtitle" id="draftSubtitle">双方轮流禁用与抽取角色，各得 3 名后开战</div>
+    <div class="draft-status">
+      <div class="draft-team a" id="draftSideA">
+        <div class="draft-team-name" style="color:#ff7a3d;">队伍 A</div>
+        <div class="draft-team-slots" id="draftSlotsA"><span class="draft-empty">待抽取</span></div>
+      </div>
+      <div class="draft-vs">BAN /<br>PICK</div>
+      <div class="draft-team b" id="draftSideB">
+        <div class="draft-team-name" style="color:#5fd4ff;">队伍 B</div>
+        <div class="draft-team-slots" id="draftSlotsB"><span class="draft-empty">待抽取</span></div>
+      </div>
+    </div>
+    <div class="draft-hint" id="draftHint">当前行动：<b id="draftActor">队伍 A</b></div>
+    <div class="draft-options" id="draftOptions"></div>
+    <div class="draft-ban-pool" id="draftBanPool"></div>
+    <button class="draw-action-btn" id="draftCancelBtn" style="background:linear-gradient(135deg,#6b6b6b,#3a3a4a);box-shadow:0 6px 20px rgba(0,0,0,0.3);">取 消 选 秀</button>
   </div>
 
   <!-- ===== 图鉴总览弹窗 ===== -->
@@ -12379,6 +12482,7 @@
     $('survivalMode').style.display = mode === 'survival' ? '' : 'none';
     $('battleroyaleMode').style.display = mode === 'battleroyale' ? '' : 'none';
     $('randomMode').style.display = mode === 'random' ? '' : 'none';
+    $('draftMode').style.display = mode === 'draft' ? '' : 'none';
     if (mode === 'duel'){
       $('duelTitleA').innerHTML = '队伍 A · ' + CLASSES[duelPick.A].label + ' <span class="arrow">▼</span>';
       $('duelTitleA').style.color = CLASSES[duelPick.A].color;
@@ -12674,6 +12778,242 @@
     $('resultStatsSection').classList.add('hidden');
   }
 
+  // ===== 选秀对战：状态机 =====
+  let draftVsAI = true;
+  let draftTeams = null; // 选秀完成后的队伍，供 startGame 使用
+  let draftState = null;
+  // 流程模板：先手(lead)与本轮后手轮换。L=先手, F=后手
+  const DRAFT_TEMPLATE = [
+    { slot: 'L', type: 'ban' },   { slot: 'F', type: 'ban' },
+    { slot: 'L', type: 'pick3' }, { slot: 'F', type: 'pick3' }, { slot: 'F', type: 'pick3' },
+    { slot: 'L', type: 'ban' },   { slot: 'F', type: 'ban' },
+    { slot: 'L', type: 'pick3' }, { slot: 'L', type: 'pick3' }, { slot: 'F', type: 'pick3' }
+  ];
+  // 翻硬币决定先手，生成实际步序（先手走 L 模板，后手走 F 模板）
+  function buildDraftSteps(lead){
+    const other = lead === 'A' ? 'B' : 'A';
+    return DRAFT_TEMPLATE.map(t => ({
+      type: t.type,
+      actor: t.slot === 'L' ? lead : other
+    }));
+  }
+  function draftBegin(){
+    draftTeams = null;
+    draftVsAI = $('draftVsAI').checked;
+    // 翻硬币随机决定先手
+    const lead = Math.random() < 0.5 ? 'A' : 'B';
+    draftState = { A: [], B: [], banned: [], pool: Object.keys(CLASSES), step: 0, options: [], steps: buildDraftSteps(lead), lead: lead, coinDone: false };
+    $('draftOverlay').classList.remove('hidden');
+    $('draftCancelBtn').style.display = '';
+    $('draftSubtitle').innerHTML = '🪙 翻硬币决定先手...';
+    draftRender(); // 显示硬币翻转动画
+    // 动画结束后定格先手，再进入第一轮（禁用）
+    setTimeout(() => {
+      if (!draftState) return;
+      draftState.coinDone = true;
+      $('draftSubtitle').innerHTML = '🪙 翻硬币：<b style="color:#ffd700">队伍 ' + lead + ' 先手</b> · 请先手禁用角色';
+      draftRender();
+      draftMaybeAI();
+    }, 1650);
+  }
+  // 单人对战时，队伍 B（AI）的所有行动自动决策
+  function draftMaybeAI(){
+    const s = draftState;
+    if (!s) return;
+    const step = draftState.steps[s.step];
+    if (draftVsAI && step && step.actor === 'B'){
+      setTimeout(() => draftAutoAct(step), 550);
+    }
+  }
+  // 角色强度评分：六维均值 + 血量 + 造价
+  function scoreClass(k){
+    const c = CLASSES[k];
+    if (!c) return 0;
+    const s = c.stats || {};
+    const six = (s.atk||0) + (s.def||0) + (s.spd||0) + (s.rng||0) + (s.sup||0) + (s.ctrl||0);
+    return six / 6 * 2 + (c.maxHp||0) * 0.15 + (c.cost||0);
+  }
+  // 返回列表中得分最高的角色；并列时随机其一，避免完全固定
+  function bestOf(list){
+    if (!list || !list.length) return null;
+    let best = null, bestScore = -Infinity;
+    for (const k of list){
+      const sc = scoreClass(k);
+      if (sc > bestScore + 1e-9){ best = k; bestScore = sc; }
+    }
+    const tied = list.filter(k => Math.abs(scoreClass(k) - bestScore) < 1e-9);
+    return tied.length > 1 ? tied[Math.floor(Math.random() * tied.length)] : best;
+  }
+  function draftAutoAct(step){
+    const s = draftState;
+    if (!s) return;
+    if (step.type === 'ban'){
+      const pool = draftAvailableBan();
+      if (!pool.length) return;
+      const k = bestOf(pool);
+      s.banned.push(k);
+      s.pool = s.pool.filter(x => x !== k);
+    } else {
+      if (!s.options.length) return;
+      // 优先选择三张候选牌中最强的角色
+      const k = bestOf(s.options);
+      s[step.actor].push(k);
+      s.pool = s.pool.filter(x => x !== k);
+    }
+    draftNext();
+    draftRender();
+    draftMaybeAI();
+  }
+  function draftAvailableBan(){
+    const s = draftState;
+    return s.pool.filter(k => !s.banned.includes(k) && !s.A.includes(k) && !s.B.includes(k));
+  }
+  function draftPickFor(){
+    // 从可用池（排除已禁用/已选）随机抽 3 名不重复候选中
+    const arr = draftAvailableBan().slice();
+    const opts = [];
+    for (let i = 0; i < Math.min(3, arr.length) && arr.length; i++){
+      const idx = Math.floor(Math.random() * arr.length);
+      opts.push(arr[idx]);
+      arr.splice(idx, 1);
+    }
+    // 额外 Fisher–Yates 洗牌：保证候选在牌中的摆放位置也完全随机
+    for (let i = opts.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = opts[i]; opts[i] = opts[j]; opts[j] = t;
+    }
+    return opts;
+  }
+  function draftAct(choice){
+    const s = draftState;
+    if (!s) return;
+    const step = draftState.steps[s.step];
+    if (draftVsAI && step.actor === 'B') return; // AI 自动决策
+    if (step.type === 'ban'){
+      if (!draftAvailableBan().includes(choice)) return;
+      s.banned.push(choice);
+    } else {
+      if (!s.options.includes(choice)) return;
+      s[step.actor].push(choice);
+    }
+    s.pool = s.pool.filter(x => x !== choice);
+    draftNext();
+    draftRender();
+    draftMaybeAI();
+  }
+  function draftNext(){
+    const s = draftState;
+    s.step++;
+    if (s.step >= draftState.steps.length){
+      draftFinish();
+      return;
+    }
+    const step = draftState.steps[s.step];
+    s.options = step.type === 'pick3' ? draftPickFor() : [];
+  }
+  function draftFinish(){
+    const s = draftState;
+    draftTeams = {
+      A: budgetBuildTeam('队伍 A', '#ff7a3d', s.A),
+      B: budgetBuildTeam('队伍 B', '#5fd4ff', s.B)
+    };
+    $('draftOverlay').classList.add('hidden');
+    startGame();
+  }
+  function renderDraftCoin(s){
+    const box = $('draftOptions');
+    box.innerHTML = '';
+    const w = document.createElement('div');
+    w.className = 'draft-coin-wrap';
+    w.innerHTML = '<div class="draft-coin"><div class="face a"><span class="side">队伍<br>A</span></div><div class="face b"><span class="side">队伍<br>B</span></div></div>';
+    box.appendChild(w);
+    const coin = w.firstChild;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      coin.style.transition = 'transform 1.2s cubic-bezier(.2,.7,.2,1)';
+      coin.style.transform = 'rotateY(' + (s.lead === 'A' ? 1440 : 1620) + 'deg)';
+    }));
+    $('draftBanPool').innerHTML = '';
+  }
+  function draftRender(){
+    const s = draftState;
+    if (!s) return;
+    // 翻硬币阶段：先展示硬币翻转动画，定格先手后再进入第一轮
+    if (!s.coinDone){
+      renderDraftCoin(s);
+      return;
+    }
+    const step = draftState.steps[s.step];
+    const actorName = step ? (step.actor === 'A' ? '队伍 A' : '队伍 B') : '—';
+    $('draftHint').innerHTML = '剩余角色 ' + draftAvailableBan().length + ' 名 · ' +
+      (step ? (step.type === 'ban' ? `⛔ 当前行动：<b>${actorName}</b>· 请<em>禁用</em> 1 名角色` : `🎯 当前行动：<b>${actorName}</b>· 三选一<em>抽取</em> 1 名`) : '选秀完成');
+    $('draftSideA').classList.toggle('is-turn', !!step && step.actor === 'A');
+    $('draftSideB').classList.toggle('is-turn', !!step && step.actor === 'B');
+    draftRenderSlots('draftSlotsA', s.A, '#ff7a3d');
+    draftRenderSlots('draftSlotsB', s.B, '#5fd4ff');
+    const box = $('draftOptions');
+    box.innerHTML = '';
+    if (step && step.type === 'ban'){
+      const aiOwned = draftVsAI && step.actor === 'B';
+      draftAvailableBan().forEach(k => {
+        const c = CLASSES[k];
+        const el = document.createElement('div');
+        el.className = 'draft-opt actor-ban' + (aiOwned ? ' disabled' : '');
+        el.innerHTML = `<div class="i">${c.icon}</div><div class="n" style="color:${c.color}">${c.label}</div><div class="t">BAN</div>`;
+        if (!aiOwned) el.addEventListener('click', () => draftAct(k));
+        box.appendChild(el);
+      });
+    } else if (step && step.type === 'pick3'){
+      // 电脑(AI)轮自动逐张翻开观赏；玩家轮则点击牌才翻，翻开的牌再点一次即选定
+      const aiTurn = draftVsAI && step.actor === 'B';
+      s.options.forEach((k, idx) => {
+        const c = CLASSES[k];
+        const w = document.createElement('div');
+        w.className = 'flip-card';
+        w.innerHTML = `
+          <div class="flip-inner">
+            <div class="flip-front"><span class="fp-q">❓</span><span class="fp-h">${aiTurn ? '开 牌' : '点开 ▼'}</span></div>
+            <div class="flip-back">
+              <div class="i">${c.icon}</div>
+              <div class="n" style="color:${c.color}">${c.label}</div>
+              <div class="t">${c.desc || ''}</div>
+              <div class="pick-tag">已翻开·点击选定</div>
+            </div>
+          </div>`;
+        box.appendChild(w);
+        if (aiTurn){
+          // 电脑回合：自动依次翻开，仅供玩家观赏
+          setTimeout(() => { w.classList.add('flipped'); }, 140 + idx * 220);
+        } else {
+          // 玩家回合：点一下翻开这张，再点一下选定该角色
+          w.addEventListener('click', () => {
+            if (w.classList.contains('flipped')) draftAct(k);
+            else w.classList.add('flipped');
+          });
+        }
+      });
+    }
+    const banBox = $('draftBanPool');
+    banBox.innerHTML = s.banned.length
+      ? '<span style="color:#8c7b6b;font-size:12px;margin-right:6px;">已禁用：</span>' + s.banned.map(k => `<span class="draft-ban-chip">${CLASSES[k].icon} ${CLASSES[k].label}</span>`).join('')
+      : '';
+  }
+  function draftRenderSlots(id, keys, color){
+    const el = $(id);
+    el.innerHTML = '';
+    if (!keys.length){
+      el.innerHTML = '<span class="draft-empty">待抽取</span>';
+      return;
+    }
+    keys.forEach(k => {
+      const c = CLASSES[k];
+      const d = document.createElement('div');
+      d.className = 'draft-slot';
+      d.style.boxShadow = `0 0 12px ${color}40`;
+      d.innerHTML = `<div class="i">${c.icon}</div><div class="n">${c.label}</div>`;
+      el.appendChild(d);
+    });
+  }
+
   function startGame(){
     if (currentMode === 'duel'){
       teams = DUEL_TEAMS();
@@ -12714,11 +13054,15 @@
       teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
     } else if (currentMode === 'random'){
       teams = RANDOM_TEAMS();
+    } else if (currentMode === 'draft'){
+      // 未完成选秀则先进入选秀流程
+      if (!draftTeams){ draftBegin(); return; }
+      teams = draftTeams;
     } else {
       teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
     }
     $('startScreen').classList.add('hidden');
-    $('backBtn').style.display = (currentMode === 'custom' || currentMode === 'budget' || currentMode === 'survival' || currentMode === 'battleroyale' || currentMode === 'random') ? '' : 'none';
+    $('backBtn').style.display = (currentMode === 'custom' || currentMode === 'budget' || currentMode === 'survival' || currentMode === 'battleroyale' || currentMode === 'random' || currentMode === 'draft') ? '' : 'none';
     round = 1;
     paused = false;
     resizeCanvas();
@@ -12726,11 +13070,11 @@
     renderRoles('B');
     // 生存/随机/20元模式锁定配置面板：隐藏添加按钮
     document.querySelectorAll('.btn-add').forEach(btn => {
-      btn.style.display = (currentMode === 'survival' || currentMode === 'random' || currentMode === 'budget') ? 'none' : '';
+      btn.style.display = (currentMode === 'survival' || currentMode === 'random' || currentMode === 'budget' || currentMode === 'draft') ? 'none' : '';
     });
-    // 大逃杀模式隐藏配置面板
-    $('teamCfgA').style.display = currentMode === 'battleroyale' ? 'none' : '';
-    $('teamCfgB').style.display = currentMode === 'battleroyale' ? 'none' : '';
+    // 大逃杀/选秀对战模式隐藏配置面板（选秀结束后阵容固定不可更改）
+    $('teamCfgA').style.display = (currentMode === 'battleroyale' || currentMode === 'draft') ? 'none' : '';
+    $('teamCfgB').style.display = (currentMode === 'battleroyale' || currentMode === 'draft') ? 'none' : '';
     syncLabels();
     startMatch();
     requestAnimationFrame(loop);
@@ -12752,6 +13096,13 @@
     $('drawOverlay').classList.add('hidden');
     startGame();
   });
+  // 选秀对战：开始 / 取消
+  $('draftStartBtn').addEventListener('click', draftBegin);
+  $('draftCancelBtn').addEventListener('click', () => {
+    $('draftOverlay').classList.add('hidden');
+    draftState = null;
+    $('startScreen').classList.remove('hidden');
+  });
   $('budgetClearBtn').addEventListener('click', () => {
     budgetRoster = [];
     renderBudgetShop();
@@ -12768,6 +13119,11 @@
       renderRoles('B');
       syncLabels();
     }
+    // 选秀对战模式：再来一局时重新翻硬币选秀
+    if (currentMode === 'draft'){
+      draftBegin();
+      return;
+    }
     // 随机抽选模式：再来一局时重新抽选
     if (currentMode === 'random'){
       startRandomDraw();
@@ -12781,6 +13137,8 @@
     hideResult();
     $('startScreen').classList.remove('hidden');
     $('drawOverlay').classList.add('hidden');
+    $('draftOverlay').classList.add('hidden');
+    draftState = null;
     drawAnimating = false;
     paused = true;
     round = 1;
@@ -12795,6 +13153,8 @@
   $('backBtn').addEventListener('click', () => {
     $('startScreen').classList.remove('hidden');
     $('drawOverlay').classList.add('hidden');
+    $('draftOverlay').classList.add('hidden');
+    draftState = null;
     drawAnimating = false;
     paused = true;
     round = 1;
