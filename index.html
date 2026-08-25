@@ -2526,10 +2526,10 @@
       ]
     },
     whiteEmber: {
-      label: '白厄', icon: '🔥', maxHp: 165, color: '#f7c236', cost: 7, ballSpeed: 140,
+      label: '白厄', icon: '🔥', maxHp: 165, color: '#f7c236', cost: 8, ballSpeed: 140,
       desc: '蓄能变身爆发·残局战神',
       stats: { atk: 9, def: 4, spd: 6, rng: 4, sup: 3, ctrl: 7 },
-      codex: '背负轮回命运的救世主，以火种为引蜕变为卡厄斯兰那。常态输出平稳，造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，火种最多可溢出3点，每溢出1点提升变身期暴击伤害。变身瞬间展开境界【时墟铁墓】，恢复大量血量，期间攻击力暴涨、移速加快、攻击附带范围溅射，获得伤害减免且免疫控制，每次攻击回复自身比例生命值。变身期普攻与战技可叠加【毁伤】层数，叠满4层即可施放【支柱·死星天裁】，消耗层数打出多段弹射爆发，满层时追加群体均摊伤害并驱散自身负面；受击叠加【弑魂之炽】，叠满触发全屏反击。受到致命伤害时不会阵亡，回血并发动最终裁决一击。变身结束后进入虚弱期，攻击与移速下降，同时为友方全体提供移速加成，需重新积攒火种。场上每阵亡一名友方，火种获取速度大幅提升。',
+      codex: '背负轮回命运的救世主，以火种为引蜕变为卡厄斯兰那。常态输出平稳，造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，火种最多可溢出3点，每溢出1点提升变身期暴击伤害。变身瞬间展开境界【时墟铁墓】，期间攻击力暴涨、移速加快、攻击附带范围溅射，获得伤害减免且免疫控制，变身结束后恢复大量血量。变身期普攻与战技可叠加【毁伤】层数，叠满4层即可施放【支柱·死星天裁】，消耗层数打出多段弹射爆发，满层时追加群体均摊伤害并驱散自身负面；受击叠加【弑魂之炽】，叠满触发全屏反击。受到致命伤害时不会阵亡，回血并发动最终裁决一击。变身结束后进入虚弱期，攻击与移速下降，同时为友方全体提供移速加成，需重新积攒火种。场上每阵亡一名友方，火种获取速度大幅提升。',
       params: [
         { key: 'emberGainRate', label: '火种获取速率', min: 0.5, max: 3, step: 0.1, def: 1.0, int: false },
         { key: 'emberMaxOverflow', label: '火种溢出上限', min: 0, max: 6, step: 1, def: 3, int: true },
@@ -2537,14 +2537,13 @@
         { key: 'transformDur', label: '变身持续秒', min: 3, max: 12, step: 0.5, def: 7, int: false },
         { key: 'transformAtkMul', label: '变身攻击倍率', min: 1.5, max: 5, step: 0.1, def: 2.4, int: false },
         { key: 'transformDmgReduce', label: '变身免伤%', min: 0, max: 80, step: 5, def: 60, int: true },
-        { key: 'transformHealRatio', label: '变身回血%', min: 0, max: 50, step: 5, def: 25, int: true },
-        { key: 'atkHealRatio', label: '攻击回血比例%', min: 0, max: 20, step: 1, def: 8, int: true },
+        { key: 'transformHealRatio', label: '变身后回血%', min: 0, max: 50, step: 5, def: 25, int: true },
         { key: 'ruinStackPerAtk', label: '普攻获得毁伤层数', min: 1, max: 3, step: 1, def: 1, int: true },
         { key: 'ruinStackPerSkill', label: '战技获得毁伤层数', min: 1, max: 6, step: 1, def: 2, int: true },
         { key: 'deadStarCostStack', label: '死星消耗毁伤层数', min: 2, max: 8, step: 1, def: 4, int: true },
         { key: 'deadStarBaseDmgMul', label: '死星基础伤害倍率', min: 1, max: 8, step: 0.1, def: 2.2, int: false },
         { key: 'deadStarBounceCount', label: '死星弹射次数', min: 2, max: 8, step: 1, def: 5, int: true },
-        { key: 'deadStarFullBonus', label: '满层追加伤害倍率', min: 0.5, max: 6, step: 0.1, def: 1.0, int: false },
+        { key: 'deadStarFullBonus', label: '满层追加伤害倍率', min: 0.5, max: 6, step: 0.1, def: 0.9, int: false },
         { key: 'fatalLockHpRatio', label: '锁血回血比例%', min: 5, max: 40, step: 5, def: 25, int: true },
         { key: 'finalStrikeDmg', label: '最终一击倍率', min: 2, max: 10, step: 0.5, def: 6, int: false },
         { key: 'counterDmgMul', label: '反击伤害倍率', min: 1, max: 5, step: 0.2, def: 2.2, int: false },
@@ -5092,6 +5091,15 @@
             const hpRatio = this.hp / this.maxHp;
             this.maxHp = this.emberBaseMaxHp;
             this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio));
+            // 变身结束后回复 25% 血量
+            const finalHeal = Math.ceil(this.emberBaseMaxHp * (this.params.transformHealRatio != null ? this.params.transformHealRatio : 25) / 100);
+            this.hp = Math.min(this.maxHp, this.hp + finalHeal);
+            if (this.stats) this.stats.healDone = (this.stats.healDone||0) + finalHeal;
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 26, '+' + finalHeal + ' ✅', '#7fff7f', {life: 1.0, size: 14}));
+            for (let i=0;i<12;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(this.x, this.y, '#7fff7f', {ang:a, speed:30+Math.random()*45, life:0.6, size:2+Math.random()*1.5}));
+            }
             // 退出变身特效：金色烈焰溃散，转为灰烬
             for (let i=0;i<26;i++){
               const a = Math.random()*Math.PI*2;
@@ -5130,18 +5138,11 @@
           this.emberPoints = 0;
           const hpRatio = this.hp / this.maxHp;
           this.maxHp = Math.ceil(this.emberBaseMaxHp * 1.2);
-          const healAmount = Math.ceil(this.emberBaseMaxHp * (this.params.transformHealRatio || 25) / 100);
-          this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio) + healAmount);
-          if (this.stats) this.stats.healDone = (this.stats.healDone||0) + healAmount;
-          // 变身回血飘字与粒子
+          this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio));
+          // 变身登场飘字
           floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '卡厄斯兰那！', '#ffd76b', {life: 1.1, size: 16}));
           if (this.emberOverflow > 0){
             floatTexts.push(new FloatText(this.x, this.y - this.size - 50, '⬆️暴伤+'+this.emberCritDmg+'%', '#ff9d5c', {life: 1.2, size: 13}));
-          }
-          floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '+' + healAmount + ' 🔥', '#7fff7f', {life: 1.0, size: 14}));
-          for (let i=0;i<15;i++){
-            const a = Math.random()*Math.PI*2;
-            particles.push(new Particle(this.x, this.y, '#7fff7f', {ang:a, speed:40+Math.random()*60, life:0.6+Math.random()*0.4, size:2+Math.random()*2}));
           }
           for (let i=0;i<50;i++){
             const a = Math.random()*Math.PI*2;
@@ -8809,7 +8810,7 @@
             if (dd < nd){ nd = dd; nxt = t; }
           }
           if (!nxt) break;
-          const bounceMul = Math.max(0.28, 0.72 - bc * 0.09);
+          const bounceMul = Math.max(0.22, 0.55 - bc * 0.12);
           nxt.takeDamage(Math.ceil(base * baseMul * bounceMul), '#ffb84d', particles, this);
           const segs = Math.max(3, Math.floor(nd / 22));
           for (let s=1; s<segs; s++){
@@ -8844,15 +8845,15 @@
       };
       // 变身期战技【卡厄斯兰那斩】：周期性AOE + 叠加毁伤
       if (isTransformed && !isWeak && this.alive && this.emberSkillCD <= 0){
-        this.emberSkillCD = 2.2;
-        const skillDmg = Math.ceil((p.baseDmg || 10) * transformMul * 1.0);
+        this.emberSkillCD = 3.0;
+        const skillDmg = Math.ceil((p.baseDmg || 10) * transformMul * 0.7);
         for (const b of balls){
           if (!b.alive || b.team === this.team) continue;
           const dd = Math.hypot(b.x - this.x, b.y - this.y);
-          if (dd < 130){
+          if (dd < 95){
             b.takeDamage(skillDmg, '#ff9d5c', particles, this);
             const ang = Math.atan2(b.y-this.y, b.x-this.x);
-            b.vx += Math.cos(ang)*110; b.vy += Math.sin(ang)*110;
+            b.vx += Math.cos(ang)*90; b.vy += Math.sin(ang)*90;
           }
         }
         floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '卡厄斯兰那斩', '#ffcf6b', {life:0.7, size:12}));
@@ -8873,12 +8874,6 @@
             crit = true;
             dmgMul *= (2 + this.emberCritDmg / 100);
           }
-          // 每次攻击回复比例生命值
-          const heal = Math.ceil(this.maxHp * ((p.atkHealRatio != null ? p.atkHealRatio : 8) / 100));
-          this.hp = Math.min(this.maxHp, this.hp + heal);
-          if (this.stats) this.stats.healDone = (this.stats.healDone||0) + heal;
-          if (Math.random() < 0.3) floatTexts.push(new FloatText(this.x, this.y-this.size-36, '+' + heal, '#7fff7f', {life:0.5, size:9}));
-          // 普攻叠加毁伤
           this.ruinStacks += (p.ruinStackPerAtk != null ? p.ruinStackPerAtk : 1);
         }
         const finalDmg = Math.ceil((p.baseDmg || 10) * dmgMul);
@@ -8892,7 +8887,7 @@
         }
         if (isTransformed){
           const splashR = 60;
-          const splashDmg = Math.ceil(finalDmg * 0.35);
+          const splashDmg = Math.ceil(finalDmg * 0.2);
           for (const b of balls){
             if (!b.alive || b.team === this.team || b === enemy) continue;
             const dd = Math.hypot(b.x - enemy.x, b.y - enemy.y);
