@@ -928,6 +928,11 @@
     font-size: 14px;
     padding: 10px 16px;
   }
+  /* 窗口足够宽时：模式全部平铺换行显示，不滚动 */
+  @media (min-width: 760px){
+    .mode-tabs { overflow-x: visible; flex-wrap: wrap; }
+    .mode-tabs.carousel .mode-tab { flex: 1 1 auto; scroll-snap-align: none; font-size: 13px; padding: 8px 12px; }
+  }
   .mode-tab {
     flex: 1 0 auto;
     white-space: nowrap;
@@ -2524,16 +2529,30 @@
       label: '白厄', icon: '🔥', maxHp: 165, color: '#f7c236', cost: 7, ballSpeed: 140,
       desc: '蓄能变身爆发·残局战神',
       stats: { atk: 9, def: 4, spd: 6, rng: 4, sup: 3, ctrl: 7 },
-      codex: '背负轮回命运的救世主，不断积蓄火种完成蜕变。常态输出平平，变身之后一人成军，越是友军倒下的绝境，爆发越为恐怖。造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，变身瞬间恢复大量血量，期间攻击力暴涨、移速加快、攻击附带范围溅射，并获得一定比例的伤害减免；变身结束后进入虚弱期，攻击与移速下降，需重新积攒火种。场上每阵亡一名友方，火种获取速度提升。',
+      codex: '背负轮回命运的救世主，以火种为引蜕变为卡厄斯兰那。常态输出平稳，造成伤害与受击时积攒火种，满12点触发变身【卡厄斯兰那】，火种最多可溢出3点，每溢出1点提升变身期暴击伤害。变身瞬间展开境界【时墟铁墓】，恢复大量血量，期间攻击力暴涨、移速加快、攻击附带范围溅射，获得伤害减免且免疫控制，每次攻击回复自身比例生命值。变身期普攻与战技可叠加【毁伤】层数，叠满4层即可施放【支柱·死星天裁】，消耗层数打出多段弹射爆发，满层时追加群体均摊伤害并驱散自身负面；受击叠加【弑魂之炽】，叠满触发全屏反击。受到致命伤害时不会阵亡，回血并发动最终裁决一击。变身结束后进入虚弱期，攻击与移速下降，同时为友方全体提供移速加成，需重新积攒火种。场上每阵亡一名友方，火种获取速度大幅提升。',
       params: [
         { key: 'emberGainRate', label: '火种获取速率', min: 0.5, max: 3, step: 0.1, def: 1.0, int: false },
+        { key: 'emberMaxOverflow', label: '火种溢出上限', min: 0, max: 6, step: 1, def: 3, int: true },
+        { key: 'overflowCritDmgPer', label: '溢出点暴伤加成%', min: 5, max: 30, step: 1, def: 12, int: true },
         { key: 'transformDur', label: '变身持续秒', min: 3, max: 12, step: 0.5, def: 7, int: false },
-        { key: 'transformAtkMul', label: '变身攻击倍率', min: 1.5, max: 5, step: 0.1, def: 3, int: false },
-        { key: 'weakDur', label: '虚弱持续秒', min: 1, max: 8, step: 0.5, def: 5, int: false },
-        { key: 'baseDmg', label: '普攻伤害', min: 5, max: 30, step: 1, def: 8, int: true },
-        { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.5, step: 0.1, def: 1.0, int: false },
+        { key: 'transformAtkMul', label: '变身攻击倍率', min: 1.5, max: 5, step: 0.1, def: 2.4, int: false },
         { key: 'transformDmgReduce', label: '变身免伤%', min: 0, max: 80, step: 5, def: 60, int: true },
-        { key: 'transformHealRatio', label: '变身回血%', min: 0, max: 50, step: 5, def: 25, int: true }
+        { key: 'transformHealRatio', label: '变身回血%', min: 0, max: 50, step: 5, def: 25, int: true },
+        { key: 'atkHealRatio', label: '攻击回血比例%', min: 0, max: 20, step: 1, def: 8, int: true },
+        { key: 'ruinStackPerAtk', label: '普攻获得毁伤层数', min: 1, max: 3, step: 1, def: 1, int: true },
+        { key: 'ruinStackPerSkill', label: '战技获得毁伤层数', min: 1, max: 6, step: 1, def: 2, int: true },
+        { key: 'deadStarCostStack', label: '死星消耗毁伤层数', min: 2, max: 8, step: 1, def: 4, int: true },
+        { key: 'deadStarBaseDmgMul', label: '死星基础伤害倍率', min: 1, max: 8, step: 0.1, def: 2.2, int: false },
+        { key: 'deadStarBounceCount', label: '死星弹射次数', min: 2, max: 8, step: 1, def: 5, int: true },
+        { key: 'deadStarFullBonus', label: '满层追加伤害倍率', min: 0.5, max: 6, step: 0.1, def: 1.0, int: false },
+        { key: 'fatalLockHpRatio', label: '锁血回血比例%', min: 5, max: 40, step: 5, def: 25, int: true },
+        { key: 'finalStrikeDmg', label: '最终一击倍率', min: 2, max: 10, step: 0.5, def: 6, int: false },
+        { key: 'counterDmgMul', label: '反击伤害倍率', min: 1, max: 5, step: 0.2, def: 2.2, int: false },
+        { key: 'soulFlameMaxStack', label: '弑魂之炽最大层数', min: 1, max: 10, step: 1, def: 5, int: true },
+        { key: 'weakDur', label: '虚弱持续秒', min: 1, max: 8, step: 0.5, def: 5, int: false },
+        { key: 'allySpdBuffPer', label: '变身结束全队加速%', min: 5, max: 30, step: 5, def: 15, int: true },
+        { key: 'baseDmg', label: '普攻伤害', min: 5, max: 30, step: 1, def: 8, int: true },
+        { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.5, step: 0.1, def: 1.0, int: false }
       ]
     },
     obito: {
@@ -4728,13 +4747,24 @@
       this.moltenGuardAtkCD = 0; // 卫士攻击冷却
       this.moltenBodyAtkCD = 0; // 本体普攻冷却
       // 白厄相关状态
-      this.emberPoints = 0; // 火种点数（0-12）
-      this.emberTransformTime = 0; // 变身剩余时间
+      this.emberPoints = 0; // 火种点数（满12触发变身）
+      this.emberTransformTime = 0; // 变身剩余时间【卡厄斯兰那】
       this.emberWeakTime = 0; // 虚弱剩余时间
       this.emberAtkCD = 0; // 普攻冷却
       this.emberTransformFlash = 0; // 变身瞬间全屏闪白计时
       this.emberBaseMaxHp = this.maxHp; // 记录原始最大血量（变身时临时提升）
-      this.emberShockwaveTime = 0; // 变身冲击波扩散计时
+      this.emberShockwaveTime = 0; // 变身冲击波扩散计时（时墟铁墓展开）
+      this.emberOverflow = 0; // 火种溢出点数（每点提升变身期暴击伤害）
+      this.emberCritDmg = 0; // 变身期暴击伤害加成（由溢出换算）
+      this.ruinStacks = 0; // 变身期【毁伤】层数
+      this.soulFlameStacks = 0; // 变身期【弑魂之炽】层数
+      this.emberSkillCD = 0; // 战技【卡厄斯兰那斩】冷却
+      this.fatalLockUsed = false; // 是否已触发过致命锁血（每场仅一次）
+      this.emberFieldTime = 0; // 【时墟铁墓】境界领域剩余时间（视觉）
+      this.emberFinalFx = 0; // 最终裁决一击特效计时
+      this.emberCounterFx = 0; // 全屏反击特效计时
+      this.emberFieldFx = 0; // 变身瞬间全场领域特效计时（暗金覆盖 + 光点雨）
+      this.emberWeakenBuff = 0; // 虚弱期全队移速加成剩余时间
       // ===== 波风水门相关状态 =====
       this.minatoKunaiCD = 0; // 苦无发射冷却
       this.minatoMarks = []; // 飞雷神标记数组 [{x,y,life,maxLife,target}]
@@ -5035,73 +5065,112 @@
         this._emberDeadAllies = deadCount;
         if (this.emberTransformFlash > 0) this.emberTransformFlash -= dt;
         if (this.emberShockwaveTime > 0) this.emberShockwaveTime -= dt;
+        if (this.emberFieldTime > 0) this.emberFieldTime -= dt;
+        if (this.emberFinalFx > 0) this.emberFinalFx -= dt;
+        if (this.emberCounterFx > 0) this.emberCounterFx -= dt;
+        if (this.emberFieldFx > 0) this.emberFieldFx -= dt;
+        // 虚弱期光环：其它友军获得移速加成（否则清除）
+        emberWeakAuraBuff = (this.emberWeakTime > 0 && this.alive) ? ((this.params.allySpdBuffPer||15)/100) : 0;
+        // 变身【卡厄斯兰那】期间免疫控制（持续清除减速/眩晕/冰冻）
+        if (this.emberTransformTime > 0){
+          this.slow = 0;
+          this.stun = 0;
+          this.frostStacks = 0;
+          this.frostTimer = 0;
+          this._frostSlow = 0;
+        }
         if (this.emberTransformTime > 0){
           this.emberTransformTime -= dt;
           if (this.emberTransformTime <= 0){
+            // 变身结束 → 进入虚弱期
             this.emberTransformTime = 0;
             this.emberWeakTime = this.params.weakDur || 3;
             this.emberPoints = 0;
+            this.emberOverflow = 0;
+            this.emberCritDmg = 0;
+            this.ruinStacks = 0;
             const hpRatio = this.hp / this.maxHp;
             this.maxHp = this.emberBaseMaxHp;
             this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio));
-            for (let i=0;i<20;i++){
+            // 退出变身特效：金色烈焰溃散，转为灰烬
+            for (let i=0;i<26;i++){
               const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(this.x, this.y, '#f7c236', {ang:a, speed:30+Math.random()*50, life:0.8+Math.random()*0.6, size:2+Math.random()*2}));
+              particles.push(new Particle(this.x, this.y, '#f7c236', {ang:a, speed:40+Math.random()*80, life:0.8+Math.random()*0.6, size:3+Math.random()*2}));
             }
-            for (let i=0;i<8;i++){
+            for (let i=0;i<18;i++){
               const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(this.x, this.y, '#ff6b1a', {ang:a, speed:20+Math.random()*30, life:1.0+Math.random()*0.5, size:2+Math.random()*2}));
+              particles.push(new Particle(this.x, this.y, '#ff6b1a', {ang:a, speed:30+Math.random()*50, life:1.0+Math.random()*0.5, size:2+Math.random()*2}));
             }
+            for (let i=0;i<14;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(this.x, this.y, '#999', {ang:a, speed:15+Math.random()*30, life:0.6+Math.random()*0.3, size:2+Math.random()*1.5}));
+            }
+            if (typeof shake !== 'undefined') shake = Math.min(20, (shake||0) + 4);
           }
         } else if (this.emberWeakTime > 0){
           this.emberWeakTime -= dt;
           if (this.emberWeakTime <= 0){
             this.emberWeakTime = 0;
-            for (let i=0;i<10;i++){
+            for (let i=0;i<12;i++){
               const a = Math.random()*Math.PI*2;
-              particles.push(new Particle(this.x, this.y, '#999', {ang:a, speed:15+Math.random()*20, life:0.5, size:2}));
+              particles.push(new Particle(this.x, this.y, '#aaa', {ang:a, speed:18+Math.random()*22, life:0.5, size:2}));
             }
           }
-        } else if (this.emberPoints >= 12){
+        } else if (this.alive && this.emberPoints >= 12){
+          // ===== 触发变身【卡厄斯兰那】：展开时墟铁墓境界 =====
           this.emberTransformTime = this.params.transformDur || 6;
           this.emberTransformFlash = 0.3;
           this.emberShockwaveTime = 0.5;
+          this.emberFieldTime = (this.params.transformDur || 6);
+          this.emberFieldFx = 1.3; // 全场领域特效（暗金覆盖 + 光点雨）
+          // 火种溢出换算暴击伤害
+          const overflowMax = (this.params.emberMaxOverflow != null) ? this.params.emberMaxOverflow : 3;
+          this.emberOverflow = Math.min(overflowMax, Math.max(0, this.emberPoints - 12));
+          this.emberCritDmg = this.emberOverflow * ((this.params.overflowCritDmgPer != null) ? this.params.overflowCritDmgPer : 12);
+          this.emberPoints = 0;
           const hpRatio = this.hp / this.maxHp;
           this.maxHp = Math.ceil(this.emberBaseMaxHp * 1.2);
           const healAmount = Math.ceil(this.emberBaseMaxHp * (this.params.transformHealRatio || 25) / 100);
           this.hp = Math.min(this.maxHp, Math.ceil(this.maxHp * hpRatio) + healAmount);
+          if (this.stats) this.stats.healDone = (this.stats.healDone||0) + healAmount;
           // 变身回血飘字与粒子
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '卡厄斯兰那！', '#ffd76b', {life: 1.1, size: 16}));
+          if (this.emberOverflow > 0){
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 50, '⬆️暴伤+'+this.emberCritDmg+'%', '#ff9d5c', {life: 1.2, size: 13}));
+          }
           floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '+' + healAmount + ' 🔥', '#7fff7f', {life: 1.0, size: 14}));
           for (let i=0;i<15;i++){
             const a = Math.random()*Math.PI*2;
             particles.push(new Particle(this.x, this.y, '#7fff7f', {ang:a, speed:40+Math.random()*60, life:0.6+Math.random()*0.4, size:2+Math.random()*2}));
           }
-          for (let i=0;i<40;i++){
+          for (let i=0;i<50;i++){
             const a = Math.random()*Math.PI*2;
-            const sp = 100+Math.random()*200;
-            particles.push(new Particle(this.x, this.y, '#f7c236', {ang:a, speed:sp, life:0.6+Math.random()*0.4, size:3+Math.random()*3}));
+            const sp = 120+Math.random()*220;
+            particles.push(new Particle(this.x, this.y, '#f7c236', {ang:a, speed:sp, life:0.7+Math.random()*0.5, size:3+Math.random()*3}));
           }
-          for (let i=0;i<25;i++){
+          for (let i=0;i<32;i++){
             const a = Math.random()*Math.PI*2;
-            const sp = 80+Math.random()*160;
-            particles.push(new Particle(this.x, this.y, '#ff6b1a', {ang:a, speed:sp, life:0.7+Math.random()*0.5, size:3+Math.random()*3}));
+            const sp = 90+Math.random()*170;
+            particles.push(new Particle(this.x, this.y, '#ff6b1a', {ang:a, speed:sp, life:0.8+Math.random()*0.6, size:3+Math.random()*3}));
           }
-          for (let i=0;i<12;i++){
+          for (let i=0;i<16;i++){
             const a = Math.random()*Math.PI*2;
-            const sp = 60+Math.random()*100;
-            particles.push(new Particle(this.x, this.y, '#2a2a2a', {ang:a, speed:sp, life:0.8+Math.random()*0.4, size:2+Math.random()*3}));
+            const sp = 70+Math.random()*110;
+            particles.push(new Particle(this.x, this.y, '#3a3a3a', {ang:a, speed:sp, life:0.9+Math.random()*0.4, size:2+Math.random()*3}));
           }
+          // 时墟铁墓境界展开：范围内敌方被击退+短期减速（视觉与手感）
           for (const b of balls){
             if (!b.alive || b === this) continue;
             const dd = Math.hypot(b.x - this.x, b.y - this.y);
-            if (dd < 150){
+            if (dd < 170){
               const dx = (b.x - this.x) / Math.max(1, dd);
               const dy = (b.y - this.y) / Math.max(1, dd);
-              b.vx += dx * 250;
-              b.vy += dy * 250;
+              b.vx += dx * 320;
+              b.vy += dy * 320;
+              if (b.team !== this.team && b.cls !== 'whiteEmber') b.slow = Math.max(b.slow, 0.4);
             }
           }
-          if (typeof shake !== 'undefined') shake = Math.min(25, (shake||0) + 8);
+          if (typeof shake !== 'undefined') shake = Math.min(28, (shake||0) + 10);
         }
       }
       this.slow = Math.max(0, this.slow - dt*0.4);
@@ -5124,7 +5193,9 @@
       }
       // 雷印减速：每层降低移速
       const thunderSlow = this.thunderMarkStacks > 0 ? this.thunderMarkStacks * (this._thunderSlowPerStack || 0.08) : 0;
-      const spdMul = (1 - this.slow*0.85) * (1 + this.windSpeedBuff) * (1 - thunderSlow);
+      // 白厄虚弱期全队移速光环（作用于除白厄外的友军）
+      const emberAura = (this.cls !== 'whiteEmber') ? (1 + (emberWeakAuraBuff||0)) : 1;
+      const spdMul = (1 - this.slow*0.85) * (1 + this.windSpeedBuff) * (1 - thunderSlow) * emberAura;
 
       // 陷阱效果（吸附+伤害+眩晕）—— 在眩晕判断之前处理，确保眩晕期间也能持续扣血
       for (const tr of traps){
@@ -8712,14 +8783,116 @@
         }
       }
       this.emberAtkCD -= dt;
+      this.emberSkillCD = (this.emberSkillCD||0) - dt;
       const atkRange = this.size + enemy.size + 10;
-      if (this.emberAtkCD <= 0 && d < atkRange && !isWeak){
+      const castDeadStar = () => {
+        const cost = (p.deadStarCostStack != null ? p.deadStarCostStack : 4);
+        if (this.ruinStacks < cost || !this.alive) return;
+        this.ruinStacks -= cost;
+        this.emberFinalFx = 0.6;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 24, '支柱·死星天裁', '#ffd76b', {life:0.9, size:14}));
+        const base = Math.max(1, Math.ceil(p.baseDmg || 10));
+        const enemiesAlive = balls.filter(b => b.alive && b.team !== this.team);
+        if (!enemiesAlive.length) return;
+        // 主目标：最近敌人
+        let mainT = enemiesAlive[0], bestd = 1e9;
+        for (const t of enemiesAlive){ const dd = Math.hypot(t.x-this.x, t.y-this.y); if (dd<bestd){bestd=dd;mainT=t;} }
+        const baseMul = (p.deadStarBaseDmgMul != null ? p.deadStarBaseDmgMul : 2.2);
+        mainT.takeDamage(Math.ceil(base * baseMul), '#ffd76b', particles, this);
+        // 弹射链：伤害平滑递减（首段0.72 → 逐段下降，爆发柔和）
+        let cur = mainT;
+        for (let bc=0; bc < (p.deadStarBounceCount||5); bc++){
+          let nxt = null, nd = 1e9;
+          for (const t of enemiesAlive){
+            if (t === cur || !t.alive) continue;
+            const dd = Math.hypot(t.x-cur.x, t.y-cur.y);
+            if (dd < nd){ nd = dd; nxt = t; }
+          }
+          if (!nxt) break;
+          const bounceMul = Math.max(0.28, 0.72 - bc * 0.09);
+          nxt.takeDamage(Math.ceil(base * baseMul * bounceMul), '#ffb84d', particles, this);
+          const segs = Math.max(3, Math.floor(nd / 22));
+          for (let s=1; s<segs; s++){
+            const tt = s/segs;
+            particles.push(new Particle(cur.x+(nxt.x-cur.x)*tt, cur.y+(nxt.y-cur.y)*tt, '#ffd76b', {speed:12, life:0.22, size:2.5}));
+          }
+          cur = nxt;
+        }
+        // 满层追加：对全体敌方均摊伤害 + 驱散自身负面
+        const full = Math.ceil(base * (p.deadStarFullBonus!=null?p.deadStarFullBonus:2.8));
+        const each = Math.max(1, Math.floor(full / enemiesAlive.length));
+        for (const t of enemiesAlive){
+          if (!t.alive) continue;
+          t.takeDamage(each, '#fff370', particles, this);
+          for (let i=0;i<6;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(t.x, t.y, '#fff370', {ang:a, speed:70+Math.random()*60, life:0.4, size:2.5}));
+          }
+        }
+        // 驱散自身负面
+        this.slow = 0; this.stun = 0; this.frostStacks = 0; this.frostTimer = 0; this._frostSlow = 0;
+        // 死星爆发视觉
+        for (let i=0;i<40;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:140+Math.random()*180, life:0.5+Math.random()*0.3, size:3+Math.random()*2}));
+        }
+        for (let i=0;i<24;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#fff', {ang:a, speed:90+Math.random()*130, life:0.4, size:2+Math.random()*1.5}));
+        }
+        if (typeof shake !== 'undefined') shake = Math.min(22, (shake||0) + 6);
+      };
+      // 变身期战技【卡厄斯兰那斩】：周期性AOE + 叠加毁伤
+      if (isTransformed && !isWeak && this.alive && this.emberSkillCD <= 0){
+        this.emberSkillCD = 2.2;
+        const skillDmg = Math.ceil((p.baseDmg || 10) * transformMul * 1.0);
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const dd = Math.hypot(b.x - this.x, b.y - this.y);
+          if (dd < 130){
+            b.takeDamage(skillDmg, '#ff9d5c', particles, this);
+            const ang = Math.atan2(b.y-this.y, b.x-this.x);
+            b.vx += Math.cos(ang)*110; b.vy += Math.sin(ang)*110;
+          }
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '卡厄斯兰那斩', '#ffcf6b', {life:0.7, size:12}));
+        for (let i=0;i<30;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ff9d5c', {ang:a, speed:160+Math.random()*140, life:0.45, size:3+Math.random()*2}));
+        }
+        this.ruinStacks += (p.ruinStackPerSkill != null ? p.ruinStackPerSkill : 2);
+        castDeadStar();
+      }
+      if (this.emberAtkCD <= 0 && d < atkRange && !isWeak && this.alive){
         this.emberAtkCD = 1 / ((p.atkRate || 1.0) * (isTransformed ? 1.3 : 1));
-        const finalDmg = Math.ceil((p.baseDmg || 10) * totalDmgMul);
-        enemy.takeDamage(finalDmg, this.color, particles, this);
+        // 变身期暴击判定（受溢出暴伤加成）
+        let crit = false;
+        let dmgMul = totalDmgMul;
         if (isTransformed){
-          const splashR = 70;
-          const splashDmg = Math.ceil(finalDmg * 0.5);
+          if (Math.random() < 0.35){
+            crit = true;
+            dmgMul *= (2 + this.emberCritDmg / 100);
+          }
+          // 每次攻击回复比例生命值
+          const heal = Math.ceil(this.maxHp * ((p.atkHealRatio != null ? p.atkHealRatio : 8) / 100));
+          this.hp = Math.min(this.maxHp, this.hp + heal);
+          if (this.stats) this.stats.healDone = (this.stats.healDone||0) + heal;
+          if (Math.random() < 0.3) floatTexts.push(new FloatText(this.x, this.y-this.size-36, '+' + heal, '#7fff7f', {life:0.5, size:9}));
+          // 普攻叠加毁伤
+          this.ruinStacks += (p.ruinStackPerAtk != null ? p.ruinStackPerAtk : 1);
+        }
+        const finalDmg = Math.ceil((p.baseDmg || 10) * dmgMul);
+        enemy.takeDamage(finalDmg, this.color, particles, this);
+        if (crit){
+          floatTexts.push(new FloatText(enemy.x, enemy.y - enemy.size - 20, '⚡暴击!', '#ffd76b', {life:0.7, size:14}));
+          for (let i=0;i<20;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(enemy.x, enemy.y, '#fff370', {ang:a, speed:120+Math.random()*120, life:0.5, size:3+Math.random()*2}));
+          }
+        }
+        if (isTransformed){
+          const splashR = 60;
+          const splashDmg = Math.ceil(finalDmg * 0.35);
           for (const b of balls){
             if (!b.alive || b.team === this.team || b === enemy) continue;
             const dd = Math.hypot(b.x - enemy.x, b.y - enemy.y);
@@ -8731,6 +8904,7 @@
             const a = Math.random()*Math.PI*2;
             particles.push(new Particle(enemy.x, enemy.y, '#ff6b1a', {ang:a, speed:80+Math.random()*80, life:0.4, size:3}));
           }
+          castDeadStar();
         }
         const fxColor = isTransformed ? '#fff370' : this.color;
         for (let i=0;i<8;i++){
@@ -9150,18 +9324,47 @@
         attacker.stats.dmgDealt += dmg;
         this.lastAttacker = attacker;
       }
-      // 白厄：受击获取火种（仅常态，非DOT伤害每次固定1点）
+      // 白厄：受击获取火种（仅常态，非DOT伤害每次固定1点；可越过12蓄出溢出）
       if (this.cls === 'whiteEmber' && this.emberTransformTime <= 0 && this.emberWeakTime <= 0 && !isDot){
         const rate = this.params.emberGainRate || 1.0;
-        const allyBonus = 1 + (this._emberDeadAllies || 0) * 0.3;
-        this.emberPoints = Math.min(12, this.emberPoints + 1 * rate * allyBonus);
+        // 场上每阵亡一名友方：火种获取大幅提升（+60%）
+        const allyBonus = 1 + (this._emberDeadAllies || 0) * 0.6;
+        const capEm = 12 + ((this.params.emberMaxOverflow != null) ? this.params.emberMaxOverflow : 3);
+        this.emberPoints = Math.min(capEm, this.emberPoints + 1 * rate * allyBonus);
       }
-      // 白厄：造成伤害获取火种（按伤害量，每8点伤害1点）
+      // 白厄：造成伤害获取火种（按伤害量，每8点伤害1点；可越过12蓄出溢出）
       if (attacker && attacker.cls === 'whiteEmber' && attacker.emberTransformTime <= 0 && attacker.emberWeakTime <= 0){
         const rate = attacker.params.emberGainRate || 1.0;
-        const allyBonus = 1 + (attacker._emberDeadAllies || 0) * 0.3;
+        const allyBonus = 1 + (attacker._emberDeadAllies || 0) * 0.6;
+        const capEm = 12 + ((attacker.params.emberMaxOverflow != null) ? attacker.params.emberMaxOverflow : 3);
         const gain = Math.max(0.3, dmg / 8) * rate * allyBonus;
-        attacker.emberPoints = Math.min(12, attacker.emberPoints + gain);
+        attacker.emberPoints = Math.min(capEm, attacker.emberPoints + gain);
+      }
+      // 白厄：变身期受击叠加【弑魂之炽】，叠满触发全屏反击
+      if (this.cls === 'whiteEmber' && this.emberTransformTime > 0 && this.alive){
+        const sfMax = (this.params.soulFlameMaxStack != null) ? this.params.soulFlameMaxStack : 5;
+        this.soulFlameStacks = this.soulFlameStacks || 0;
+        this.soulFlameStacks += (isDot ? 0.5 : 1);
+        if (this.soulFlameStacks >= sfMax){
+          this.soulFlameStacks = 0;
+          this.emberCounterFx = 0.7;
+          // 全屏反击
+          const counterDmg = Math.ceil((this.params.baseDmg || 10) * (this.params.transformAtkMul || 3)
+            * (this.params.counterDmgMul != null ? this.params.counterDmgMul : 2.0));
+          for (const b of balls){
+            if (!b.alive || b.team === this.team) continue;
+            const dd = Math.hypot(b.x - this.x, b.y - this.y);
+            if (dd < 300) b.takeDamage(counterDmg, '#ff6b4d', particles, this);
+          }
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 26, '弑魂之炽·绯域反击!', '#ff6b4d', {life:1.0, size:14}));
+          for (let i=0;i<46;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#ff6b4d', {ang:a, speed:180+Math.random()*200, life:0.6+Math.random()*0.3, size:3+Math.random()*3}));
+          }
+          if (typeof shake !== 'undefined') shake = Math.min(22, (shake||0) + 7);
+        } else if (Math.random() < 0.6){
+          particles.push(new Particle(this.x, this.y, '#ff6b4d', {speed:40, life:0.35, size:2}));
+        }
       }
       for (let i=0;i<5;i++){
         particles.push(new Particle(this.x, this.y, fromColor, {speed:160, life:0.4, size:2.5}));
@@ -9182,6 +9385,41 @@
           particles.push(new Particle(attacker.x, attacker.y, this.color, {speed:140, life:0.35, size:2.5}));
         }
         if (attacker.hp <= 0 && attacker.alive) attacker.die(particles);
+      }
+      // 白厄锁血【焚身不死】：受到致命伤害时不会阵亡，回血并发动最终裁决一击（每场一次）
+      if (this.hp <= 0 && this.alive && this.cls === 'whiteEmber' && !this.fatalLockUsed){
+        this.fatalLockUsed = true;
+        this.hp = Math.ceil(this.maxHp * ((this.params.fatalLockHpRatio != null) ? this.params.fatalLockHpRatio : 25) / 100);
+        this.emberFinalFx = 0.8;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 26, '焚身不死!', '#ff6b4d', {life:1.0, size:15}));
+        // 发动最终裁决一击：对最近敌方造成高倍率伤害
+        let target = null, td = 1e9;
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const dd = Math.hypot(b.x - this.x, b.y - this.y);
+          if (dd < td){ td = dd; target = b; }
+        }
+        if (target){
+          const finalDmg = Math.ceil((this.params.baseDmg || 10)
+            * (this.params.finalStrikeDmg != null ? this.params.finalStrikeDmg : 6));
+          target.takeDamage(finalDmg, '#ff4d3d', particles, this);
+          floatTexts.push(new FloatText(target.x, target.y - target.size - 20, '最终裁决!' + finalDmg, '#ff4d3d', {life:1.0, size:14}));
+          const segs = 16;
+          for (let s=0; s<=segs; s++){
+            const tt = s/segs;
+            particles.push(new Particle(this.x+(target.x-this.x)*tt, this.y+(target.y-this.y)*tt, '#ff6b4d', {speed:14, life:0.3, size:3}));
+          }
+        }
+        // 裁决冲击波 + 大量粒子
+        for (let i=0;i<50;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ff8a5c', {ang:a, speed:170+Math.random()*200, life:0.7+Math.random()*0.4, size:3+Math.random()*3}));
+        }
+        for (let i=0;i<26;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#fff', {ang:a, speed:110+Math.random()*150, life:0.5, size:2+Math.random()*2}));
+        }
+        if (typeof shake !== 'undefined') shake = Math.min(26, (shake||0) + 8);
       }
       // 忍者替身术：受到致命伤时触发（仅有1次）
       if (this.hp <= 0 && this.alive && this.cls === 'ninja' && !this.substituteUsed && !this.isDecoy){
@@ -10846,6 +11084,61 @@
           ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
           ctx.restore();
         }
+        // 变身全场领域特效：暗金能量覆盖 + 边缘光晕 + 金色光点雨
+        if (this.emberFieldFx > 0){
+          const fa = Math.max(0, Math.min(1, this.emberFieldFx / 1.3));
+          const cw = ctx.canvas.width, ch = ctx.canvas.height;
+          const cx0 = cw / 2, cy0 = ch / 2;
+          const cr = Math.max(cw, ch);
+          const fg = ctx.createRadialGradient(cx0, cy0, cr * 0.2, cx0, cy0, cr * 0.8);
+          fg.addColorStop(0, rgba('#f7c236', fa * 0.05));
+          fg.addColorStop(0.55, rgba('#c07a00', fa * 0.16));
+          fg.addColorStop(1, rgba('#3a1f00', fa * 0.55));
+          ctx.fillStyle = fg;
+          ctx.fillRect(0, 0, cw, ch);
+          // 边缘聚焦光环（收拢感）
+          ctx.strokeStyle = rgba('#ffd76b', fa * 0.5);
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#ffb84d'; ctx.shadowBlur = 14;
+          ctx.beginPath(); ctx.arc(cx0, cy0, cr * 0.42, -Math.PI * 0.5, -Math.PI * 0.5 + Math.PI * 2 * fa); ctx.stroke();
+          ctx.shadowBlur = 0;
+          // 金色光点雨
+          for (let i = 0; i < 36; i++){
+            const px = ((i * 137.5) % 1) * cw;
+            const spd = 0.35 + ((i * 89.3) % 0.5);
+            const py = ((i * 61.7 + Date.now() * 0.00016 * spd * 200) % 1) * ch;
+            const size = 1.5 + ((i * 7.3) % 2.5);
+            ctx.fillStyle = rgba('#ffd76b', fa * (0.25 + ((i * 13.1) % 0.5)));
+            ctx.shadowColor = '#ffd76b'; ctx.shadowBlur = 4;
+            ctx.beginPath(); ctx.arc(px, py, size, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.shadowBlur = 0;
+        }
+        // 最终裁决一击：金色柱光 + 扩散爆闪
+        if (this.emberFinalFx > 0){
+          const fp = 1 - this.emberFinalFx / 0.8;
+          const colH = 90 + fp * 60;
+          const fg = ctx.createLinearGradient(x, y - colH, x, y);
+          fg.addColorStop(0, rgba('#fff370', 0));
+          fg.addColorStop(0.4, rgba('#ffd76b', 0.4 * (1 - fp)));
+          fg.addColorStop(1, rgba('#ff6b4d', 0.7 * (1 - fp)));
+          ctx.fillStyle = fg;
+          ctx.beginPath(); ctx.ellipse(x, y, this.size + 4 + fp * 10, this.size + 4 + fp * 10, 0, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = rgba('#ff4d3d', (1 - fp) * 0.9);
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#ff6b4d'; ctx.shadowBlur = 22;
+          ctx.beginPath(); ctx.arc(x, y, this.size + 16 + fp * 120, 0, Math.PI * 2); ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+        // 全屏反击：绯红扩散环
+        if (this.emberCounterFx > 0){
+          const cp = 1 - this.emberCounterFx / 0.7;
+          ctx.strokeStyle = rgba('#ff6b4d', (1 - cp) * 0.85);
+          ctx.lineWidth = 4 * (1 - cp) + 1;
+          ctx.shadowColor = '#ff4d3d'; ctx.shadowBlur = 20;
+          ctx.beginPath(); ctx.arc(x, y, this.size + 12 + cp * 150, 0, Math.PI * 2); ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
         // 变身冲击波环形扩散
         if (this.emberShockwaveTime > 0){
           const t = 1 - this.emberShockwaveTime / 0.5;
@@ -10857,6 +11150,73 @@
           ctx.shadowBlur = 0;
         }
         if (this.emberTransformTime > 0){
+          // 【时墟铁墓】境界领域：地表旋转暗金纹路 + 环形刻印 + 中央升腾光柱
+          if (this.emberFieldTime > 0 || this.emberTransformTime > 0){
+            const fieldP = this.emberTransformTime / (this.params.transformDur || 6);
+            const fieldR = this.size + 42 + Math.sin(wt * 1.6) * 5;
+            // 地表领域圆环（明灭）
+            ctx.save();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = rgba('#d4a017', 0.5 + 0.2 * Math.sin(wt * 2.4));
+            ctx.shadowColor = '#ff6b1a'; ctx.shadowBlur = 10;
+            ctx.beginPath(); ctx.arc(x, y, fieldR, 0, Math.PI * 2); ctx.stroke();
+            // 旋转符文环（两个错相位）
+            for (let k = 0; k < 2; k++){
+              ctx.beginPath();
+              ctx.setLineDash([9, 14]);
+              const ro = wt * (k === 0 ? 1.3 : -1.1) + k * 1.2;
+              ctx.arc(x, y, fieldR * (0.8 + k * 0.22), ro, ro + Math.PI * 1.6);
+              ctx.lineDashOffset = -wt * (k === 0 ? 60 : 40);
+              ctx.stroke();
+              ctx.setLineDash([]);
+            }
+            // 中央升腾光柱
+            const colH = 46 + Math.sin(wt * 4) * 10;
+            const colG = ctx.createLinearGradient(x, y - colH, x, y);
+            colG.addColorStop(0, rgba('#fff370', 0));
+            colG.addColorStop(1, rgba('#ffb84d', 0.5 + 0.25 * Math.sin(wt * 3)));
+            ctx.fillStyle = colG;
+            ctx.beginPath();
+            ctx.ellipse(x, y, this.size + 6, this.size + 6, 0, 0, Math.PI * 2); ctx.fill();
+            ctx.shadowBlur = 0;
+            // 领域随时间收缩/消散
+            if (this.emberFieldTime <= 0){
+              const fade = Math.min(1, (-this.emberFieldTime + 0.4) / 0.4);
+              ctx.strokeStyle = rgba('#888', fade * 0.3);
+              ctx.lineWidth = 1.5;
+              ctx.beginPath(); ctx.arc(x, y, this.size + 30 + (1 - fieldP) * 20, 0, Math.PI * 2); ctx.stroke();
+            }
+            ctx.restore();
+          }
+          // 变身期【毁伤】层数指示：环绕的小棱刺（金色）
+          const costSt = (this.params.deadStarCostStack != null) ? this.params.deadStarCostStack : 4;
+          if (this.ruinStacks > 0){
+            const n = Math.min(6, this.ruinStacks);
+            for (let i = 0; i < n; i++){
+              const a = wt * 1.5 + (i / n) * Math.PI * 2;
+              const rx = x + Math.cos(a) * (this.size + 28);
+              const ry = y + Math.sin(a) * (this.size + 28);
+              const fl = this.ruinStacks >= costSt ? 0.9 + 0.1 * Math.sin(wt * 8) : 0.55;
+              ctx.fillStyle = rgba('#ffd76b', fl);
+              ctx.shadowColor = '#fff370'; ctx.shadowBlur = 8;
+              ctx.beginPath(); ctx.arc(rx, ry, 3, 0, Math.PI * 2); ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          }
+          // 变身期【弑魂之炽】层数指示：内侧红点
+          const sfMax = (this.params.soulFlameMaxStack != null) ? this.params.soulFlameMaxStack : 5;
+          if (this.soulFlameStacks > 0){
+            const sn = Math.min(6, this.soulFlameStacks);
+            for (let i = 0; i < sn; i++){
+              const a = wt * -1.2 + (i / sn) * Math.PI * 2 + 0.4;
+              const rx = x + Math.cos(a) * (this.size + 6);
+              const ry = y + Math.sin(a) * (this.size + 6);
+              ctx.fillStyle = rgba('#ff6b4d', this.soulFlameStacks >= sfMax ? 1 : 0.7);
+              ctx.shadowColor = '#ff4d3d'; ctx.shadowBlur = 7;
+              ctx.beginPath(); ctx.arc(rx, ry, 2.4, 0, Math.PI * 2); ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          }
           // 变身状态：强烈金橙火焰光环
           const tfPulse = 0.7 + 0.3 * Math.sin(wt * 3);
           const tfR = this.size + 14 + Math.sin(wt * 2) * 4;
@@ -10915,11 +11275,13 @@
           ctx.lineWidth = 2.5;
           ctx.beginPath(); ctx.arc(x, y, this.size + 14, -Math.PI/2, -Math.PI/2 + Math.PI*2*weakP); ctx.stroke();
         } else {
-          // 常态：火种点数进度环
+          // 常态：火种点数进度环（支持越过12蓄出溢出）
+          const capEm = 12 + ((this.params.emberMaxOverflow != null) ? this.params.emberMaxOverflow : 3);
           if (this.emberPoints > 0){
-            const emberP = this.emberPoints / 12;
-            ctx.strokeStyle = rgba('#f7c236', 0.5 + 0.4 * emberP);
-            ctx.lineWidth = 3;
+            const full = this.emberPoints >= 12;
+            const emberP = Math.min(1, this.emberPoints / 12);
+            ctx.strokeStyle = rgba(full ? '#fff370' : '#f7c236', 0.5 + 0.4 * emberP);
+            ctx.lineWidth = full ? 4 : 3;
             ctx.shadowColor = '#f7c236'; ctx.shadowBlur = 8 * emberP;
             ctx.beginPath(); ctx.arc(x, y, this.size + 6, -Math.PI/2, -Math.PI/2 + Math.PI*2*emberP); ctx.stroke();
             ctx.shadowBlur = 0;
@@ -10934,13 +11296,36 @@
               ctx.beginPath(); ctx.arc(ex, ey, 2.2, 0, Math.PI * 2); ctx.fill();
               ctx.shadowBlur = 0;
             }
+            // 溢出火种点：绯红高亮，独立环绕展示
+            const ov = this.emberPoints - 12;
+            if (ov > 0){
+              const ovN = Math.min(capEm - 12, ov);
+              for (let i = 0; i < ovN; i++){
+                const ea = wt * 2 + (i / Math.max(1, ovN)) * Math.PI * 2 + 0.5;
+                const er2 = this.size + 12;
+                const ex2 = x + Math.cos(ea) * er2;
+                const ey2 = y + Math.sin(ea) * er2;
+                ctx.fillStyle = rgba('#ff6b4d', 0.9 + 0.1 * Math.sin(wt * 6));
+                ctx.shadowColor = '#ff4d3d'; ctx.shadowBlur = 8;
+                ctx.beginPath(); ctx.arc(ex2, ey2, 3, 0, Math.PI * 2); ctx.fill();
+                ctx.shadowBlur = 0;
+              }
+            }
           }
-          // 火种即将满时预警闪烁
-          if (this.emberPoints >= 10){
+          // 火种预警闪烁（逼近门槛）/ 盈满高亮
+          if (this.emberPoints >= 10 && this.emberPoints < 12){
             const warnPulse = 0.3 + 0.4 * Math.sin(wt * 6);
             ctx.strokeStyle = rgba('#ff6b1a', warnPulse);
             ctx.lineWidth = 2;
             ctx.beginPath(); ctx.arc(x, y, this.size + 11, 0, Math.PI * 2); ctx.stroke();
+          }
+          if (this.emberPoints >= 12){
+            const fullPulse = 0.5 + 0.4 * Math.sin(wt * 5);
+            ctx.strokeStyle = rgba('#fff370', fullPulse);
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = '#f7c236'; ctx.shadowBlur = 12;
+            ctx.beginPath(); ctx.arc(x, y, this.size + 15, 0, Math.PI * 2); ctx.stroke();
+            ctx.shadowBlur = 0;
           }
         }
       }
@@ -10949,6 +11334,7 @@
 
   // ============== 游戏状态 ==============
   let balls = [], bullets = [], traps = [], aoes = [], healWaves = [], particles = [], frostZones = [], timeMarks = [], ironWalls = [], floatTexts = [];
+  let emberWeakAuraBuff = 0; // 白厄虚弱期全队移速加成光环（作用于其它友军）
   let _thunderLinkTimer = 0; // 雷印雷电链接结算计时器
   let round = 1;
   let resetTimer = 0;
@@ -12585,10 +12971,22 @@
   let modeIsAutoScroll = false;
 
   function checkModeTabsOverflow(){
-    if (modeTabsEl.scrollWidth > modeTabsEl.clientWidth + 10){
-      modeTabsEl.classList.add('carousel');
-    } else {
+    const wide = window.innerWidth >= 760;
+    if (wide){
+      // 窗口足够宽：所有模式tab平铺换行显示，不滚动
       modeTabsEl.classList.remove('carousel');
+      modeTabsEl.style.flexWrap = 'wrap';
+      modeTabsEl.style.overflowX = 'visible';
+      modeTabsEl.scrollLeft = 0;
+    } else {
+      // 窗口较窄：恢复横向滚动轮播
+      modeTabsEl.style.flexWrap = 'nowrap';
+      modeTabsEl.style.overflowX = 'auto';
+      if (modeTabsEl.scrollWidth > modeTabsEl.clientWidth + 10){
+        modeTabsEl.classList.add('carousel');
+      } else {
+        modeTabsEl.classList.remove('carousel');
+      }
     }
   }
   window.addEventListener('resize', checkModeTabsOverflow);
