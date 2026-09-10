@@ -2707,7 +2707,7 @@
       ]
     },
     lingShuo: {
-      label: '凌朔', icon: '💨', maxHp: 122, color: '#4799e6', cost: 7, ballSpeed: 130,
+            label: '凌朔', icon: '💨', maxHp: 115, color: '#4799e6', cost: 7, ballSpeed: 130,
       desc: '顺闪拔刀·攻守归位',
       stats: { atk: 7, def: 4, spd: 10, rng: 6, sup: 2, ctrl: 8 },
       codex: '精通顺闪拔刀术的孤行剑侍。出刀之际同步瞬闪突进斩击，斩毕即刻归位原地。来去一瞬之间，刀光已经掠过敌人，以高速闪斩周旋战场。',
@@ -10009,13 +10009,13 @@
         }
         return;
       }
-      // 凌朔·沧浪千闪状态：全程免伤（外放蓝色罡风反馈，含持续伤害）
+      // 凌朔·沧浪千闪状态：全程60%减伤（外放蓝色罡风反馈，含持续伤害）
       if (!broken && this.cls === 'lingShuo' && this.linUltT > 0){
-        for (let i=0;i<5;i++){
+        dmg = dmg * 0.4; // 千闪期间受到的伤害减免60%
+        for (let i=0;i<4;i++){
           const a = Math.random()*Math.PI*2;
           particles.push(new Particle(this.x, this.y, '#7fe0ff', {ang:a, speed:70+Math.random()*90, life:0.3, size:2.5}));
         }
-        return;
       }
       // 沈玄玑·乾元罡罩破碎后短暂护体：1.5s内减免当前伤害40%
       if (!broken && this.cls === 'liangyi' && this.lyGuardT > 0 && !isDot){
