@@ -2604,7 +2604,10 @@
         { key: 'markDur', label: '标记持续秒', min: 4, max: 12, step: 0.5, def: 8, int: false },
         { key: 'teleportCd', label: '瞬移冷却秒', min: 0.8, max: 4, step: 0.1, def: 1.8, int: false },
         { key: 'rasenganDmg', label: '螺旋丸伤害', min: 10, max: 50, step: 1, def: 25, int: true },
-        { key: 'flashBonus', label: '闪光增益%', min: 5, max: 40, step: 5, def: 15, int: true }
+        { key: 'flashBonus', label: '闪光增益%', min: 5, max: 40, step: 5, def: 15, int: true },
+        { key: 'ultCD', label: '大招冷却秒', min: 12, max: 40, step: 1, def: 22, int: true },
+        { key: 'ultKunaiCount', label: '闪杀苦无件数', min: 3, max: 10, step: 1, def: 6, int: true },
+        { key: 'ultFlashDmg', label: '闪杀单段斩伤', min: 8, max: 40, step: 1, def: 16, int: true }
       ]
     },
     wuLiuQi: {
@@ -2681,6 +2684,47 @@
         { key: 'dodgeCD', label: '闪避冷却秒', min: 4, max: 12, step: 0.5, def: 8, int: false },
         { key: 'focusMaxBonus', label: '专注最大增伤', min: 0.1, max: 0.6, step: 0.05, def: 0.25, int: false },
         { key: 'recoilForce', label: '后坐力力度', min: 200, max: 1500, step: 20, def: 1000, int: true }
+      ]
+    },
+    liangyi: {
+      label: '沈玄玑', icon: '☯', maxHp: 140, color: '#c4b2ff', cost: 9, ballSpeed: 110,
+      desc: '双形态轮换·阴阳双生',
+      stats: { atk: 8, def: 6, spd: 7, rng: 7, sup: 3, ctrl: 9 },
+      codex: '玄门阴阳宗末代传人，身负太极双生命格。正阳罡气与幽阴煞气同源平衡，分化乾罡、坤阴两般法相。阳以符剑贯日破阵，刚猛穿刺；阴以丝刃锁魄缠敌，诡谲纠缠。阴阳转圜随心切换，刚柔相济，应对万般战局。',
+      params: [
+        { key: 'yangPierceMul', label: '阳仪破甲增伤', min: 1, max: 3, step: 0.1, def: 1.4, int: false },
+        { key: 'yangAtkDmg', label: '阳普攻伤害', min: 5, max: 25, step: 1, def: 10, int: true },
+        { key: 'yangAtkInterval', label: '阳攻速间隔秒', min: 0.3, max: 1.5, step: 0.05, def: 0.8, int: false },
+        { key: 'yinAtkDmg', label: '阴普攻伤害', min: 2, max: 12, step: 1, def: 4, int: true },
+        { key: 'yinAtkInterval', label: '阴攻速间隔秒', min: 0.2, max: 1.0, step: 0.05, def: 0.42, int: false },
+        { key: 'venomDps', label: '阴蚀每层每秒伤害', min: 1, max: 10, step: 1, def: 3, int: false },
+        { key: 'venomDur', label: '阴蚀持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'skillTotal', label: '大招总伤害', min: 15, max: 90, step: 5, def: 40, int: true },
+        { key: 'barrierDur', label: '罡罩持续秒', min: 0.5, max: 3, step: 0.1, def: 1.5, int: false },
+        { key: 'blindDur', label: '罡罩致盲秒', min: 0.3, max: 2, step: 0.1, def: 0.9, int: false },
+        { key: 'dodgeDist', label: '遁身瞬移距离', min: 60, max: 300, step: 10, def: 150, int: true },
+        { key: 'dodgeHideDur', label: '遁身隐身秒', min: 0.3, max: 2.5, step: 0.1, def: 1.1, int: false }
+      ]
+    },
+    lingShuo: {
+      label: '凌朔', icon: '💨', maxHp: 122, color: '#4799e6', cost: 7, ballSpeed: 130,
+      desc: '顺闪拔刀·攻守归位',
+      stats: { atk: 7, def: 4, spd: 10, rng: 6, sup: 2, ctrl: 8 },
+      codex: '精通顺闪拔刀术的孤行剑侍。出刀之际同步瞬闪突进斩击，斩毕即刻归位原地。来去一瞬之间，刀光已经掠过敌人，以高速闪斩周旋战场。',
+      params: [
+        { key: 'meleeDmg', label: '普攻伤害', min: 4, max: 26, step: 1, def: 7, int: true },
+        { key: 'meleeInterval', label: '普攻段间隔秒', min: 0.08, max: 0.8, step: 0.01, def: 0.24, int: false },
+        { key: 'energyRecharge', label: '闪刃能量回复/秒', min: 5, max: 40, step: 1, def: 18, int: true },
+        { key: 'flashDist', label: '顺闪冲刺距离', min: 40, max: 220, step: 10, def: 120, int: true },
+        { key: 'waveDmg', label: '碎浪拔刀斩伤害', min: 6, max: 32, step: 1, def: 12, int: true },
+        { key: 'bladeProjDmg', label: '破空剑气伤害', min: 6, max: 30, step: 1, def: 11, int: true },
+        { key: 'breachDmg', label: '掠影破袭斩伤', min: 8, max: 34, step: 1, def: 14, int: true },
+        { key: 'sealSlowDur', label: '掠袭破霸减速秒', min: 0.5, max: 3, step: 0.1, def: 1.5, int: false },
+        { key: 'markDur', label: '裂刃标记持续秒', min: 2, max: 8, step: 0.5, def: 4, int: false },
+        { key: 'ultDur', label: '大招千闪持续秒', min: 2, max: 7, step: 0.5, def: 4, int: false },
+        { key: 'skill1CD', label: '碎浪拔刀CD秒', min: 1, max: 14, step: 0.5, def: 3, int: false },
+        { key: 'skill2CD', label: '掠影破袭CD秒', min: 1, max: 14, step: 0.5, def: 3.5, int: false },
+        { key: 'ultCD', label: '千闪大招CD秒', min: 6, max: 40, step: 1, def: 13, int: false }
       ]
     }
   };
@@ -3617,6 +3661,8 @@
       this.bounceBonus = 0.3; // 每次弹跳伤害提升比例
       this.bounceDecay = 0.3; // 风舞游侠每次弹射伤害衰减比例
       this._hitTargets = []; // 已命中目标（避免同一弹多次命中同一敌人）
+      this.isLinBlade = false; // 凌朔破空剑气：半月形扩散刀波刃面
+      this.linFanHit = null; // 同一波扩散刀波共享的已命中集合（防止单敌多刃重结算）
       this.life=2.2; this.size=5; this.trail=[];
     }
     update(dt){
@@ -4168,6 +4214,38 @@
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.restore();
+      } else if (this.isLinBlade){
+        // 凌朔半月剑气：青色新月弧刃（外弧前凸+内回刃腹），随扩散方向飞行
+        const flyAng = Math.atan2(this.vy, this.vx);
+        const r = this.size * 3.2;       // 刀弧半径
+        const half = this.size * 0.9;    // 弧面张半角（弧度）
+        // 外层气团
+        const gAura = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,r*1.7);
+        gAura.addColorStop(0, rgba('#bff0ff', 0.5));
+        gAura.addColorStop(0.5, rgba('#7fe0ff', 0.18));
+        gAura.addColorStop(1, rgba('#3fb8ff', 0));
+        ctx.fillStyle = gAura;
+        ctx.beginPath(); ctx.arc(this.x,this.y,r*1.7,0,Math.PI*2); ctx.fill();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(flyAng);
+        const gBlade = ctx.createLinearGradient(-r,0,r,0);
+        gBlade.addColorStop(0, rgba('#3fb8ff', 0.05));
+        gBlade.addColorStop(0.5, rgba('#9fe8ff', 0.85));
+        gBlade.addColorStop(1, '#ffffff');
+        ctx.fillStyle = gBlade;
+        ctx.shadowColor = '#7fe0ff'; ctx.shadowBlur = 13;
+        // 半月轮廓：外弧 + 内回弧构成的新月切面，尖端朝运动方向
+        ctx.beginPath();
+        ctx.arc(0, 0, r, -half, half);
+        ctx.arc(0, 0, r - this.size*1.2, half, -half, true);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = rgba('#ffffff', 0.8);
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(0, 0, r*0.96, -half, half); ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.restore();
       } else {
         const g = ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*2);
         g.addColorStop(0, '#ffffff');
@@ -4608,7 +4686,7 @@
       this.name = roleCfg.name;
       this.color = roleCfg.color;
       this.size = cls.ballSize || roleCfg.size;
-      this.baseSpeed = (cls.ballSpeed || roleCfg.speed) * (roleCfg.speedMul || 1);
+      this.baseSpeed = (cls.ballSpeed || roleCfg.speed) * (roleCfg.speedMul || 1) * 1.15;
       this.maxHp = Math.ceil(cls.maxHp * (roleCfg.hpMul || 1));
       this.hp = this.maxHp;
       this.x = x; this.y = y;
@@ -4676,18 +4754,18 @@
       this.shieldHP = 0; // 当前护盾层数
       this.shieldRegenCD = 0; // 护盾再生冷却
       this.shieldSpeedTime = 0; // 碎盾加速剩余时间
-      this.wallCD = 3; // 铁壁冷却（开局3秒后可首次施放）
-      this.bashCD = 4; // 盾击冲锋冷却（开局4秒后可首次冲锋）
+      this.wallCD = 1.5; // 铁壁冷却
+      this.bashCD = 2; // 盾击冲锋冷却
       this.shieldBashTime = 0; // 盾击冲锋剩余时间
       this.bashDirX = 0; this.bashDirY = 0; // 盾击冲锋方向（起手锁定）
       this.bashRecoverTime = 0; // 盾击命中后的回力硬直
       if (this.cls === 'shieldGuard') this.shieldHP = this.params.shieldLayers || 0;
       // 风舞游侠相关状态
-      this.windDashCD = 1; // 冲刺位移冷却（开局1秒后可首次冲刺）
+      this.windDashCD = 0.4; // 冲刺位移冷却
       this.windDashing = 0; // 冲刺位移剩余时间
       this.windDashDirX = 0; this.windDashDirY = 0; // 冲刺方向
       // ===== 宇智波带土相关状态 =====
-      this.obitoSpikeCD = 3; // 木遁棘刺冷却（开局3秒后可首次释放）
+      this.obitoSpikeCD = 1.5; // 木遁棘刺冷却
       this.obitoChakra = 0; // 瞳力点数（初始0点，需蓄满5点才能虚化）
       this.obitoChakraTimer = 0; // 瞳力积蓄计时
       this.obitoKamuiTime = 0; // 神威虚化剩余时间
@@ -4695,7 +4773,7 @@
       this.obitoRootedList = []; // 被木棘束缚的目标引用列表
       this.obitoKamuiTriggered = false; // 本次受击是否已触发虚化（防抖）
       // 宇智波带土相关状态
-      this.woodSpikeCD = 3; // 木遁棘刺冷却（开局3秒后可首次释放）
+      this.woodSpikeCD = 1.5; // 木遁棘刺冷却
       this.chakra = 0; // 瞳力点数
       this.chakraTimer = 0; // 瞳力积蓄计时
       this.kamuiTime = 0; // 神威虚化剩余时间
@@ -4705,7 +4783,7 @@
       this.windSpeedBuff = 0; // 来自己方风舞游侠的移速加成
       // 电磁脉冲师相关状态
       this.silenceTime = 0; // 被EMP沉默时间
-      this.empCastCD = 4; // EMP脉冲冷却（开局4秒后首次释放）
+      this.empCastCD = 2; // EMP脉冲冷却
       this.leakStacks = 0; // 漏电标记层数（被电磁脉冲师普攻叠加）
       this.leakTimer = 0; // 漏电标记持续计时
       // 雷霆主宰相关状态
@@ -4741,7 +4819,7 @@
       // 熔火契约师相关状态
       this.moltenShellStacks = 0; // 熔火壳层数（0-10）
       this.moltenShieldHP = 0; // 火焰护盾血量
-      this.moltenSummonCD = 2; // 召唤冷却（开局2秒后首次召唤）
+      this.moltenSummonCD = 1; // 召唤冷却
       this.isMoltenGuard = false; // 是否为熔火卫士（召唤物）
       this.moltenGuardAtkCD = 0; // 卫士攻击冷却
       this.moltenBodyAtkCD = 0; // 本体普攻冷却
@@ -4774,6 +4852,8 @@
       this.minatoRasenganCD = 0; // 螺旋丸冷却
       this.minatoAutoKunaiTimer = 0; // 标记全消失后自动补苦无计时
       this.minatoKunaiCombo = 0; // 普攻连击计数（达到阈值后释放多重苦无）
+      this.minatoUltCD = 0; // 大招·飞雷神多重闪杀 冷却
+      this.minatoUlt = null; // 大招进行中状态机 {points, idx, t, step, hit}
       // ===== 伍六七相关状态 =====
       this.wlqScissorCD = 0; // 剪刀攻击冷却
       this.wlqScissorOut = false; // 剪刀是否已飞出
@@ -4813,6 +4893,37 @@
       this.titanShieldHP = 0; // 护盾值
       this.titanShieldTime = 0; // 护盾剩余时间
       this.titanShieldCD = 0; // 护盾冷却
+      // ===== 沈玄玑·两仪散人相关状态 =====
+      this.lyForm = 'yang'; // 当前法相 'yang'阳仪 / 'yin'阴仪
+      this.lyQi = 0; // 阴阳气脉（0-100，满即可切换）
+      this.lyQiRate = 1; // 气脉积攒倍率（受战场影响）
+      this.lyAtkCD = 0; // 普攻冷却
+      this.lySkillCD = 5; // 大招冷却（贯日诀/锁魄阵共CD）
+      this.lySurvCD = 6.5; // 生存冷却（罡罩/遁身共CD）
+      this.lySwitchCD = 0; // 切换后短暂冷却
+      this.lyBarrier = 0; // 阳仪罡罩激活剩余时间
+      this.lyShieldHP = 0; // 阴→阳切换的临时护盾
+      this.lyHidden = 0; // 遁身隐身剩余时间
+      this.lyArray = null; // 阴仪千丝锁魄阵状态 {x,y,dur,seg,total,segCD}
+      this.lyQiFx = 0; // 切换形态爆发特效计时
+      this.lyFormFx = 0; // 法相外观辉光伸缩计时
+      // ===== 凌朔·孤行剑侍（艾希顺闪拔刀体系）相关状态 =====
+      this.linEnergy = 100; // 闪刃能量 0-100
+      this.linSkill1CD = 0; // 碎浪拔刀斩 CD
+      this.linSkill2CD = 0; // 掠影破袭 CD
+      this.linUltCD = 0; // 沧浪千闪 CD
+      this.linUltT = 0; // 大招持续剩余时间（期间顺闪不耗能）
+      this.linMeleeStage = 0; // 四段普攻段位
+      this.linMeleeCD = 0; // 普攻段间隔
+      this._linHit = new Set(); // 每段已命中目标
+      this.linRiftTarget = null; // 裂刃标记目标
+      this.linRiftTimer = 0; // 裂刃标记剩余时间
+      this.linFlash = null; // 顺闪状态 {ox,oy,tx,ty,t,type,dirx,diry}
+      this.linGhost = null; // 派生虚影残影 {x,y,life,maxLife}
+      this.linRingSlash = 0; // 环形拔刀斩视觉计时
+      this.linBladeSwing = 0; // 刀光横扫残影计时
+      this.linAfterT = 0; // 移动残影计时
+      this.linInvuln = 0; // 顺闪无敌帧（takeDamage 拦伤）
     }
 
     nearestEnemy(balls){
@@ -5505,6 +5616,8 @@
         case 'sniper':  this.aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
         case 'titan':  this.aiTitan(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
         case 'foehn':  this.aiFoehn(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'liangyi': this.aiLiangyi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'lingShuo': this.aiLingShuo(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
       }
       }
 
@@ -5824,6 +5937,21 @@
       const markDur = this.params.markDur || 8;
       const flashBonus = (this.params.flashBonus || 15) / 100;
 
+      // 大招·飞雷神多重闪杀：穿梭状态机（期间占据行动，穿梭结束销毁本次全部苦无/标记）
+      if (this.minatoUlt){
+        this.minatoUlt.t -= dt;
+        if (this.minatoUlt.t <= 0 && this.minatoUlt.idx < this.minatoUlt.points.length){
+          this._ultStrike(this.minatoUlt, balls, particles);
+          this.minatoUlt.idx++;
+          if (this.minatoUlt.idx >= this.minatoUlt.points.length){
+            this._endMultiFlash(balls, particles);
+          } else {
+            this.minatoUlt.t = this.minatoUlt.step;
+          }
+        }
+        return;
+      }
+
       // 更新飞雷神标记（跟随目标移动+减少持续时间）
       for (const m of this.minatoMarks){
         if (m.target && m.target.alive){
@@ -5845,6 +5973,7 @@
       // 瞬移冷却：黄色闪光叠满(5层)时减半
       const tpCdMul = this.minatoFlashStacks >= 5 ? 0.5 : 1;
       this.minatoTeleportCD -= dt;
+      this.minatoUltCD -= dt;
 
       // 瞬移中无敌帧：保持不动
       if (this.minatoTeleporting > 0){
@@ -5870,6 +5999,12 @@
         const side = Math.sin(Date.now()*0.004 + this.bobPhase) > 0 ? 1 : -1;
         this.vx += -dirY*side * this.baseSpeed * spdMul * flashSpdMul * dt * 3;
         this.vy += dirX*side * this.baseSpeed * spdMul * flashSpdMul * dt * 3;
+      }
+
+      // 大招·飞雷神多重闪杀：冷却完毕且目标在射程内时释放
+      if (this.minatoUltCD <= 0 && enemy && enemy.alive && d < 460){
+        this._castMultiFlash(enemy, balls, particles, flashAtkMul);
+        return;
       }
 
       // 普攻：投掷飞雷神苦无（每3次后第4次释放三连扇形苦无）
@@ -6131,7 +6266,114 @@
       this.minatoFlashTime = 4;
     }
 
-    // ===== 伍六七 AI =====
+    // 波风水门：大招·飞雷神多重闪杀（瞬间大范围投掷苦无→标记点穿梭连斩）
+    _castMultiFlash(enemy, balls, particles, atkMul){
+      this.minatoUltCD = this.params.ultCD || 22;
+      const count = this.params.ultKunaiCount || 6;
+      // 在目标敌人附近生成标记点位（环形分布，带随机偏移）
+      const base = [];
+      for (let i=0;i<count;i++){
+        const a = (i/count)*Math.PI*2 + Math.random()*0.7;
+        const r = enemy.size + 15 + Math.random()*55;
+        base.push({
+          x: Math.max(24, Math.min(canvas.width-24, enemy.x + Math.cos(a)*r)),
+          y: Math.max(24, Math.min(canvas.height-24, enemy.y + Math.sin(a)*r))
+        });
+      }
+      // 交叉穿梭顺序（0→末→1→末-1→…）：每次瞬移都穿越敌群中心，形成交叉闪杀轨迹
+      const pts = [];
+      let L=0, R=base.length-1;
+      while (L <= R){
+        pts.push(base[L]);
+        if (L !== R) pts.push(base[R]);
+        L++; R--;
+      }
+      this.minatoUlt = {
+        points: pts, idx: 0, t: 0.06, step: 0.11,
+        dmg: Math.ceil((this.params.ultFlashDmg || 16) * atkMul),
+        hit: new Set()
+      };
+      // 施放瞬间：朝敌人方向一次性投掷大批飞雷神苦无（粒子拟态光点飞掠，纯演出，不产生永久标记）
+      const baseA = Math.atan2(enemy.y-this.y, enemy.x-this.x);
+      for (let i=0;i<20;i++){
+        const a = baseA + (Math.random()-0.5)*1.1;
+        const sp = 380 + Math.random()*260;
+        particles.push(new Particle(this.x, this.y, Math.random()<0.4 ? '#ffdd00' : '#ffe88a', {ang:a, speed:sp, life:0.55, size:3}));
+      }
+      // 各标记点位预先亮起金色标记光点
+      for (const pt of pts){
+        for (let i=0;i<6;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(pt.x, pt.y, '#ffdd00', {ang:a, speed:60+Math.random()*60, life:0.5, size:2.5}));
+        }
+      }
+      for (let i=0;i<40;i++){
+        particles.push(new Particle(this.x, this.y, this.color, {speed:160+Math.random()*160, life:0.6, size:3.5}));
+      }
+      for (let i=0;i<20;i++){
+        particles.push(new Particle(this.x, this.y, '#ffffff', {speed:130, life:0.4, size:2.5}));
+      }
+      aoes.push(new AOE(this.x, this.y, this.color, 170));
+      shake = Math.max(shake, 18);
+      floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '飞雷神·多重闪杀!', '#ffdd00', {life:1.4, size:17}));
+      this.minatoFlashStacks = Math.min(5, this.minatoFlashStacks + 1);
+      this.minatoFlashTime = 4;
+    }
+
+    // 穿梭斩击：瞬移到当前标记点，落地打出一圈飞雷神斩击
+    _ultStrike(state, balls, particles){
+      const pt = state.points[state.idx];
+      // 起点残影
+      for (let i=0;i<12;i++){
+        particles.push(new Particle(this.x, this.y, this.color, {speed:160, life:0.35, size:3}));
+      }
+      this.x = pt.x; this.y = pt.y;
+      this.minatoTeleporting = 0.12; // 穿梭中的无敌帧
+      this.vx = 0; this.vy = 0;
+      const bounds = getTerrainBounds();
+      this.x = Math.max(this.size, Math.min(bounds.right-this.size, this.x));
+      this.y = Math.max(this.size, Math.min(bounds.bottom-this.size, this.y));
+      // 落地飞雷神斩击
+      const slashR = this.size + 55;
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        const dd = Math.hypot(b.x-this.x, b.y-this.y);
+        if (dd < slashR && !state.hit.has(b)){
+          b.takeDamage(state.dmg, this.color, particles, this);
+          const kx=(b.x-this.x)/Math.max(1,dd), ky=(b.y-this.y)/Math.max(1,dd);
+          b.vx += kx*220; b.vy += ky*220;
+          state.hit.add(b);
+        }
+      }
+      // 落点扩散斩环
+      for (let i=0;i<18;i++){
+        const a=(i/18)*Math.PI*2;
+        particles.push(new Particle(this.x+Math.cos(a)*slashR*0.3, this.y+Math.sin(a)*slashR*0.3, this.color, {ang:a, speed:200, life:0.35, size:3}));
+      }
+      for (let i=0;i<8;i++){
+        particles.push(new Particle(this.x, this.y, '#ffffff', {speed:130, life:0.28, size:2.5}));
+      }
+      shake = Math.max(shake, 8);
+    }
+
+    // 大招结束：销毁本次全部苦无/标记（不保留给后续使用），停留最后一处标记点
+    _endMultiFlash(balls, particles){
+      this.minatoUlt = null;
+      // 落点绽放
+      for (let i=0;i<30;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(this.x, this.y, this.color, {ang:a, speed:160+Math.random()*130, life:0.5, size:3.5}));
+      }
+      for (let i=0;i<12;i++){
+        particles.push(new Particle(this.x, this.y, '#ffffff', {speed:120, life:0.35, size:2.5}));
+      }
+      aoes.push(new AOE(this.x, this.y, this.color, 130));
+      shake = Math.max(shake, 14);
+      floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '闪杀·终!', '#ffdd00', {life:1.0, size:16}));
+      this.minatoFlashStacks = Math.min(5, this.minatoFlashStacks + 1);
+      this.minatoFlashTime = 4;
+    }
+
     aiWuLiuQi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
       const awaken = this.wlqAwakened;
       const atkMul = awaken ? (this.params.awakenAtkMul || 1.8) : 1;
@@ -6568,8 +6810,8 @@
       if (this.titanShieldTime <= 0) this.titanShieldHP = 0;
       if (this.titanShieldCD > 0) this.titanShieldCD -= dt;
 
-      // 1. 火炮齐射（永久生效，不依赖武器模式）——集束母弹
-      if (this.titanCannonCD <= 0){
+      // 1. 火炮齐射（永久生效，不依赖武器模式）——集束母弹（射程收缩：仅对较近目标开火）
+      if (this.titanCannonCD <= 0 && d < 480){
         this.titanCannonCD = this.params.cannonCD || 4;
         // 收集可追踪目标（敌方存活球体）
         const targets = [];
@@ -6600,11 +6842,11 @@
           const bullet = new Bullet(sx, sy, vx, vy, this.params.cannonDmg || 12, '#ff8833', this.team, this);
           bullet.isTitanCannon = true;
           bullet.isTitanMother = true; // 集束母弹，发射后定时分裂
-          bullet.initLife = 3.5; // 记录初始生命，用于计算飞行时间
+          bullet.initLife = 2.6; // 记录初始生命，用于计算飞行时间
           bullet.splitTime = 0.15; // 发射后 0.15s 分裂
           bullet.target = tgt; // 追踪目标
           bullet.size = 7;
-          bullet.life = 3.5;
+          bullet.life = 2.6;
           bullets.push(bullet);
         }
         // 开火特效
@@ -6707,7 +6949,7 @@
       if (this._foehnBurnCD > 0) this._foehnBurnCD -= dt;
       if (this._foehnBurnTime > 0) this._foehnBurnTime -= dt;
 
-      const inRange = d < 430;
+      const inRange = d < 540;
       const locked = this._foehnOverheat > 0;
       // 自然散热（锁死期间散热翻倍）；开火瞬间的生热单独在真正射出子弹时结算
       this._foehnHeat -= (locked ? heatDown * 2 : heatDown) * dt;
@@ -6744,6 +6986,7 @@
         bul.isFoehn = true;
         bul.isFoehnBurn = burn;
         bul.size = 4;
+        bul.life = 1.15; // 加长弹道寿命：射程随开火距离同步提升
         bullets.push(bul);
         // 真正射出子弹的瞬间才生热（焚烬爆燃模式翻倍）
         this._foehnHeat += heatUp * baseInterval * 2 * (burn ? 2 : 1);
@@ -8924,6 +9167,542 @@
       }
     }
 
+    // ===== 沈玄玑·两仪散人 AI =====
+    aiLiangyi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
+      const p = this.params;
+      this.lyAtkCD -= dt;
+      this.lySkillCD -= dt;
+      this.lySurvCD -= dt;
+      this.lySwitchCD -= dt;
+      if (this.lyQiFx > 0) this.lyQiFx -= dt;
+      if (this.lyFormFx > 0) this.lyFormFx -= dt;
+      // 罡罩计时：激活中持续塑造金色能量外壳
+      if (this.lyBarrier > 0){
+        this.lyBarrier -= dt;
+        if (this.lyBarrier <= 0) this.lyBarrier = 0;
+      }
+      // 遁身隐身计时
+      if (this.lyHidden > 0){
+        this.lyHidden -= dt;
+        this.invisible = true;
+        if (this.lyHidden <= 0){ this.invisible = false; }
+      }
+      const isYang = this.lyForm === 'yang';
+      // ---- 移动：阳中远离，阴贴身上前 ----
+      if (this.lyArray) {
+        // 阵法持续期间小幅游走
+        this.vx += -dirY * this.baseSpeed * spdMul * dt * 2;
+        this.vy += dirX * this.baseSpeed * spdMul * dt * 2;
+      } else {
+        const ideal = isYang ? 300 : 150;
+        if (d > ideal){
+          this.vx += dirX * this.baseSpeed * spdMul * dt * 3.2;
+          this.vy += dirY * this.baseSpeed * spdMul * dt * 3.2;
+        } else if (d < ideal - 90){
+          const away = isYang ? 2.6 : 3.4;
+          this.vx -= dirX * this.baseSpeed * spdMul * dt * away;
+          this.vy -= dirY * this.baseSpeed * spdMul * dt * away;
+        } else {
+          const side = Math.sin(Date.now()*0.004 + this.bobPhase) > 0 ? 1 : -1;
+          this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2.4;
+          this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2.4;
+        }
+      }
+      // ---- 阴仪大招·千丝锁魄阵：跨帧持续结算 ----
+      if (this.lyArray){
+        const arr = this.lyArray;
+        arr.dur -= dt; arr.segCD -= dt;
+        if (arr.segCD <= 0){
+          arr.segCD = arr.dur / arr.segs;
+          const segDmg = Math.max(1, Math.floor(arr.total / arr.segs));
+          for (const b of balls){
+            if (!b.alive || b.team === this.team) continue;
+            const dd = Math.hypot(b.x - arr.x, b.y - arr.y);
+            if (dd < arr.r + b.size){
+              b.takeDamage(segDmg, '#b06bff', particles, this);
+              b.slow = Math.max(b.slow, 0.55); // 阵内持续切割并迟滞
+              b.burnDmg = Math.max(b.burnDmg, p.venomDps || 3);
+              b.burnTime = Math.max(b.burnTime, 1.2);
+              for (let i=0;i<3;i++){
+                const a = Math.random()*Math.PI*2;
+                particles.push(new Particle(b.x, b.y, '#b06bff', {ang:a, speed:60+Math.random()*70, life:0.4, size:2.5}));
+              }
+            }
+          }
+          // 阵法环刃闪耀
+          for (let i=0;i<6;i++){
+            const a = (i + Math.random()) * Math.PI/3;
+            particles.push(new Particle(arr.x + Math.cos(a)*arr.r*0.5, arr.y + Math.sin(a)*arr.r*0.5, '#c77dff', {speed:120, life:0.55, size:3}));
+          }
+        }
+        if (arr.dur <= 0) this.lyArray = null;
+      }
+      // ---- 阳仪大招·七曜贯日诀：一次性爆发贯穿射线 ----
+      if (isYang && this.lySkillCD <= 0 && d < 560 && this.alive){
+        this.lySkillCD = 5;
+        // 沿朝向收集敌人（按距离排序）
+        const got = [];
+        for (const b of balls){
+          if (!b.alive || b.team === this.team || b.invisible) continue;
+          const rdx = b.x - this.x, rdy = b.y - this.y;
+          const along = rdx*dirX + rdy*dirY;
+          if (along < 0 || along > 560) continue;
+          const perp = Math.abs(rdx*(-dirY) + rdy*dirX);
+          if (perp < 46 + b.size) got.push({b, along});
+        }
+        got.sort((a,b) => a.along - b.along);
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 18, '七曜·贯日诀', '#ffd76b', {life:0.9, size:14}));
+        if (got.length > 0){
+          got.forEach((g, idx) => {
+            const armor = ((p.yangPierceMul != null ? p.yangPierceMul : 1.4) - 1) * (g.b.maxHp >= 150 ? 1 : 0.4);
+            const dmg = (idx === 0) ? Math.ceil((p.skillTotal||40) * 0.7 * (1 + armor)) : Math.ceil((p.skillTotal||40) * 0.28);
+            g.b.takeDamage(dmg, '#ffd76b', particles, this);
+            g.b.burnDmg = Math.max(g.b.burnDmg, 5);
+            g.b.burnTime = Math.max(g.b.burnTime, 2);
+            if (idx === 0){ // 首目标强力击退
+              const ang = Math.atan2(g.b.y - this.y, g.b.x - this.x);
+              g.b.vx += Math.cos(ang)*340; g.b.vy += Math.sin(ang)*340;
+            }
+            for (let i=0;i<10;i++){
+              particles.push(new Particle(g.b.x, g.b.y, '#ffd76b', {speed:80+Math.random()*90, life:0.4, size:3, ang:Math.atan2(g.b.y-this.y, g.b.x-this.x)}));
+            }
+          });
+        }
+        // 贯穿剑虹视觉
+        for (let i=0;i<42;i++){
+          const t = i/42;
+          const px = this.x + dirX*(20 + t*520), py = this.y + dirY*(20 + t*520);
+          particles.push(new Particle(px, py, i%2 ? '#fff7c0' : '#ffd76b', {speed:180, life:0.4, size:4, ang:Math.atan2(dirY, dirX)}));
+        }
+        if (typeof shake !== 'undefined') shake = Math.min(20, (shake||0)+5);
+      }
+      // ---- 阴仪大招·千丝锁魄阵：铺阵 ----
+      if (!isYang && this.lySkillCD <= 0 && d < 300 && this.alive && !this.lyArray){
+        this.lySkillCD = 5;
+        this.lyArray = { x: enemy.x, y: enemy.y, dur: 6, segs: 7, segCD: 0, r: 130, total: (p.skillTotal != null ? p.skillTotal : 40) };
+        floatTexts.push(new FloatText(enemy.x, enemy.y - enemy.size - 18, '千丝·锁魄阵', '#c77dff', {life:0.9, size:14}));
+        for (let i=0;i<36;i++){
+          const a = i/36 * Math.PI*2;
+          particles.push(new Particle(enemy.x + Math.cos(a)*120, enemy.y + Math.sin(a)*120, '#b06bff', {speed:150, life:0.7, size:3}));
+        }
+      }
+      // ---- 阳仪生存·乾元罡罩：受创就为自己布下一次性格挡，破碎后短暂减伤 ----
+      if (isYang && this.lySurvCD <= 0 && this.hp < this.maxHp * 0.95){
+        this.lySurvCD = 6.5;
+        this.lyBarrier = (p.barrierDur != null ? p.barrierDur : 1.5);
+        this.lyGuardTs = Date.now();
+        this.lyGuardT = 1.5;
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '乾元·罡罩', '#ffd76b', {life:0.8, size:12}));
+        for (let i=0;i<20;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:40+Math.random()*50, life:0.6, size:3}));
+        }
+      }
+      // ---- 阴仪生存·坤影遁身：危险时瞬移绕后隐身 ----
+      if (!isYang && this.lySurvCD <= 0 && d < 200 && this.alive){
+        let danger = 0;
+        for (const b of balls){ if (b.alive && b.team !== this.team){ const dd = Math.hypot(b.x-this.x, b.y-this.y); if (dd < 170) danger++; } }
+        if (danger >= 1 || this.hp < this.maxHp * 0.6){
+          this.lySurvCD = 6.5;
+          this.lyShieldHP = Math.max(this.lyShieldHP, 25); // 遁身落地短暂韧性护盾
+          const dist = (p.dodgeDist != null ? p.dodgeDist : 150);
+          // 瞬移到敌人侧后方
+          const ang = Math.atan2(dirY, dirX) + (Math.random() < 0.5 ? 1 : -1) * (Math.PI/2);
+          this.x = Math.max(30, Math.min(canvas.width - 30, this.x + Math.cos(ang)*dist));
+          this.y = Math.max(30, Math.min(canvas.height - 30, this.y + Math.sin(ang)*dist));
+          this.lyHidden = (p.dodgeHideDur != null ? p.dodgeHideDur : 0.7);
+          this.invisible = true;
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '坤影·遁身', '#c77dff', {life:0.8, size:12}));
+          for (let i=0;i<22;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#b06bff', {ang:a, speed:50+Math.random()*70, life:0.6, size:3}));
+          }
+        }
+      }
+      // ---- 普攻：阳=贯穿飞剑 / 阴=扇形丝刃 ----
+      if (isYang && this.lyAtkCD <= 0 && d < 620 && this.alive){
+        this.lyAtkCD = (p.yangAtkInterval != null ? p.yangAtkInterval : 0.8);
+        const bs = 540;
+        const bul = new Bullet(
+          this.x + dirX*this.size, this.y + dirY*this.size,
+          dirX*bs, dirY*bs,
+          (p.yangAtkDmg != null ? p.yangAtkDmg : 10), '#ffd76b', this.team, this
+        );
+        bul.size = 5;
+        bul.pierceMax = 3;
+        bul._hitTargets = [];
+        bul.burnDmg = 2;
+        bul.burnTime = 1.5;
+        bullets.push(bul);
+        for (let i=0;i<6;i++){
+          const a = Math.atan2(dirY, dirX) + (Math.random()-0.5)*0.5;
+          particles.push(new Particle(this.x + dirX*this.size, this.y + dirY*this.size, '#ffd76b', {ang:a, speed:120+Math.random()*90, life:0.3, size:2.5}));
+        }
+      } else if (!isYang && this.lyAtkCD <= 0 && d < 130 && this.alive){
+        this.lyAtkCD = (p.yinAtkInterval != null ? p.yinAtkInterval : 0.42);
+        const dmg = (p.yinAtkDmg != null ? p.yinAtkDmg : 4);
+        const baseAng = Math.atan2(dirY, dirX);
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const bdx = b.x - this.x, bdy = b.y - this.y;
+          const dd = Math.hypot(bdx, bdy);
+          if (dd > 125 + b.size) continue;
+          let angDiff = Math.abs(Math.atan2(bdy, bdx) - baseAng);
+          if (angDiff > Math.PI) angDiff = 2*Math.PI - angDiff;
+          if (angDiff < Math.PI * 0.3){
+            b.takeDamage(dmg, '#b06bff', particles, this);
+            b.burnDmg = Math.max(b.burnDmg, (p.venomDps != null ? p.venomDps : 3));
+            b.burnTime = Math.max(b.burnTime, (p.venomDur != null ? p.venomDur : 3));
+            for (let i=0;i<5;i++){
+              const a = Math.atan2(bdy, bdx) + (Math.random()-0.5)*0.6;
+              particles.push(new Particle(b.x, b.y, '#b06bff', {ang:a, speed:70+Math.random()*80, life:0.4, size:2.5}));
+            }
+          }
+        }
+      }
+      // ---- 太极转圜·自动切换法相：当敌方存活人数多于我方时一律切阴仪（近战控场清场） ----
+      if (this.lySwitchCD <= 0 && this.alive){
+        let myCount = 0, enCount = 0;
+        for (const b of balls){ if (b.alive){ if (b.team === this.team) myCount++; else enCount++; } }
+        if (enCount > myCount && this.lyForm !== 'yin'){
+          this.lySwitchCD = 2.0; // 切换后短暂冷却，避免人数临界反复抖动
+          this.lyForm = 'yin';
+          this.lyQiFx = 1.1;
+          // 阳→阴：阴寒气场，周围敌人减速40%持续1.2s
+          for (const b of balls){
+            if (!b.alive || b.team === this.team) continue;
+            if (Math.hypot(b.x-this.x, b.y-this.y) < 190 + b.size){
+              b.slow = Math.max(b.slow, 0.85);
+            }
+          }
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '☾ 转圜·坤阴', '#c77dff', {life:1.1, size:14}));
+          for (let i=0;i<28;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#b06bff', {ang:a, speed:160+Math.random()*140, life:0.6, size:3.5}));
+          }
+        }
+      }
+      // ---- 法相环境粒子 ----
+      if (this.alive && Math.random() < dt*6){
+        const a = Math.random()*Math.PI*2;
+        const r = this.size + 6 + Math.random()*10;
+        if (isYang) particles.push(new Particle(this.x + Math.cos(a)*r, this.y + Math.sin(a)*r, '#ffd76b', {speed:12, life:0.5, size:2}));
+        else particles.push(new Particle(this.x + Math.cos(a)*r, this.y + Math.sin(a)*r, '#b06bff', {speed:10, life:0.6, size:2}));
+      }
+    }
+
+    // ===== 凌朔·孤行剑侍 AI =====
+// ===== 凌朔·孤行剑侍 AI（艾希顺闪拔刀体系：攻击-瞬闪-回位） =====
+    aiLingShuo(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
+      const p = this.params;
+      // ---------- 每帧状态（能量回复 / CD / buff / 标记 / 虚影） ----------
+      this.linEnergy = Math.min(100, this.linEnergy + (p.energyRecharge || 18) * dt);
+      this.linSkill1CD -= dt;
+      this.linSkill2CD -= dt;
+      this.linUltCD -= dt;
+      if (this.linInvuln > 0) this.linInvuln -= dt;
+      if (this.linRingSlash > 0) this.linRingSlash -= dt;
+      if (this.linMeleeCD > 0) this.linMeleeCD -= dt;
+      if (this.linAfterT > 0) this.linAfterT -= dt;
+      // 大招【沧浪千闪】buff：持续时间内顺闪不耗能，结束立刻归零疲软
+      if (this.linUltT > 0){
+        this.linUltT -= dt;
+        if (this.linUltT <= 0){
+          this.linUltT = 0;
+          this.linEnergy = 0;
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '千闪·力竭', '#7fc6e8', {life:0.9, size:13}));
+          for (let i=0;i<10;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#7fe0ff', {ang:a, speed:60+Math.random()*70, life:0.4, size:2.5}));
+          }
+        }
+      }
+      // 裂刃标记计时
+      if (this.linRiftTimer > 0){
+        this.linRiftTimer -= dt;
+        if (this.linRiftTimer <= 0 || !this.linRiftTarget || !this.linRiftTarget.alive) this.linRiftTarget = null;
+      }
+      // 虚影残影计时
+      if (this.linGhost){ this.linGhost.life -= dt; if (this.linGhost.life <= 0) this.linGhost = null; }
+
+// ---------- 顺闪拔刀状态机（单程突进）：冲过去-斩毕停留不归位 ----------
+      if (this.linFlash){
+        const fl = this.linFlash;
+        fl.t -= dt;
+        const prog = Math.max(0, fl.t) / 0.16; // 1 -> 0
+        const k = 1 - prog; // 1 -> 0（线性单程冲前，无回程）
+        this.x = fl.ox + (fl.tx - fl.ox) * k;
+        this.y = fl.oy + (fl.ty - fl.oy) * k;
+        // 突进拖影
+        if (Math.random() < 0.85){
+          this.afterimages.push({ x: this.x, y: this.y, life: 0.26, maxLife: 0.26, color: '#9fe0ff' });
+          if (this.afterimages.length > 14) this.afterimages.splice(0, this.afterimages.length - 14);
+        }
+        // 抵近目标瞬间执行斩击判定（落地成环，命中接拔刀斩）
+        if (!fl.landed && prog < 0.3){
+          fl.landed = true;
+          this.linRingSlash = 0.3;
+          const sd = fl.type === 'wave' ? (p.waveDmg || 16) : (p.breachDmg || 18);
+          for (const b of balls){
+            if (!b.alive || b.team === this.team || b.invisible) continue;
+            if (Math.hypot(b.x - this.x, b.y - this.y) < 150 + b.size){
+              b.takeDamage(sd, '#9fd8ff', particles, this);
+              const ka = Math.atan2(b.y - this.y, b.x - this.x);
+              b.vx += Math.cos(ka) * 120; b.vy += Math.sin(ka) * 120;
+            }
+          }
+          // 环形刀光粒子
+          for (let i=0;i<26;i++){
+            const aa = (i/26)*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, i%2 ? '#aee4ff' : '#6fc3ff', {ang:aa, speed:170+Math.random()*80, life:0.38, size:3}));
+          }
+          if (fl.type === 'wave'){
+            // 碎浪拔刀斩：命中给最近敌人打【裂刃】标记
+            const tt = this.nearestEnemy(balls);
+            if (tt && tt.alive && Math.hypot(tt.x - this.x, tt.y - this.y) < 210){
+              this.linRiftTarget = tt;
+              this.linRiftTimer = p.markDur || 4;
+              floatTexts.push(new FloatText(tt.x, tt.y - tt.size - 12, '裂刃', '#7fe0ff', {life:0.6, size:11}));
+            }
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '碎浪·拔刀', '#bfeaff', {life:0.6, size:13}));
+          } else {
+            // 掠影破袭斩：对带裂刃目标破霸体 + 减速
+            if (this.linRiftTarget && this.linRiftTarget.alive){
+              const rt = this.linRiftTarget;
+              ['brShield','shieldHP','titanShieldHP','lyShieldHP','moltenShieldHP'].forEach(k => { if (rt[k] > 0) rt[k] = 0; });
+              rt.linBreakT = Date.now() + (p.sealSlowDur != null ? p.sealSlowDur : 1.5) * 1000; // 破霸=免伤失效
+              rt.slow = Math.max(rt.slow, 0.85);
+              floatTexts.push(new FloatText(rt.x, rt.y - rt.size - 14, '裂刃·破霸!', '#ffd27a', {life:0.7, size:13}));
+              for (let i=0;i<12;i++){
+                const aa = Math.random()*Math.PI*2;
+                particles.push(new Particle(rt.x, rt.y, '#ffcf6b', {ang:aa, speed:110+Math.random()*100, life:0.4, size:3}));
+              }
+            }
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 22, '掠影·破袭', '#bfeaff', {life:0.6, size:13}));
+          }
+        }
+        this.vx = 0; this.vy = 0;
+        this.linInvuln = Math.max(this.linInvuln, 0.1);
+        if (fl.t <= 0){
+          // 停留突进目标位置（不再归位）→ 派生技能结算
+          this.x = fl.tx; this.y = fl.ty;
+          this.linInvuln = Math.max(this.linInvuln, 0.12);
+          this.linAfterT = Math.max(this.linAfterT, 0.4);
+          for (let i=0;i<6;i++){
+            particles.push(new Particle(this.x, this.y, '#cfefff', {ang:Math.random()*Math.PI*2, speed:60+Math.random()*60, life:0.3, size:2}));
+          }
+          if (fl.type === 'wave'){
+            // 派生·破空剑气：向前打出半月形扩散刀波（多条新月弧刃向两侧展开，不耗能量）
+            const tt = this.nearestEnemy(balls);
+            if (tt && tt.alive && Math.hypot(tt.x - this.x, tt.y - this.y) < 460){
+              const at = Math.atan2(tt.y - this.y, tt.x - this.x);
+              const N = 6;                      // 刃数
+              const spread = 130 * Math.PI/180; // 半月扩散张角
+              const fanHit = new Set();         // 共享命中集合：同一波对单一敌人只算一次
+              for (let i=0;i<N;i++){
+                const k = N===1 ? 0.5 : (i/(N-1));
+                const ang = at + (spread * (2*k - 1));
+                const bs = 340;
+                const bul = new Bullet(
+                  this.x + Math.cos(ang)*this.size, this.y + Math.sin(ang)*this.size,
+                  Math.cos(ang)*bs, Math.sin(ang)*bs,
+                  p.bladeProjDmg || 11, '#7fe0ff', this.team, this
+                );
+                bul.isLinBlade = true;
+                bul.linFanHit = fanHit;
+                bul.size = 6;
+                bul.life = 1.05;
+                bullets.push(bul);
+              }
+              floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '破空·半月剑气', '#bff0ff', {life:0.55, size:11}));
+            }
+          } else {
+            // 派生·虚影留影：在突进末端留下一道半透明剑影残影
+            this.linGhost = { x: fl.tx, y: fl.ty, life: 1.6, maxLife: 1.6 };
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '虚影·留影', '#bff0ff', {life:0.55, size:11}));
+          }
+          this.linFlash = null;
+        }
+        return;
+      }
+
+      // ---------- 顺闪启动辅助 ----------
+      const canFlash = () => this.linUltT > 0 || this.linEnergy >= 30;
+      const place = (target) => {
+        const ang = Math.atan2(target.y - this.y, target.x - this.x);
+        const base = this.size + target.size + 18;
+        const fx = target.x - Math.cos(ang) * base;
+        const fy = target.y - Math.sin(ang) * base;
+        const distRaw = Math.hypot(fx - this.x, fy - this.y);
+        const maxD = p.flashDist || 120;
+        let tx = fx, ty = fy;
+        if (distRaw > maxD && distRaw > 0.01){
+          tx = this.x + (fx - this.x) / distRaw * maxD;
+          ty = this.y + (fy - this.y) / distRaw * maxD;
+        }
+        return { tx: Math.max(24, Math.min(canvas.width - 24, tx)), ty: Math.max(24, Math.min(canvas.height - 24, ty)), ang };
+      };
+      const startFlash = (target) => {
+        if (this.linUltT <= 0) this.linEnergy -= 30;
+        const pp = place(target);
+        this.linFlash = { ox: this.x, oy: this.y, tx: pp.tx, ty: pp.ty, t: 0.16, type: 'wave', landed: false };
+        this.linInvuln = Math.max(this.linInvuln, 0.5);
+        this.afterimages.push({ x: this.x, y: this.y, life: 0.3, maxLife: 0.3, color: '#e8f6ff' });
+        for (let i=0;i<10;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#dff4ff', {ang:a, speed:120+Math.random()*110, life:0.25, size:2.5}));
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '瞬闪·拔刀', '#bfeaff', {life:0.6, size:13}));
+      };
+      const startBreach = (target) => {
+        if (this.linUltT <= 0) this.linEnergy -= 30;
+        const pp = place(target);
+        this.linFlash = { ox: this.x, oy: this.y, tx: pp.tx, ty: pp.ty, t: 0.16, type: 'breach', landed: false };
+        this.linInvuln = Math.max(this.linInvuln, 0.5);
+        this.afterimages.push({ x: this.x, y: this.y, life: 0.32, maxLife: 0.32, color: '#e8f6ff' });
+        for (let i=0;i<10;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#dff4ff', {ang:a, speed:120+Math.random()*110, life:0.25, size:2.5}));
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '瞬闪·破袭', '#cde9ff', {life:0.6, size:13}));
+      };
+
+      // ---------- 大招【沧浪千闪】：补满能量 + 顺闪免耗 ----------
+      if (this.linUltCD <= 0 && this.linUltT <= 0 && this.hp > this.maxHp * 0.5 && this.linEnergy < 40){
+        let cluster = 0;
+        for (const b of balls){
+          if (b.alive && b.team !== this.team && Math.hypot(b.x - this.x, b.y - this.y) < 300) cluster++;
+        }
+        if (cluster >= 2){
+          this.linUltCD = p.ultCD || 22;
+          this.linEnergy = 100;
+          this.linUltT = p.ultDur || 4;
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '沧浪千闪!', '#7fe0ff', {life:1.0, size:16}));
+          for (let i=0;i<30;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, i%2 ? '#7fe0ff' : '#d6f5ff', {ang:a, speed:140+Math.random()*140, life:0.6, size:3}));
+          }
+          shake = Math.max(shake, 6);
+        }
+      }
+      // 大招期间：高频闪打，先破袭标记目标再碎浪挂标
+      if (this.linUltT > 0){
+        let acted = false;
+        if (this.linRiftTarget && this.linRiftTarget.alive && this.linSkill2CD <= 0){
+          this.linSkill2CD = p.skill2CD || 9;
+          startBreach(this.linRiftTarget); acted = true;
+        } else if (this.linSkill1CD <= 0 && d < 320){
+          this.linSkill1CD = p.skill1CD || 8;
+          startFlash(enemy); acted = true;
+        } else if (this.linSkill2CD <= 0 && d < 320){
+          this.linSkill2CD = p.skill2CD || 9;
+          startBreach(enemy); acted = true;
+        }
+        if (acted) return;
+        // 技能都在冷却：普通挥砍
+        this.meleeLin(dt, enemy, d, dirX, dirY, balls, particles);
+      }
+
+      // ---------- 能量管控：能量不足只普攻攒能 ----------
+      if (!canFlash()){
+        if (d > 120){
+          this.vx += dirX * this.baseSpeed * spdMul * dt * 5;
+          this.vy += dirY * this.baseSpeed * spdMul * dt * 5;
+          this.linAfterT = Math.max(this.linAfterT, 0.3);
+          if (Math.random() < dt*22){
+            this.afterimages.push({x:this.x+(Math.random()-0.5)*2, y:this.y+(Math.random()-0.5)*2, life:0.24, maxLife:0.24, color:'#8fd0ff'});
+            if (this.afterimages.length > 10) this.afterimages.splice(0, this.afterimages.length - 10);
+          }
+        } else if (d < 65){
+          this.vx -= dirX * this.baseSpeed * spdMul * dt * 3;
+          this.vy -= dirY * this.baseSpeed * spdMul * dt * 3;
+        } else {
+          const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+          this.vx += -dirY * side * this.baseSpeed * spdMul * dt * 2.5;
+          this.vy += dirX * side * this.baseSpeed * spdMul * dt * 2.5;
+        }
+        this.meleeLin(dt, enemy, d, dirX, dirY, balls, particles);
+        return;
+      }
+
+      // ---------- 技能决策（能量充足，非大招） ----------
+      // 1) 碎浪拔刀斩起手：有裂刃目标优先对其破袭，否则挂标
+      if (this.linRiftTarget && this.linRiftTarget.alive && this.linSkill2CD <= 0
+          && Math.hypot(this.linRiftTarget.x - this.x, this.linRiftTarget.y - this.y) < 340){
+        this.linSkill2CD = p.skill2CD || 9;
+        this.linSkill1CD = Math.min(this.linSkill1CD, 0.5);
+        startBreach(this.linRiftTarget);
+        return;
+      }
+      if (this.linSkill1CD <= 0 && d < 330 && d > 40){
+        this.linSkill1CD = p.skill1CD || 8;
+        startFlash(enemy);
+        return;
+      }
+      this.meleeLin(dt, enemy, d, dirX, dirY, balls, particles);
+
+      // ---------- 常规机动走位 ----------
+      if (this.hp < this.maxHp * 0.3){
+        this.vx -= dirX * this.baseSpeed * spdMul * dt * 4;
+        this.vy -= dirY * this.baseSpeed * spdMul * dt * 4;
+      } else if (d > 150){
+        this.vx += dirX * this.baseSpeed * spdMul * dt * 5;
+        this.vy += dirY * this.baseSpeed * spdMul * dt * 5;
+        this.linAfterT = Math.max(this.linAfterT, 0.25);
+        if (Math.random() < dt*14){
+          this.afterimages.push({x:this.x+(Math.random()-0.5)*2, y:this.y+(Math.random()-0.5)*2, life:0.24, maxLife:0.24, color:'#8fd0ff'});
+          if (this.afterimages.length > 10) this.afterimages.splice(0, this.afterimages.length - 10);
+        }
+      } else if (d < 55){
+        this.vx -= dirX * this.baseSpeed * spdMul * dt * 3;
+        this.vy -= dirY * this.baseSpeed * spdMul * dt * 3;
+      } else {
+        const side = Math.sin(Date.now()*0.003 + this.bobPhase) > 0 ? 1 : -1;
+        this.vx += -dirY * side * this.baseSpeed * spdMul * dt * 3;
+        this.vy += dirX * side * this.baseSpeed * spdMul * dt * 3;
+      }
+      // 移动残影（淡蓝拖尾）
+      if (this.alive && Math.random() < dt*7){
+        this.afterimages.push({ x: this.x + (Math.random()-0.5)*2, y: this.y + (Math.random()-0.5)*2, life: 0.28, maxLife: 0.28, color: '#8fd0ff' });
+        if (this.afterimages.length > 8) this.afterimages.splice(0, this.afterimages.length - 8);
+      }
+    }
+
+    // ---- 凌朔·四段普攻（寒锋快斩）----
+    meleeLin(dt, enemy, d, dirX, dirY, balls, particles){
+      const p = this.params;
+      if (!this.alive || this.linMeleeCD > 0 || d >= this.size + enemy.size + 70) return;
+      this.linMeleeCD = p.meleeInterval || 0.30;
+      const md = Math.ceil(p.meleeDmg || 9);
+      const ang = Math.atan2(dirY, dirX);
+      for (const b of balls){
+        if (!b.alive || b.team === this.team || this._linHit.has(b)) continue;
+        if (Math.hypot(b.x - this.x, b.y - this.y) < this.size + enemy.size + 70 + b.size){
+          this._linHit.add(b);
+          b.takeDamage(md, '#6fc3ff', particles, this);
+          b.vx += Math.cos(ang) * 58; b.vy += Math.sin(ang) * 58;
+          for (let i=0;i<8;i++){
+            const a = ang - 1.3 + i*0.26;
+            particles.push(new Particle(this.x + Math.cos(a)*this.size*1.7, this.y + Math.sin(a)*this.size*1.7, i%2 ? '#aee4ff' : '#6fc3ff', {ang:a + Math.PI/2, speed:150, life:0.22, size:2.6}));
+          }
+        }
+      }
+      floatTexts.push(new FloatText(this.x, this.y - this.size - 14, ['一','二','三','四'][this.linMeleeStage] || '一', '#aee4ff', {life:0.35, size:9}));
+      this.linMeleeStage++;
+      if (this.linMeleeStage >= 4){
+        this.linMeleeStage = 0;
+        if (this._linHit.size > 0){
+          this.linEnergy = Math.min(100, this.linEnergy + 25);
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 24, '闪刃 +25', '#bfeaff', {life:0.7, size:11}));
+          for (let i=0;i<8;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#aee4ff', {ang:a, speed:70, life:0.4, size:2}));
+          }
+        }
+      }
+      this._linHit = new Set();
+    }
+
     // ===== 宇智波带土 AI =====
     aiObito(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles){
       const p = this.params;
@@ -9123,26 +9902,28 @@
 
     takeDamage(dmg, fromColor, particles, attacker, isDot){
       if (!this.alive) return;
+      // 凌朔【锁锋擒斩】·破霸（霸体=免伤）：破霸期间目标所有免伤/减伤/护盾吸收全部失效
+      const broken = !isDot && this.linBreakT && Date.now() < this.linBreakT;
       // 刺客冲刺无敌帧：仅居合冲刺前0.12秒免疫伤害（冲刺后半段可被击中）
-      if (this.cls === 'dash' && this.dashing > 0.24){
+      if (!broken && this.cls === 'dash' && this.dashing > 0.24){
         for (let i=0;i<3;i++){
           particles.push(new Particle(this.x, this.y, '#ffffff', {speed:150, life:0.25, size:2}));
         }
         return;
       }
       // 波风水门瞬移无敌帧：瞬移过程完全免疫伤害
-      if (this.cls === 'minato' && this.minatoTeleporting > 0){
+      if (!broken && this.cls === 'minato' && this.minatoTeleporting > 0){
         for (let i=0;i<4;i++){
           particles.push(new Particle(this.x, this.y, this.color, {speed:120, life:0.28, size:2.5}));
         }
         return;
       }
       // 伍六七柒状态：60%免伤
-      if (this.cls === 'wuLiuQi' && this.wlqAwakened){
+      if (!broken && this.cls === 'wuLiuQi' && this.wlqAwakened){
         dmg = Math.ceil(dmg * 0.4);
       }
       // 风舞游侠冲刺位移：冲刺前半段闪避来袭弹道（规避弹道伤害）
-      if (this.cls === 'windRanger' && this.windDashing > 0.1 && !isDot){
+      if (!broken && this.cls === 'windRanger' && this.windDashing > 0.1 && !isDot){
         for (let i=0;i<4;i++){
           const a = Math.random()*Math.PI*2;
           particles.push(new Particle(this.x, this.y, '#a8f0e8', {ang:a, speed:160, life:0.25, size:2}));
@@ -9167,7 +9948,7 @@
         dmg *= (1 + vulnBonus);
       }
       // 超时空战士跃迁（隐身）期间完全免疫伤害
-      if (this.cls === 'chrono' && this.chronoWarpTime > 0){
+      if (!broken && this.cls === 'chrono' && this.chronoWarpTime > 0){
         // 跃迁免疫时显示时空偏转粒子反馈（无掉血）
         for (let i=0;i<4;i++){
           particles.push(new Particle(this.x, this.y, '#bfefff', {speed:180, life:0.28, size:2}));
@@ -9175,7 +9956,7 @@
         return;
       }
       // 宇智波带土：受击触发神威完美虚化（需满5点瞳力，在扣血前判断）
-      if (this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra >= 5 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
+      if (!broken && this.cls === 'obito' && !this.isDoll && !this.isClone && !isDot && this.obitoChakra >= 5 && this.obitoKamuiTime <= 0 && !this.obitoKamuiTriggered){
         this.obitoKamuiTriggered = true;
         this.obitoKamuiTime = this.params.kamuiDur || 3;
         // 虚化特效
@@ -9186,11 +9967,11 @@
         floatTexts.push(new FloatText(this.x, this.y - this.size - 15, '神威·虚化!', '#b484ff', {life: 1.0, size: 13}));
       }
       // 宇智波带土：虚化期间完全免疫伤害（在扣血前return）
-      if (this.cls === 'obito' && this.obitoKamuiTime > 0){
+      if (!broken && this.cls === 'obito' && this.obitoKamuiTime > 0){
         return;
       }
       // 铁壁屏障：屏障内友方减伤（持续灼烧/毒素类伤害无视减伤，直接穿透防线）
-      if (!isDot && typeof ironWalls !== 'undefined'){
+      if (!broken && !isDot && typeof ironWalls !== 'undefined'){
         for (const w of ironWalls){
           if (w.life <= 0 || w.team !== this.team) continue;
           const dw = Math.hypot(this.x - w.x, this.y - w.y);
@@ -9200,8 +9981,58 @@
           }
         }
       }
+      // 凌朔·孤行剑侍：突进斩 / 瞬身 / 沧浪连斩期间的无敌帧（完全回避伤害）
+      if (!broken && this.cls === 'lingShuo' && this.linInvuln > 0 && !isDot){
+        for (let i=0;i<5;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#8fd0ff', {ang:a, speed:60+Math.random()*80, life:0.28, size:2.5}));
+        }
+        return;
+      }
+      // 沈玄玑·乾元罡罩破碎后短暂护体：1.5s内减免当前伤害40%
+      if (!broken && this.cls === 'liangyi' && this.lyGuardT > 0 && !isDot){
+        if (!this.lyGuardTs || Date.now() - this.lyGuardTs > 1500){
+          this.lyGuardT = 0;
+        } else {
+          dmg = dmg * 0.6;
+          for (let i=0;i<4;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:45, life:0.28, size:2}));
+          }
+        }
+      }
+      // 沈玄玑·乾元罡罩：硬挡一次重击，破碎迸发阳芒致盲攻击者
+      if (!broken && this.cls === 'liangyi' && this.lyBarrier > 0 && !isDot){
+        this.lyBarrier = 0;
+        for (let i=0;i<16;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:120+Math.random()*120, life:0.5, size:3}));
+        }
+        if (attacker && attacker.alive){
+          attacker.stun = Math.max(attacker.stun, (this.params.blindDur != null ? this.params.blindDur : 0.9));
+          floatTexts.push(new FloatText(attacker.x, attacker.y - attacker.size - 12, '致盲!', '#fff7c0', {life:0.8, size:13}));
+        }
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '罡罩破碎', '#ffd76b', {life:0.7, size:12}));
+        return;
+      }
+      // 沈玄玑·正阳罡风护盾（阴→阳切换临时30点）
+      if (!broken && this.cls === 'liangyi' && this.lyShieldHP > 0 && !isDot){
+        this.lyShieldHP -= dmg;
+        for (let i=0;i<6;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:60, life:0.3, size:2.5}));
+        }
+        if (this.lyShieldHP <= 0){
+          this.lyShieldHP = 0;
+          for (let i=0;i<14;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#ffd76b', {ang:a, speed:110+Math.random()*100, life:0.5, size:3}));
+          }
+        }
+        return;
+      }
       // 大逃杀护盾：优先吸收伤害
-      if (!isDot && this.brShield > 0){
+      if (!broken && !isDot && this.brShield > 0){
         if (dmg <= this.brShield){
           this.brShield -= dmg;
           floatTexts.push(new FloatText(this.x, this.y - this.size - 25, '🛡️ ' + Math.round(dmg), '#5fd4ff', {life: 0.6, size: 11}));
@@ -9217,7 +10048,7 @@
         }
       }
       // 护盾守卫硬质护盾：单次高额伤害超过当前血量40%的部分由护盾吸收（灼烧/毒素穿透护盾）
-      if (!isDot && this.cls === 'shieldGuard' && this.shieldHP > 0 && dmg > this.hp * 0.4){
+      if (!broken && !isDot && this.cls === 'shieldGuard' && this.shieldHP > 0 && dmg > this.hp * 0.4){
         const rawDmg = dmg;
         dmg = Math.max(1, this.hp * 0.4);
         this.shieldHP--;
@@ -9242,7 +10073,7 @@
         }
       }
       // 熔火契约师火焰护盾：优先吸收伤害（灼烧/毒素穿透护盾）
-      if (!isDot && this.moltenShieldHP > 0){
+      if (!broken && !isDot && this.moltenShieldHP > 0){
         if (dmg <= this.moltenShieldHP){
           this.moltenShieldHP -= dmg;
           floatTexts.push(new FloatText(this.x, this.y - this.size - 25, '🔥 ' + Math.round(dmg), '#ff6b1a', {life: 0.6, size: 11}));
@@ -9263,12 +10094,12 @@
         }
       }
       // 熔火契约师熔火壳：每层减伤（灼烧/毒素穿透减伤）
-      if (!isDot && this.moltenShellStacks > 0){
+      if (!broken && !isDot && this.moltenShellStacks > 0){
         const reduce = this.moltenShellStacks * (this.params.shellDefBonus || 3) / 100;
         dmg *= (1 - reduce);
       }
       // 白厄变身【卡厄斯兰那】：期间获得免伤（灼烧/毒素穿透免伤）
-      if (!isDot && this.cls === 'whiteEmber' && this.emberTransformTime > 0){
+      if (!broken && !isDot && this.cls === 'whiteEmber' && this.emberTransformTime > 0){
         const reduce = (this.params.transformDmgReduce || 40) / 100;
         dmg *= (1 - reduce);
         if (Math.random() < 0.3){
@@ -9277,7 +10108,7 @@
       }
       // 通灵兽：无减伤（脆皮召唤物）
       // 佩恩饿鬼道：吸收伤害转化回血
-      if (this.cls === 'pain' && !this.isPainBeast && this.painForm === 1 && !this.painTenduoActive && !isDot){
+      if (this.cls === 'pain' && !this.isPainBeast && this.painForm === 1 && !this.painTenduoActive && !isDot && !broken){
         const absorbRate = (this.params.absorbRate || 25) / 100;
         const absorbed = dmg * absorbRate;
         dmg = dmg - absorbed;
@@ -9287,11 +10118,11 @@
         }
       }
       // 佩恩熊猫减伤领域
-      if (this.cls === 'pain' && !this.isPainBeast && this.painPandaShieldTime > 0 && !isDot){
+      if (!broken && this.cls === 'pain' && !this.isPainBeast && this.painPandaShieldTime > 0 && !isDot){
         dmg *= 0.7;
       }
       // 泰坦重装护甲：单次伤害超过最大血量15%时触发减伤护盾（灼烧/毒素穿透）
-      if (!isDot && this.cls === 'titan' && this.titanShieldCD <= 0 && dmg > this.maxHp * 0.15){
+      if (!broken && !isDot && this.cls === 'titan' && this.titanShieldCD <= 0 && dmg > this.maxHp * 0.15){
         this.titanShieldHP = 1;
         this.titanShieldTime = this.params.shieldDur || 2.5;
         this.titanShieldCD = (this.params.shieldDur || 2.5) + 3;
@@ -9302,7 +10133,7 @@
         floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '重装护盾!', '#6b7b8b', {life: 0.8, size: 12}));
       }
       // 泰坦护盾持续期间减伤
-      if (!isDot && this.cls === 'titan' && this.titanShieldTime > 0){
+      if (!broken && !isDot && this.cls === 'titan' && this.titanShieldTime > 0){
         const reduce = this.params.shieldReduce || 0.25;
         const reduced = Math.ceil(dmg * reduce);
         dmg -= reduced;
@@ -9619,16 +10450,17 @@
         for (const a of this.afterimages){
           const t = a.life / a.maxLife;
           const alpha = t * 0.45;
+          const ac = a.color || this.color;
           ctx.save();
           ctx.globalAlpha = alpha;
           const ag = ctx.createRadialGradient(a.x, a.y, 0, a.x, a.y, this.size * 1.2);
-          ag.addColorStop(0, this.color);
-          ag.addColorStop(1, rgba(this.color, 0));
+          ag.addColorStop(0, ac);
+          ag.addColorStop(1, rgba(ac, 0));
           ctx.fillStyle = ag;
           ctx.beginPath(); ctx.arc(a.x, a.y, this.size * 1.2, 0, Math.PI*2); ctx.fill();
-          ctx.strokeStyle = rgba(this.color, t * 0.7);
+          ctx.strokeStyle = rgba(ac, t * 0.7);
           ctx.lineWidth = 2;
-          ctx.shadowColor = this.color; ctx.shadowBlur = 12;
+          ctx.shadowColor = ac; ctx.shadowBlur = 12;
           ctx.beginPath(); ctx.arc(a.x, a.y, this.size, 0, Math.PI*2); ctx.stroke();
           ctx.restore();
         }
@@ -11000,6 +11832,202 @@
         ctx.shadowBlur = 0;
         ctx.restore();
       }
+      // 沈玄玑·两仪散人：法相外壳（阳=金白日轮☀ / 阴=深紫黯月☾）
+      if (this.cls === 'liangyi'){
+        const nowYang = this.lyForm !== 'yin';
+        // 阴仪专属：残影拖尾
+        if (!nowYang){
+          this._afterimageTimer = (this._afterimageTimer || 0) - 0.033;
+          if (this._afterimageTimer <= 0){
+            this._afterimageTimer = 0.033;
+            this.afterimages.push({ x: this.x + (Math.random()-0.5)*2, y: this.y + (Math.random()-0.5)*2, life: 0.34, maxLife: 0.34, color: '#b06bff' });
+            if (this.afterimages.length > 9) this.afterimages.splice(0, this.afterimages.length - 9);
+          }
+        }
+        const col = nowYang ? '#ffd76b' : '#b06bff';
+        const t = Date.now() * 0.001;
+        const pulse = this.lyQiFx > 0 ? (1 + this.lyQiFx) : 1;
+        const r0 = (this.size + 7 + Math.sin(t*3)*1.5) * pulse;
+        ctx.save();
+        // 背后法相虚影（日轮/月盘）+ 切换时放大扩散
+        const grad = ctx.createRadialGradient(this.x,this.y,this.size*0.3,this.x,this.y,r0*4);
+        grad.addColorStop(0, nowYang ? 'rgba(255,222,120,0.30)' : 'rgba(150,80,240,0.30)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(this.x, this.y, r0*4, 0, 6.29); ctx.fill();
+        // 外圈法相环
+        ctx.strokeStyle = col;
+        ctx.globalAlpha = 0.75;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(this.x, this.y, r0, 0, 6.29); ctx.stroke();
+        ctx.globalAlpha = 0.35;
+        ctx.beginPath(); ctx.arc(this.x, this.y, r0*1.35, 0, 6.29); ctx.stroke();
+        ctx.globalAlpha = 1;
+        // 环绕光点：阳=三道旋转阳符 / 阴=三道飘转阴丝
+        for (let i=0;i<3;i++){
+          const a = t*(nowYang ? 1.6 : -1.4) + i*Math.PI*2/3;
+          const px = this.x + Math.cos(a)*r0*1.15, py = this.y + Math.sin(a)*r0*1.15;
+          ctx.fillStyle = col;
+          ctx.globalAlpha = 0.85;
+          ctx.beginPath(); ctx.arc(px, py, nowYang ? 1.9 : 2.2, 0, 6.29); ctx.fill();
+          if (!nowYang){
+            // 阴丝：从光点拖出细尾
+            ctx.strokeStyle = col; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px - Math.cos(a)*7, py - Math.sin(a)*7); ctx.stroke();
+          }
+        }
+        ctx.globalAlpha = 1;
+        // 阳仪专属：背光环上顺时针旋转的八卦纹（三爻线条卦形）
+        if (nowYang){
+          ctx.globalAlpha = 0.8;
+          for (let i=0;i<8;i++){
+            // 顺时针旋转
+            const a = i*Math.PI/4 + t*0.8;
+            const pr = r0*1.58;
+            const px = this.x + Math.cos(a)*pr, py = this.y + Math.sin(a)*pr;
+            ctx.save();
+            ctx.translate(px, py);
+            ctx.rotate(a);
+            ctx.strokeStyle = i%2 ? '#ffe9a8' : '#ffd76b';
+            ctx.lineWidth = 1.1;
+            for (let s=0;s<3;s++){
+              const yOff = (s-1)*4;
+              const on = ((i >> (2-s)) & 1) === 1; // 实爻(阳线) / 虚爻(阴线) 交替形成八种卦
+              if (on){
+                ctx.beginPath(); ctx.moveTo(-4, yOff); ctx.lineTo(4, yOff); ctx.stroke();
+              } else {
+                ctx.beginPath(); ctx.moveTo(-4, yOff); ctx.lineTo(-1.2, yOff); ctx.moveTo(1.2, yOff); ctx.lineTo(4, yOff); ctx.stroke();
+              }
+            }
+            ctx.restore();
+          }
+          ctx.globalAlpha = 1;
+        }
+        // 法相标识：☀ / ☾ 悬浮于球心
+        ctx.font = '11px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.shadowColor = col;
+        ctx.shadowBlur = 6;
+        ctx.fillText(nowYang ? '☀' : '☾', this.x, this.y);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+// 凌朔·孤行剑侍：本体双刀光刃 + 顺闪/裂刃/虚影/大招光环 + 头顶闪刃能量条
+      if (this.cls === 'lingShuo'){
+        const t = Date.now() * 0.001;
+        // 本体外两把旋转短刀光刃
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(t*2.2);
+        ctx.shadowColor = '#7fe0ff'; ctx.shadowBlur = 6;
+        for (let i=0;i<2;i++){
+          const a = i*Math.PI;
+          const dx = Math.cos(a)*(this.size+7), dy = Math.sin(a)*(this.size+7);
+          ctx.save();
+          ctx.translate(dx, dy);
+          ctx.rotate(a + Math.PI/2);
+          ctx.beginPath();
+          ctx.moveTo(0,-5); ctx.lineTo(3,3); ctx.lineTo(-3,3); ctx.closePath();
+          ctx.fillStyle = 'rgba(127,224,255,0.85)'; ctx.fill();
+          ctx.restore();
+        }
+        ctx.restore();
+        // 大招【沧浪千闪】：多层蓝色残影光环 + 周身刀光不停闪烁
+        if (this.linUltT > 0){
+          for (let k=0;k<4;k++){
+            const pr = this.size + 8 + k*6 + 2*Math.sin(t*8 + k);
+            ctx.save();
+            ctx.globalAlpha = 0.5 - k*0.08;
+            ctx.strokeStyle = k%2 ? '#5fc9ff' : '#bff0ff';
+            ctx.lineWidth = 1.6;
+            ctx.shadowColor = '#3fb8ff'; ctx.shadowBlur = 8;
+            ctx.beginPath(); ctx.arc(this.x, this.y, pr, 0, Math.PI*2); ctx.stroke();
+            ctx.restore();
+          }
+          if (Math.random() < 0.6){
+            const a = Math.random()*Math.PI*2, rr = this.size + 6 + Math.random()*14;
+            particles.push(new Particle(this.x + Math.cos(a)*rr, this.y + Math.sin(a)*rr, Math.random()<0.5 ? '#7fe0ff' : '#d6f5ff', {speed:40+Math.random()*50, life:0.3, size:2}));
+          }
+        }
+        // 环形拔刀斩（顺闪斩击落地）：外扩光环
+        if (this.linRingSlash > 0){
+          const rr = this.size + 30 + (0.3 - this.linRingSlash) * 260;
+          ctx.save();
+          ctx.globalAlpha = 0.8 * Math.max(0, this.linRingSlash / 0.3);
+          ctx.strokeStyle = '#bfeaff'; ctx.lineWidth = 2.5;
+          ctx.beginPath(); ctx.arc(this.x, this.y, rr, 0, Math.PI*2); ctx.stroke();
+          ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(174,228,255,0.5)';
+          ctx.beginPath(); ctx.arc(this.x, this.y, rr + 7, 0, Math.PI*2); ctx.stroke();
+          ctx.restore();
+        }
+        // 无敌帧：青白闪烁护圈
+        if (this.linInvuln > 0){
+          ctx.save();
+          ctx.globalAlpha = 0.7;
+          ctx.strokeStyle = '#cfe9ff'; ctx.lineWidth = 2;
+          ctx.shadowColor = '#9fd8ff'; ctx.shadowBlur = 10;
+          ctx.beginPath(); ctx.arc(this.x, this.y, this.size + 3, 0, Math.PI*2); ctx.stroke();
+          ctx.restore();
+        }
+        // 裂刃标记：在标记敌人小球上缠绕旋转青蓝刀纹
+        if (this.linRiftTarget && this.linRiftTarget.alive && this.linRiftTimer > 0){
+          const rt = this.linRiftTarget;
+          ctx.save();
+          ctx.translate(rt.x, rt.y);
+          ctx.rotate(t*3);
+          ctx.strokeStyle = 'rgba(127,224,255,0.85)'; ctx.lineWidth = 1.6;
+          ctx.shadowColor = '#3fb8ff'; ctx.shadowBlur = 5;
+          for (let i=0;i<3;i++){
+            const a = i*Math.PI*2/3;
+            ctx.beginPath();
+            ctx.arc(0,0, rt.size + 6, a, a + 1.6);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        // 虚影残影：半透明淡蓝剑侍虚影
+        if (this.linGhost){
+          const g = this.linGhost;
+          const alpha = Math.max(0, g.life / g.maxLife) * 0.5;
+          ctx.save();
+          ctx.translate(g.x, g.y);
+          ctx.globalAlpha = alpha;
+          ctx.strokeStyle = '#8fd0ff'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(0,0, this.size, 0, Math.PI*2); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(this.size + 2, 0); ctx.lineTo(this.size + 10, 0); ctx.stroke();
+          ctx.beginPath(); ctx.arc(0,0, this.size + 4, -2.6, 2.6); ctx.stroke();
+          ctx.restore();
+        }
+        // 头顶闪刃能量条（100 → 0）
+        const enRatio = Math.max(0, Math.min(1, this.linEnergy / 100));
+        const enBw = bw;
+        const enBy = by - 10;
+        const enH = 4;
+        ctx.save();
+        ctx.fillStyle = 'rgba(16,26,38,0.85)';
+        ctx.fillRect(bx - 1, enBy - 1, enBw + 2, enH + 2);
+        const enG = ctx.createLinearGradient(bx, 0, bx + enBw, 0);
+        enG.addColorStop(0, '#3ecfff'); enG.addColorStop(1, '#bff0ff');
+        ctx.fillStyle = enG;
+        ctx.shadowColor = this.linUltT > 0 ? '#6fe4ff' : '#3ecfff';
+        ctx.shadowBlur = this.linUltT > 0 ? 9 : 4;
+        ctx.fillRect(bx, enBy, enBw * enRatio, enH);
+        ctx.shadowBlur = 0;
+        // 30 阈值刻度：顺闪所需能量（低于此则无法触发顺闪）
+        const enThX = bx + enBw * (30 / 100);
+        ctx.strokeStyle = 'rgba(255,235,160,0.8)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(enThX, enBy - 1); ctx.lineTo(enThX, enBy + enH + 1); ctx.stroke();
+        // 大招激活标签
+        if (this.linUltT > 0){
+          const bl = 0.5 + 0.5*Math.sin(t*12);
+          ctx.font = '8px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+          ctx.fillStyle = 'rgba(127,224,255,' + (0.5 + 0.5*bl) + ')';
+          ctx.fillText('沧浪千闪', x, enBy - 3);
+        }
+        ctx.restore();
+      }
       // 焚风：枪管温度条（专属独立设计，位于血条上方，冷→热渐变+阈值刻度+过热警示）
       if (this.cls === 'foehn'){
         const fhMax = this.params.heatMax || 100;
@@ -11865,6 +12893,23 @@
             for (let i=0;i<6;i++){
               particles.push(new Particle(bul.x, bul.y, '#ffcc00', {ang:Math.random()*Math.PI*2, speed:60, life:0.5, size:4}));
             }
+          }
+          // 凌朔半月剑气：扩散刀波命中带小范围青光迸裂，随即消失（同波对单一敌人只结算一次）
+          if (bul.isLinBlade && bul.owner){
+            const aoeR = 52;
+            for (const eb of balls){
+              if (!eb.alive || eb.team === bul.team) continue;
+              if (Math.hypot(eb.x - bul.x, eb.y - bul.y) < aoeR + eb.size){
+                if (bul.linFanHit && bul.linFanHit.has(eb)) continue;
+                if (bul.linFanHit) bul.linFanHit.add(eb);
+                eb.takeDamage(bul.dmg, '#7fe0ff', particles, bul.owner);
+              }
+            }
+            for (let i=0;i<10;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(bul.x, bul.y, i%2 ? '#bff0ff' : '#7fe0ff', {ang:a, speed:100+Math.random()*100, life:0.35, size:2.5}));
+            }
+            shake = Math.max(shake, 3);
           }
           bul.life = 0;
           break;
