@@ -2639,9 +2639,29 @@
         { key: 'spikeDmg', label: '木棘伤害', min: 3, max: 25, step: 1, def: 5, int: true },
         { key: 'fireDmg', label: '爆风乱舞伤害', min: 3, max: 25, step: 1, def: 8, int: true },
         { key: 'kamuiBonusDmg', label: '神威附加伤害', min: 5, max: 40, step: 1, def: 30, int: true },
-        { key: 'kamuiBanishChance', label: '神威放逐概率%', min: 0, max: 100, step: 1, def: 5, int: true },
+        { key: 'kamuiBanishChance', label: '神威放逐概率%', min: 0, max: 100, step: 1, def: 15, int: true },
         { key: 'comboFireDmg', label: '木火连击附加伤害', min: 3, max: 30, step: 1, def: 12, int: true },
         { key: 'comboRootExtend', label: '连击控制延长/秒', min: 0.5, max: 3, step: 0.5, def: 0.5, int: false }
+      ]
+    },
+    illusionist: {
+      label: '幻瞳师', icon: '👁', maxHp: 130, color: '#581c5c', cost: 7, textColor: '#e6c8ff',
+      desc: '幻鸦乱影·虚境防反·永夜囚笼',
+      stats: { atk: 7, def: 3, spd: 8, rng: 5, sup: 4, ctrl: 9 },
+      codex: '以幻瞳编织虚实梦境，幻鸦分身混淆敌我。受击之时开启虚境，令敌人陷入虚假的胜利；积蓄力量便可将猎物拖入永夜囚笼，以精神之力碾碎对手的意志。',
+      params: [
+        { key: 'crowDmg', label: '幻鸦飞弹伤害', min: 3, max: 22, step: 1, def: 12, int: true },
+        { key: 'markDur', label: '幻痕持续时间/秒', min: 1, max: 8, step: 0.5, def: 4, int: false },
+        { key: 'guardDur', label: '虚境幻防招架/秒', min: 0.8, max: 4, step: 0.1, def: 1.8, int: false },
+        { key: 'guardCD', label: '虚境幻防冷却/秒', min: 2, max: 12, step: 0.5, def: 7, int: false },
+        { key: 'phantomMarkDur', label: '幻魇标记持续/秒', min: 1, max: 6, step: 0.5, def: 2.5, int: false },
+        { key: 'phraseDur', label: '幻境禁锢时长/秒', min: 0.8, max: 4, step: 0.2, def: 2.2, int: false },
+        { key: 'voidDur', label: '永夜囚笼持续/秒', min: 1, max: 6, step: 0.5, def: 3.5, int: false },
+        { key: 'cloneDur', label: '幻鸦分身持续/秒', min: 2, max: 10, step: 0.5, def: 6, int: false },
+        { key: 'cloneHpRatio', label: '幻鸦分身血量%', min: 10, max: 60, step: 5, def: 40, int: true },
+        { key: 'cloneCD', label: '幻鸦分身冷却/秒', min: 2, max: 12, step: 1, def: 6, int: true },
+        { key: 'afterCdSlow', label: '精神损耗冷却增幅%', min: 10, max: 50, step: 5, def: 30, int: true },
+        { key: 'missChance', label: '幻魇侵蚀落空%', min: 10, max: 60, step: 5, def: 35, int: true }
       ]
     },
     pain: {
@@ -3996,6 +4016,55 @@
         ctx.shadowBlur = 8;
         ctx.beginPath(); ctx.arc(0, 0, 2.2, 0, Math.PI * 2); ctx.fill();
         ctx.restore();
+      } else if (this.isPhantomCrow){
+        // 幻瞳师·幻鸦飞弹：暗红紫鸦羽弹体 + 盘旋紫羽 + 幻静紫芒拖尾
+        const pulse = 0.85 + 0.15 * Math.sin(Date.now()*0.02);
+        const rot = Date.now() * 0.02;
+        // 外层紫芒光晕
+        const gOuter = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size*3.2);
+        gOuter.addColorStop(0, rgba('#7b3ff2', 0.5));
+        gOuter.addColorStop(0.5, rgba('#7b3ff2', 0.18));
+        gOuter.addColorStop(1, rgba('#7b3ff2', 0));
+        ctx.fillStyle = gOuter;
+        ctx.beginPath(); ctx.arc(this.x, this.y, this.size*3.2, 0, Math.PI*2); ctx.fill();
+        // 鸦羽弹体（暗紫核心+高亮喙尖）
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(Math.atan2(this.vy ? this.vy : 0, this.vx ? this.vx : 1));
+        const gBody = ctx.createRadialGradient(-this.size*0.3, -this.size*0.3, 0, 0, 0, this.size*1.2*pulse);
+        gBody.addColorStop(0, '#c78dff');
+        gBody.addColorStop(0.4, '#7b3ff2');
+        gBody.addColorStop(0.8, '#3b1a52');
+        gBody.addColorStop(1, rgba('#3b1a52', 0));
+        ctx.fillStyle = gBody;
+        ctx.shadowColor = '#a15fe0'; ctx.shadowBlur = 16;
+        ctx.beginPath(); ctx.arc(0, 0, this.size*pulse, 0, Math.PI*2); ctx.fill();
+        // 前端暗红瞳尖（指向飞行方向）
+        ctx.fillStyle = '#ff2a40';
+        ctx.shadowColor = '#ff2a40'; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(this.size*0.55, 0, this.size*0.32, 0, Math.PI*2); ctx.fill();
+        // 双翼羽（旋转展开）
+        for (let s=-1;s<=1;s+=2){
+          const wingA = 0.6 - 0.15*Math.sin(rot*2);
+          ctx.fillStyle = rgba('#3a1440', 0.85);
+          ctx.beginPath();
+          ctx.moveTo(0, -s*1.5);
+          ctx.quadraticCurveTo(-this.size*0.9, -s*this.size*1.1*s, -this.size*1.7, -s*this.size*0.8);
+          ctx.quadraticCurveTo(-this.size*0.9, -s*this.size*0.4, 0, s*1.5);
+          ctx.closePath(); ctx.fill();
+        }
+        ctx.restore();
+        // 环绕紫羽（2片小羽旋转）
+        const orbAng = Date.now()*0.006;
+        for (let i=0;i<2;i++){
+          const a = orbAng + i*Math.PI;
+          const ox = this.x + Math.cos(a)*(this.size+6);
+          const oy = this.y + Math.sin(a)*(this.size+6);
+          ctx.fillStyle = rgba('#9d6bff', 0.8);
+          ctx.beginPath();
+          ctx.ellipse(ox, oy, 1.6, 3.2, a, 0, Math.PI*2);
+          ctx.fill();
+        }
       } else if (this.isCannon){
         // 弹射炮弹：金属质感+旋转尾焰+弹跳次数指示
         const pulse = 0.9 + 0.1 * Math.sin(Date.now()*0.02);
@@ -4821,6 +4890,154 @@
     }
   }
 
+  // 幻瞳师·幻术瞳（区别于带土的鲜红三勾玉写轮眼，走紫色“幻梦境”瞳纹：紫红虹膜+旋转幻羽波纹+裂瞳中心）
+  function drawIllusionSharingan(ctx, x, y, R, opts){
+    opts = opts || {};
+    const alpha = opts.alpha != null ? opts.alpha : 1;
+    const t = Date.now();
+    ctx.save();
+    ctx.translate(x, y);
+    // 幻术紫红光晕
+    if (opts.halo !== false){
+      const haloA = (opts.haloA != null ? opts.haloA : 0.55) + 0.2*Math.sin(t*0.006);
+      const hg = ctx.createRadialGradient(0, 0, R*0.4, 0, 0, R*2.0);
+      hg.addColorStop(0, rgba('#ff4d7d', 0.16*haloA));
+      hg.addColorStop(0.5, rgba('#7b1fa2', 0.3*haloA));
+      hg.addColorStop(1, rgba('#7b1fa2', 0));
+      ctx.fillStyle = hg;
+      ctx.beginPath(); ctx.arc(0, 0, R*2.0, 0, Math.PI*2); ctx.fill();
+    }
+    // 幻术虹膜：紫红渐变（区别于带土鲜红）
+    const iris = ctx.createRadialGradient(0, 0, R*0.25, 0, 0, R);
+    iris.addColorStop(0, '#ff9cc0');
+    iris.addColorStop(0.45, '#e04a92');
+    iris.addColorStop(0.78, '#8f1a66');
+    iris.addColorStop(1, '#5a0d42');
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = iris;
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI*2); ctx.fill();
+    // 虹膜外发光（紫粉）
+    ctx.shadowColor = '#ff70b0'; ctx.shadowBlur = 22;
+    ctx.strokeStyle = rgba('#ff8ac0', 0.8*alpha);
+    ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI*2); ctx.stroke();
+    ctx.shadowBlur = 0;
+    // 幻瞳纹：三条旋转的幻影波纹羽（弧形扫出+末端黑点），非带土的勾玉风车
+    const rot = opts.rotateSpeed != null ? opts.rotateSpeed : 0.004;
+    ctx.rotate(t*rot);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    for (let i=0;i<3;i++){
+      ctx.save();
+      ctx.rotate((i/3)*Math.PI*2 + Math.PI/6);
+      ctx.strokeStyle = rgba('#1f0a1c', 0.95*alpha);
+      ctx.lineWidth = R*0.11;
+      ctx.beginPath();
+      ctx.moveTo(R*0.14, 0);
+      ctx.quadraticCurveTo(R*0.5, -R*0.02, R*0.82, -R*0.32);
+      ctx.stroke();
+      ctx.fillStyle = rgba('#1f0a1c', 0.9*alpha);
+      ctx.beginPath(); ctx.arc(R*0.84, -R*0.34, R*0.08, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    }
+    // 中心裂瞳（幻瞳特有：黑瞳+血红竖缝）
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(0, 0, R*0.26, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#ff1a3c';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, R*0.06, R*0.18, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 幻瞳师·永夜囚笼专属写轮眼（最终形态：独立于其他幻术，暗紫黑虹膜+暗红利刃+双重旋转环，更具"永夜"压迫感）
+  function drawVoidSharingan(ctx, x, y, R, opts){
+    opts = opts || {};
+    const alpha = opts.alpha != null ? opts.alpha : 1;
+    const t = Date.now();
+    const spin = opts.rotateSpeed != null ? opts.rotateSpeed : 0.008;
+    ctx.save();
+    ctx.translate(x, y);
+    // 永夜暗紫光晕（更浓，带暗红渗底）
+    if (opts.halo !== false){
+      const haloA = (opts.haloA != null ? opts.haloA : 0.7) + 0.2*Math.sin(t*0.006);
+      const hg = ctx.createRadialGradient(0, 0, R*0.4, 0, 0, R*2.2);
+      hg.addColorStop(0, rgba('#2a0a3f', 0.34*haloA));
+      hg.addColorStop(0.45, rgba('#5a1a72', 0.36*haloA));
+      hg.addColorStop(0.8, rgba('#a03060', 0.14*haloA));
+      hg.addColorStop(1, rgba('#2a0a3f', 0));
+      ctx.fillStyle = hg;
+      ctx.beginPath(); ctx.arc(0, 0, R*2.2, 0, Math.PI*2); ctx.fill();
+    }
+    // 黑紫虹膜（比普通幻瞳更暗、更"永夜"）
+    const iris = ctx.createRadialGradient(0, 0, R*0.25, 0, 0, R);
+    iris.addColorStop(0, '#7a1a5c');
+    iris.addColorStop(0.5, '#3c0d44');
+    iris.addColorStop(0.85, '#1b0730');
+    iris.addColorStop(1, '#0d0420');
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = iris;
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI*2); ctx.fill();
+    // 外圈暗红刀锋描边
+    ctx.shadowColor = '#ff3355'; ctx.shadowBlur = 20;
+    ctx.strokeStyle = rgba('#ff3a5e', 0.9*alpha);
+    ctx.lineWidth = 2.6;
+    ctx.beginPath(); ctx.arc(0, 0, R*0.98, 0, Math.PI*2); ctx.stroke();
+    ctx.shadowBlur = 0;
+    // 双重旋转环：外环静止 + 内环高速反向旋转虚线（"永不沉睡的最终眼"）
+    ctx.strokeStyle = rgba('#c86a94', 0.42*alpha);
+    ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(0, 0, R*0.78, 0, Math.PI*2); ctx.stroke();
+    ctx.save();
+    ctx.rotate(-t*spin*1.8);
+    ctx.strokeStyle = rgba('#ff8ac0', 0.5*alpha);
+    ctx.lineWidth = 2.2;
+    ctx.setLineDash([R*0.28, R*0.12]);
+    ctx.lineDashOffset = -t*0.02;
+    ctx.beginPath(); ctx.arc(0, 0, R*0.64, 0, Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+    // 主体暗红利刃纹：三条收束利刃（比普通幻羽更尖锐，末端开叉带红点）
+    ctx.rotate(t*spin);
+    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    for (let i=0;i<3;i++){
+      ctx.save();
+      ctx.rotate((i/3)*Math.PI*2);
+      ctx.strokeStyle = rgba('#0a0514', alpha);
+      ctx.lineWidth = R*0.13;
+      ctx.beginPath();
+      ctx.moveTo(R*0.14, 0);
+      ctx.quadraticCurveTo(R*0.52, -R*0.04, R*0.8, -R*0.34);
+      ctx.stroke();
+      // 末端开叉
+      ctx.lineWidth = R*0.06;
+      ctx.beginPath();
+      ctx.moveTo(R*0.78, -R*0.31);
+      ctx.lineTo(R*0.9, -R*0.44);
+      ctx.moveTo(R*0.78, -R*0.31);
+      ctx.lineTo(R*0.72, -R*0.5);
+      ctx.stroke();
+      // 末端暗红亮点
+      ctx.fillStyle = rgba('#ff1a3c', 0.9*alpha);
+      ctx.shadowColor = '#ff1a3c'; ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(R*0.83, -R*0.4, R*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.restore();
+    }
+    // 中心黑瞳 + 血红亮竖瞳（比普通幻瞳更粗、更凶）
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(0, 0, R*0.3, 0, Math.PI*2); ctx.fill();
+    const er = ctx.createRadialGradient(0, 0, 0, 0, 0, R*0.2);
+    er.addColorStop(0, '#ff2a4a');
+    er.addColorStop(1, '#8f001a');
+    ctx.fillStyle = er;
+    ctx.shadowColor = '#ff1a3c'; ctx.shadowBlur = 14;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, R*0.08, R*0.21, 0, 0, Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
+
   // 持续冰霜区域
   class FrostZone {
     constructor(x, y, color, radius, duration, team, dmg, slowRatio, freezeTime, source){
@@ -4882,6 +5099,97 @@
         ctx.lineTo(this.x + Math.cos(ang) * outer, this.y + Math.sin(ang) * outer);
         ctx.stroke();
       }
+      ctx.restore();
+    }
+  }
+
+  // 幻瞳师·黑炎区域（幻鸦自爆遗留，持续燃烧立场附带写轮眼微光）
+  class PhBlackFire {
+    constructor(x, y, team, radius, duration, dmg, source){
+      this.x = x; this.y = y; this.team = team; this.radius = radius;
+      this.life = duration; this.maxLife = duration;
+      this.dmg = dmg; this.source = source;
+      this.tickTimer = 0; this.pulsePhase = Math.random()*6.28;
+    }
+    update(dt, balls, particles){
+      this.life -= dt;
+      this.pulsePhase += dt*3;
+      this.tickTimer -= dt;
+      const dirty = this.tickTimer <= 0;
+      if (dirty) this.tickTimer = 0.25;   // 每0.25秒烧一次
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        const d = Math.hypot(b.x - this.x, b.y - this.y);
+        if (d < this.radius + b.size){
+          // 火焰标记（免疫联动式持续：若同源黑炎已烧则不重复，多区域各自独立 tick 更简单直接烧）
+          if (dirty && this.dmg > 0) b.takeDamage(this.dmg, '#c0392b', particles, this.source);
+          b._blackFireT = 0.2;   // 视觉灼烧底色
+        }
+      }
+      // 上升黑炎粒子
+      if (Math.random() < dt*14){
+        const ang = Math.random()*Math.PI*2;
+        const rr = Math.random()*this.radius;
+        const spd = 35 + Math.random()*45;
+        particles.push(new Particle(this.x + Math.cos(ang)*rr, this.y + Math.sin(ang)*rr,
+          Math.random()<0.5 ? '#b02a2a' : '#ff6b3d', {ang: -Math.PI/2 + (Math.random()-0.5)*0.8, speed: spd, life: 0.5+Math.random()*0.4, size: 2.5+Math.random()*3}));
+      }
+    }
+    draw(ctx){
+      const a = Math.max(0, Math.min(1, this.life / this.maxLife));
+      const pulse = 1 + Math.sin(this.pulsePhase)*0.05;
+      const r = this.radius * pulse;
+      const t = Date.now();
+      ctx.save();
+      // 主体：暗黑火焰渐变（中心暗红近黑，外缘橙红火焰）
+      const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, r);
+      g.addColorStop(0, rgba('#1a0505', 0.55*a));
+      g.addColorStop(0.4, rgba('#5f0d0d', 0.5*a));
+      g.addColorStop(0.7, rgba('#b02a2a', 0.32*a));
+      g.addColorStop(1, rgba('#ff6b3d', 0));
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(this.x, this.y, r, 0, Math.PI*2); ctx.fill();
+      // 旋转黑炎漩涡（多层不规则气流环）
+      for (let L=0; L<3; L++){
+        const dir = L%2===0 ? 1 : -1;
+        ctx.strokeStyle = rgba(L%2 ? '#ff6b3d' : '#8f1d1d', 0.35*a - L*0.06);
+        ctx.lineWidth = 1.6 + L*0.6;
+        ctx.setLineDash([12, 8, 4, 9, 3, 6]);
+        ctx.lineDashOffset = dir*t*0.02 + L*30;
+        ctx.beginPath(); ctx.arc(this.x, this.y, r*(0.45+L*0.18), 0, Math.PI*2); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      // 外缘火焰瓣（漂浮黑炎）
+      for (let i=0;i<8;i++){
+        const ang = (i/8)*Math.PI*2 + this.pulsePhase*0.5;
+        const fr = r*(0.7+0.15*Math.sin(t*0.005+i));
+        const fx = this.x + Math.cos(ang)*fr, fy = this.y + Math.sin(ang)*fr;
+        const fs = 3 + Math.sin(t*0.008+i*2)*1.6;
+        ctx.fillStyle = rgba(i%2 ? '#ff7b4d' : '#c0392b', 0.5*a);
+        ctx.beginPath();
+        ctx.moveTo(fx, fy-fs);
+        ctx.quadraticCurveTo(fx+fs, fy, fx, fy+fs*0.6);
+        ctx.quadraticCurveTo(fx-fs*0.6, fy+fs*0.3, fx-fs, fy);
+        ctx.quadraticCurveTo(fx-fs*0.4, fy-fs*0.6, fx, fy-fs);
+        ctx.fill();
+      }
+      // 中央写轮眼微光（暗红蛇瞳浮雕，呼应幻术）
+      if (a < 0.6){
+        ctx.strokeStyle = rgba('#ff2222', 0.5*a);
+        ctx.lineWidth = 1.6;
+        ctx.shadowColor = '#ff0000'; ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(this.x, this.y, r*0.22, 0, Math.PI*2); ctx.stroke();
+        for (let i=0;i<3;i++){
+          const ang = (i/3)*Math.PI*2 + t*0.002;
+          const bent = r*0.1;
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.quadraticCurveTo(this.x + Math.cos(ang)*bent*1.6, this.y + Math.sin(ang)*bent*1.6,
+            this.x + Math.cos(ang)*r*0.2, this.y + Math.sin(ang)*r*0.2);
+          ctx.stroke();
+        }
+      }
+      ctx.shadowBlur = 0;
       ctx.restore();
     }
   }
@@ -5199,6 +5507,23 @@
       // 命中buff：每次命中减少冲刺CD，叠加攻速（有上限）
       this.windHitStacks = 0;      // 攻速叠层
       this.windCDReducePer = 0;   // 每次命中冷却缩减量
+      // ===== 幻瞳师相关状态 =====
+      this.phEn = 0;                  // 幻瞳能量（0-3）
+      this.phAtkCD = 0.3;             // 幻鸦飞弹攻击冷却
+      this.phCloneCD = 1.0;           // 幻鸦分身冷却（开局延迟）
+      this.phCloneLife = 0;           // 幻鸦分身剩余寿命（绑定在分身身上）
+      this.phGuardT = 0;              // 虚境幻防招架剩余
+      this.phGuardCD = 0;             // 虚境幻防冷却
+      this.phStance = false;          // 是否处于招架姿态
+      this.phGuardPhantom = 0;        // 防反成功后本体潜影（幻遁）剩余
+      this.phGuardEyeFX = 0;          // 防反成功瞬间自身写轮眼爆发特效剩余
+      this.phGuardFailed = false;     // 本次招架是否失败（被打断）
+      this.phVoidUsed = false;        // 永夜囚笼是否已释放（一局一次）
+      this.phBurstUsed = false;       // 残梦碎境是否已用（一局一次）
+      this.phOwner = null;            // 分身/人偶的归属（父体幻瞳师）
+      // 目标身上携带的幻术debuff均存于目标自身：_phMarkOwner/_phMarkStacks/_phMarkT/_phMarkDecay
+      // _phantomT/_phantomOwner(幻魇标记)  _nightmareT/_nightmareBy(幻魇侵蚀)  _phVoidT(永夜)
+      // _mindExhaustDelayT/_mindExhaustT(精神损耗)  _mindShockT(残梦碎境)  _phPhraseCdUntil(幻境6s冷却)
       // ===== 宇智波带土相关状态 =====
       this.obitoSpikeCD = 1.5; // 木遁棘刺冷却
       this.obitoChakra = 0; // 瞳力点数（初始0点，需蓄满5点才能虚化）
@@ -5676,6 +6001,132 @@
         this.fireCD += dt * (this.thunderMarkStacks * (this._thunderSlowPerStack || 0.08) * 0.5);
       }
       if (this.frozenTime > 0) this.frozenTime -= dt;
+      // ===== 幻瞳师相关通用状态（任意单位身上都可能有这些幻术debuff） =====
+      // 幻痕：持续秒数来自施术者；满期未命中逐层衰减（首段 mDur，之后每1秒/层）
+      if (this._phMarkOwner && this._phMarkStacks > 0){
+        this._phMarkT -= dt;
+        if (this._phMarkT <= 0){
+          this._phMarkStacks -= 1;
+          if (this._phMarkStacks <= 0){
+            this._phMarkStacks = 0; this._phMarkOwner = null; this._phMarkT = 0;
+          } else {
+            this._phMarkT = 1; // 逐层衰减
+          }
+        }
+      }
+      // 幻魇标记（防反打出）：到期清除
+      if (this._phantomT > 0){
+        this._phantomT -= dt;
+        if (this._phantomT <= 0){ this._phantomT = 0; this._phantomOwner = null; }
+      }
+      // 幻魇侵蚀（3层幻痕触发，攻击落空debuff）：到期清除
+      if (this._nightmareT > 0){
+        this._nightmareT -= dt;
+        if (this._nightmareT <= 0){ this._nightmareT = 0; this._nightmareBy = null; }
+      }
+      // 永夜囚笼上一并记录的精神损耗延迟：幻境结束后开始 4s 冷却迟缓
+      if (this._mindExhaustDelayT > 0){
+        this._mindExhaustDelayT -= dt;
+        if (this._mindExhaustDelayT <= 0){
+          this._mindExhaustDelayT = 0;
+          this._mindExhaustT = 4; // 精神损耗持续 4 秒（技能冷却 + afterCdSlow%）
+        }
+      }
+      if (this._mindExhaustT > 0){
+        this._mindExhaustT -= dt;
+        if (this._mindExhaustT <= 0){ this._mindExhaustT = 0; this._mindExhaustBy = null; }
+      }
+      // 残梦碎境精神冲击减速（复用 web 减速通道）
+      if (this._mindShockT > 0){
+        this._mindShockT -= dt;
+        if (this._mindShockT <= 0){
+          this._mindShockT = 0;
+          if (this.slow > 0 && Math.abs(this.slow - this._mindShockSlow) < 1e-6) this.slow = 0;
+        }
+      }
+      if (this._phVoidT > 0){ this._phVoidT -= dt; if (this._phVoidT < 0) this._phVoidT = 0; }
+      // ===== 幻瞳师·本体维护 =====
+      if (this.cls === 'illusionist' && !this.isClone && !this.isDecoy){
+        // 防反成功写轮眼特效：逐帧递减，约1s内慢慢变淡消失（不受幻境禁锢打断）
+        if (this.phGuardEyeFX > 0) this.phGuardEyeFX -= dt;
+        // 被抓取/强控：清空幻瞳能量 + 打断招架（博弈代价）
+        const hardCC = this.stun > 0 || this.frozenTime > 0 || this.rootT > 0 || this._tsBindT > 0 || (this._pupCtrl && this._pupCtrl.remain > 0) || !!this.tsDominated;
+        if (hardCC){
+          if (this.phEn > 0){
+            this.phEn = 0;
+            if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '幻力瓦解', '#c77dff', {life: 0.8, size: 11}));
+          }
+          if (this.phStance){ this.phStance = false; this.phGuardT = 0; this.invisible = false; this.invisibleTime = 0; }
+        }
+        // 招架姿态走完未触发防反 → 冷却进入失败态
+        if (this.phStance && this.phGuardT > 0){
+          this.phGuardT -= dt;
+          if (this.phGuardT <= 0){ this.phStance = false; this.phGuardCD = this.params.guardCD != null ? this.params.guardCD : 7; }
+        }
+        // 防反成功潜影窗口：选择幻境禁锢 或 时间结束本体回归
+        if (this.phGuardPhantom > 0){
+          this.phGuardPhantom -= dt;
+          let mk = null;
+          for (const b of balls){
+            if (!b.alive || b.team === this.team || b.isClone || b.isDecoy || b.isDoll) continue;
+            if (b._phantomOwner === this && b._phantomT > 0){ mk = b; break; }
+          }
+          if (this.phEn >= 1 && mk){
+            const alreadyCC = mk.stun > 0 || mk.frozenTime > 0 || mk.rootT > 0 || mk._tsBindT > 0 || (mk._phPhraseCdUntil && Date.now() < mk._phPhraseCdUntil) || (mk._pupCtrl && mk._pupCtrl.remain > 0) || !!mk.tsDominated;
+            if (!alreadyCC){
+              const pd = this.params.phraseDur != null ? this.params.phraseDur : 2.2;
+              mk.rootT = pd;              // 禁移动，但可释放技能（复用根）
+              mk._phPhraseCdUntil = Date.now() + 6000; // 6秒内不可再被幻境禁锢
+              this.phEn -= 1;
+              this.phGuardPhantom = 0;
+              this.invisible = false; this.invisibleTime = 0;
+              this.phGuardCD = this.params.guardCD != null ? this.params.guardCD : 7;
+              mk._phPhraseGroundedT = pd; // 视觉：幻境禁锢穹顶
+              for (let i=0;i<14;i++){
+                const a = Math.random()*Math.PI*2;
+                particles.push(new Particle(mk.x, mk.y, '#c77dff', {ang:a, speed:70+Math.random()*70, life:0.5, size:2.5}));
+              }
+              if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(mk.x, mk.y - mk.size - 18, '幻境·禁锢!', '#d6a8ff', {life: 1.0, size: 13}));
+            }
+          }
+          if (this.phGuardPhantom <= 0){
+            this.phGuardPhantom = 0;
+            this.invisible = false; this.invisibleTime = 0;  // 未触发则时间结束本体回归
+            this.phGuardCD = this.params.guardCD != null ? this.params.guardCD : 7;
+          }
+        }
+        // 永夜囚笼：消耗全部3层幻瞳能量，仅可对带幻魇标记的目标释放（一局一次）
+        if (!this.phVoidUsed && this.phEn >= 3){
+          const vd = this.params.voidDur != null ? this.params.voidDur : 3.5;
+          let vk = null;
+          for (const b of balls){
+            if (!b.alive || b.team === this.team || b.isClone || b.isDecoy || b.isDoll) continue;
+            if (b._phantomOwner !== this || !(b._phantomT > 0)) continue;
+            const alreadyCC = b.stun > 0 || b.frozenTime > 0 || b.rootT > 0 || b._tsBindT > 0 || (b._pupCtrl && b._pupCtrl.remain > 0) || !!b.tsDominated;
+            if (alreadyCC) continue;
+            if (Math.hypot(b.x - this.x, b.y - this.y) < 600){ vk = b; break; }
+          }
+          if (vk){
+            this.phVoidUsed = true;
+            this.phEn = 0;
+            vk.stun = vd;                 // 无法移动、无法释放技能
+            vk._phVoidT = vd;             // 视觉穹顶
+            vk._mindExhaustDelayT = vd;   // 幻境结束后进入精神损耗
+            // 特效：紫黑幻境空间穹顶 + 震撼
+            shake = Math.max(shake, 9);
+            for (let i=0;i<30;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(vk.x, vk.y, '#4a1260', {ang:a, speed:100+Math.random()*160, life:0.7, size:3+Math.random()*3}));
+            }
+            for (let i=0;i<18;i++){
+              const a = (i/18)*Math.PI*2;
+              particles.push(new Particle(vk.x + Math.cos(a)*34, vk.y + Math.sin(a)*34, '#c77dff', {speed:110, life:0.7, size:3}));
+            }
+            aoes.push(new AOE(vk.x, vk.y, '#5a1a72', 70));
+            if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(vk.x, vk.y - vk.size - 22, '永夜囚笼!', '#e3b1ff', {life: 1.4, size: 16}));
+          }
+        }
+      }
       if (this.frostTickCD > 0) this.frostTickCD -= dt;
       if (this.plagueStacks > 0 && this.plagueTimer > 0){
         this.plagueTimer -= dt;
@@ -6048,7 +6499,7 @@
               shake = Math.max(shake, 6);
               floatTexts.push(new FloatText(target.x, target.y - target.size - 10, '神威!', '#b484ff', {life: 1.0, size: 14}));
               // ===== 神威放逐：抓取结束瞬间有概率将目标直接吞入神威空间，直死移除 =====
-              const banishPct = this.params.kamuiBanishChance != null ? this.params.kamuiBanishChance : 5;
+              const banishPct = this.params.kamuiBanishChance != null ? this.params.kamuiBanishChance : 15;
               if (target.alive && Math.random() * 100 < banishPct){
                 // 空间漩涡吞没特效
                 for (let i=0;i<46;i++){
@@ -6230,47 +6681,50 @@
           }
         }
       } else {
+      // 精神损耗：被幻瞳师永夜囚笼命中后，技能冷却速度+30%（AI内部 dt 缩放生效）
+      const adt = this._mindExhaustT > 0 ? dt * (1 - (((this._mindExhaustBy && this._mindExhaustBy.params.afterCdSlow != null) ? this._mindExhaustBy.params.afterCdSlow : 30) / 100)) : dt;
       switch(this.cls){
-        case 'fireBow': this.aiFireBow(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
-        case 'trap':    this.aiTrap(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'dash':    this.aiDash(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
-        case 'healer':  this.aiHealer(dt, balls, enemy, d, dirX, dirY, spdMul, healWaves, particles, bullets, aoes); break;
-        case 'guard':   this.aiGuard(dt, enemy, d, dirX, dirY, spdMul, balls, aoes, particles); break;
-        case 'mage':    this.aiMage(dt, enemy, d, dirX, dirY, spdMul, aoes, balls, bullets, particles); break;
-        case 'ninja':   this.aiNinja(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'chrono':  this.aiChrono(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
+        case 'fireBow': this.aiFireBow(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'trap':    this.aiTrap(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'dash':    this.aiDash(adt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
+        case 'healer':  this.aiHealer(adt, balls, enemy, d, dirX, dirY, spdMul, healWaves, particles, bullets, aoes); break;
+        case 'guard':   this.aiGuard(adt, enemy, d, dirX, dirY, spdMul, balls, aoes, particles); break;
+        case 'mage':    this.aiMage(adt, enemy, d, dirX, dirY, spdMul, aoes, balls, bullets, particles); break;
+        case 'ninja':   this.aiNinja(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'chrono':  this.aiChrono(adt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
         case 'summoner':
-          if (this.isDoll) this.aiDoll(dt, enemy, d, dirX, dirY, spdMul, bullets, particles);
-          else this.aiSummoner(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles);
+          if (this.isDoll) this.aiDoll(adt, enemy, d, dirX, dirY, spdMul, bullets, particles);
+          else this.aiSummoner(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles);
           break;
-        case 'plague':  this.aiPlague(dt, enemy, d, dirX, dirY, spdMul, bullets, particles); break;
-        case 'cannon':  this.aiCannon(dt, enemy, d, dirX, dirY, spdMul, bullets, particles); break;
-        case 'berserker': this.aiBerserker(dt, enemy, d, dirX, dirY, spdMul, particles, balls); break;
-        case 'frostMage': this.aiFrostMage(dt, enemy, d, dirX, dirY, spdMul, frostZones, balls, bullets, particles); break;
-        case 'timeMage': this.aiTimeMage(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'shieldGuard': this.aiShieldGuard(dt, enemy, d, dirX, dirY, spdMul, balls, ironWalls, particles); break;
-        case 'windRanger': this.aiWindRanger(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'empMage': this.aiEmpMage(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
-        case 'thunderLord': this.aiThunderLord(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
+        case 'plague':  this.aiPlague(adt, enemy, d, dirX, dirY, spdMul, bullets, particles); break;
+        case 'cannon':  this.aiCannon(adt, enemy, d, dirX, dirY, spdMul, bullets, particles); break;
+        case 'berserker': this.aiBerserker(adt, enemy, d, dirX, dirY, spdMul, particles, balls); break;
+        case 'frostMage': this.aiFrostMage(adt, enemy, d, dirX, dirY, spdMul, frostZones, balls, bullets, particles); break;
+        case 'timeMage': this.aiTimeMage(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'shieldGuard': this.aiShieldGuard(adt, enemy, d, dirX, dirY, spdMul, balls, ironWalls, particles); break;
+        case 'windRanger': this.aiWindRanger(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'empMage': this.aiEmpMage(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
+        case 'thunderLord': this.aiThunderLord(adt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
         case 'molten':
-          if (this.isMoltenGuard) this.aiMoltenGuard(dt, enemy, d, dirX, dirY, spdMul, bullets, particles);
-          else this.aiMolten(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
+          if (this.isMoltenGuard) this.aiMoltenGuard(adt, enemy, d, dirX, dirY, spdMul, bullets, particles);
+          else this.aiMolten(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
           break;
-        case 'whiteEmber': this.aiWhiteEmber(dt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
-        case 'obito': this.aiObito(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'whiteEmber': this.aiWhiteEmber(adt, enemy, d, dirX, dirY, spdMul, balls, particles); break;
+        case 'obito': this.aiObito(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
         case 'pain':
-          if (this.isPainBeast) this.aiPainBeast(dt, enemy, d, dirX, dirY, spdMul, balls, particles);
-          else this.aiPain(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
+          if (this.isPainBeast) this.aiPainBeast(adt, enemy, d, dirX, dirY, spdMul, balls, particles);
+          else this.aiPain(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles);
           break;
-        case 'minato': this.aiMinato(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'wuLiuQi': this.aiWuLiuQi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'sniper':  this.aiSniper(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
-        case 'titan':  this.aiTitan(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
-        case 'foehn':  this.aiFoehn(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
-        case 'liangyi': this.aiLiangyi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'lingShuo': this.aiLingShuo(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'puppeteer': this.aiPuppeteer(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
-        case 'tongShi': this.aiTongShi(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'minato': this.aiMinato(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'wuLiuQi': this.aiWuLiuQi(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'sniper':  this.aiSniper(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, traps, particles); break;
+        case 'titan':  this.aiTitan(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'foehn':  this.aiFoehn(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
+        case 'liangyi': this.aiLiangyi(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'lingShuo': this.aiLingShuo(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'puppeteer': this.aiPuppeteer(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'tongShi': this.aiTongShi(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
+        case 'illusionist': this.aiIllusionist(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
       }
       }
 
@@ -8770,18 +9224,19 @@
         const adx = enemy.x - this.x, ady = enemy.y - this.y;
         const ad = Math.max(1, Math.hypot(adx, ady));
         const bs = 320;
+        let lastBounce = maxBounces; // 供满法力弹射文本复用（避免外层作用域 ReferenceError）
         if (enemy.alive){
           const startDmg = 1.8 * (this.params.atkDmg || 8);
           const extra = (this.arcMana >= (p.manaMax || 6)) ? (p.bounceExtra || 2) : 0;
-          const maxB = maxBounces + extra;
-          this.arcMageFireArcaneBullet(this, this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size, adx/ad*bs, ady/ad*bs, startDmg, maxB, 1 - (p.bounceDecay || 10)/100, balls, bullets, particles);
+          lastBounce = maxBounces + extra;
+          this.arcMageFireArcaneBullet(this, this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size, adx/ad*bs, ady/ad*bs, startDmg, lastBounce, 1 - (p.bounceDecay || 10)/100, balls, bullets, particles);
         }
         this.arcBounceCD = 7;
         // 满法力充盈：不进入冷却 + 清空法力
         if (this.arcMana >= (p.manaMax || 6)){
           this.arcMana = 0;
           this.arcBounceCD = 0;
-          floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '法力充盈! '+maxB+'弹射', '#9966ff', {life: 1.2, size: 13}));
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '法力充盈! '+lastBounce+'弹射', '#9966ff', {life: 1.2, size: 13}));
           for (let i=0;i<26;i++){
             const a = Math.random()*Math.PI*2;
             particles.push(new Particle(this.x, this.y, '#9966ff', {ang:a, speed:90+Math.random()*120, life:0.6, size:2.5}));
@@ -11863,6 +12318,176 @@
       }
     }
 
+    // ===== 幻瞳师 AI =====
+    aiIllusionist(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
+      const p = this.params || {};
+      // 幻鸦分身分支：分身直线冲向最近敌人自爆 + 留下黑炎；替身静立诱敌（不主动攻击）
+      if (this.isClone || this.isDecoy){
+        if (this.phCloneLife > 0){
+          this.phCloneLife -= dt;
+          if (this.phCloneLife <= 0){ this.alive = false; this.hp = 0; return; }
+        }
+        if (this.isClone || this.isDecoy){
+          // 幻鸦原地顿挫蓄力（仅防反召唤的幻鸦：先停顿一下再扑向敌人）
+          if ((this.phDelay || 0) > 0){
+            this.phDelay -= dt;
+            this.vx *= 0.4; this.vy *= 0.4;
+            const lagDir = (enemy && enemy.alive) ? Math.atan2(enemy.y - this.y, enemy.x - this.x) : 0;
+            if (Math.random() < dt * 26){
+              particles.push(new Particle(this.x, this.y, Math.random()<0.5 ? '#8a5ce0' : '#ff6b3d', {ang: lagDir, speed: 40 + Math.random()*60, life: 0.4, size: 2.5}));
+            }
+            if (typeof floatTexts !== 'undefined' && Math.random() < dt * 3){
+              floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '蓄力·扑!', '#ff6b3d', {life: 0.5, size: 10}));
+            }
+            return;
+          }
+          // 冲刺自爆（分身与防反替身共用）：锁定最近敌人，直线扑上去，触身爆炸并留下黑炎
+          let nearest = enemy, nd = d;
+          for (const b of balls){
+            if (!b.alive || b.team === this.team || b.isClone || b.isDecoy || b.isDoll) continue;
+            const dd = Math.hypot(b.x - this.x, b.y - this.y);
+            if (dd < nd){ nd = dd; nearest = b; }
+          }
+          // 直线高速冲刺（绝不旁逸，直扑目标）
+          const dx = nearest.x - this.x, dy = nearest.y - this.y;
+          const dist = Math.max(1, Math.hypot(dx, dy));
+          const dashSpd = this.params.cloneDashSpeed != null ? this.params.cloneDashSpeed : 430;
+          this.vx = (dx / dist) * dashSpd;
+          this.vy = (dy / dist) * dashSpd;
+          // 冲刺紫红火羽拖尾
+          if (Math.random() < dt * 42){
+            particles.push(new Particle(this.x, this.y, Math.random()<0.5 ? '#8a5ce0' : '#ff6b3d', {ang: Math.atan2(dy, dx), speed: 60 + Math.random()*90, life: 0.3, size: 3}));
+          }
+          // 触碰自爆：命中近身敌人
+          if (dist < nearest.size + this.size + 14){
+            const src = this.phOwner || this.owner || this;
+            const boomDmg = src !== this ? Math.max(2, Math.round((src.params.crowDmg != null ? src.params.crowDmg : 12) * 0.8)) : 3;
+            // 爆炸即时伤害
+            for (const b of balls){
+              if (!b.alive || b.team === this.team) continue;
+              const bd = Math.hypot(b.x - this.x, b.y - this.y);
+              if (bd < 70 + b.size) b.takeDamage(boomDmg, '#ff6b3d', particles, src);
+            }
+            // 留下黑炎区域（持续燃烧）
+            const blackDur = this.params.blackFireDur != null ? this.params.blackFireDur : 5;
+            const blackR = this.params.blackFireR != null ? this.params.blackFireR : 90;
+            const blackDmg = src !== this ? Math.max(1, Math.round((src.params.crowDmg != null ? src.params.crowDmg : 12) * 0.18)) : 1;
+            if (typeof phBlackFires !== 'undefined') phBlackFires.push(new PhBlackFire(this.x, this.y, this.team, blackR, blackDur, blackDmg, src));
+            // 自爆特效：黑炎冲击 + 紫红爆光 + 微震
+            if (typeof shake !== 'undefined') shake = Math.max(shake, 6);
+            for (let i=0;i<18;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(this.x, this.y, i%2 ? '#ff6b3d' : '#8a0f0f', {ang:a, speed:100 + Math.random()*170, life:0.45, size:2 + Math.random()*2.5}));
+            }
+            if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '黑炎·自爆!', '#ff6b3d', {life: 0.8, size: 12}));
+            this.alive = false; this.hp = 0;
+          }
+          return;
+        }
+      }
+
+      // ---- 本体 ----
+      // 招架姿态 / 潜影期间：保持站定诱骗，但不影响普攻与主动技能（机动由下方压制，攻击照常）
+      const guardStill = (this.phStance || this.phGuardPhantom > 0);
+      if (guardStill){
+        this.vx *= 0.95; this.vy *= 0.95;
+      }
+      // 选择目标：优先敌方输出单位，其次后排，最后最近
+      let target = null;
+      const outCls = ['mage','frostMage','timeMage','empMage','sniper','fireBow','windRanger','thunderLord','foehn','cannon','summoner','puppeteer','dash','lingShuo'];
+      let bestD = Infinity;
+      for (const b of balls){
+        if (!b.alive || b.team === this.team || b.isClone || b.isDecoy || b.isDoll) continue;
+        if (outCls.indexOf(b.cls) < 0) continue;
+        const dd = Math.hypot(b.x - this.x, b.y - this.y);
+        if (dd < bestD){ bestD = dd; target = b; }
+      }
+      if (!target) target = (this.preferBacklineEnemy ? this.preferBacklineEnemy(balls) : null) || enemy;
+      const tdx = target.x - this.x, tdy = target.y - this.y;
+      const td = Math.max(1, Math.hypot(tdx, tdy));
+      const tdirX = tdx/td, tdirY = tdy/td;
+      // 中距离风筝（保持 190 左右）；招架/潜影期间原地不动，普攻与主动照常
+      const ideal = 190;
+      if (!guardStill){
+        if (d > ideal + 40){
+          this.vx += dirX * this.baseSpeed * spdMul * dt * 3;
+          this.vy += dirY * this.baseSpeed * spdMul * dt * 3;
+        } else if (d < ideal - 60){
+          this.vx -= dirX * this.baseSpeed * spdMul * dt * 3.5;
+          this.vy -= dirY * this.baseSpeed * spdMul * dt * 3.5;
+        }
+      }
+
+      // 幻鸦分身：场上最多1个，再次释放销毁旧分身生成新的
+      this.phCloneCD -= dt;
+      if (this.phCloneCD <= 0){
+        let oldClone = null;
+        for (const b of balls){
+          if (b.team === this.team && b.cls === 'illusionist' && b.isClone && b.phOwner === this && b.alive){ oldClone = b; break; }
+        }
+        if (oldClone){
+          oldClone.alive = false; oldClone.hp = 0;
+          for (let i=0;i<8;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(oldClone.x, oldClone.y, '#2a1233', {ang:a, speed:60+Math.random()*80, life:0.4, size:2}));
+          }
+        }
+        const ratio = p.cloneHpRatio != null ? p.cloneHpRatio : 40;
+        const clHp = Math.max(5, Math.floor(this.maxHp * ratio / 100));
+        const cx = this.x + tdirX * (this.size + 6);
+        const cy = this.y + tdirY * (this.size + 6);
+        const clone = new Ball(this.team, this.cls, cx, cy, {
+          name: this.name + '·幻鸦', color: this.color, size: this.size * 0.88,
+          speed: this.baseSpeed, params: { ...this.params }
+        });
+        clone.isClone = true;
+        clone.cloneDepth = (this.cloneDepth || 0) + 1;
+        clone.phOwner = this;
+        clone.maxHp = clHp; clone.hp = clHp;
+        clone.phCloneLife = p.cloneDur != null ? p.cloneDur : 6;
+        clone.phEn = 0; clone.phVoidUsed = true; clone.phCloneCD = 999; clone.phStance = false;
+        balls.push(clone);
+        this.phCloneCD = p.cloneCD != null ? p.cloneCD : 6;
+        // 召唤特效：紫红爆散 + 写轮眼印记环（呼应幻术）
+        for (let i=0;i<18;i++){
+          const a = (i/18)*Math.PI*2;
+          particles.push(new Particle(cx, cy, i%3 ? '#7b3ff2' : '#ff2a40', {ang:a, speed:120 + (i%2)*45, life:0.5, size:3}));
+        }
+        for (let i=0;i<10;i++){
+          const a = (i/10)*Math.PI*2;
+          const ir = this.size + 10;
+          particles.push(new Particle(cx + Math.cos(a)*ir, cy + Math.sin(a)*ir, '#c0392b', {ang:0, speed:0, life:0.6, size:2.2}));
+        }
+        if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '幻鸦分影!', '#b06bff', {life: 0.9, size: 14}));
+      }
+
+      // 普攻：幻鸦飞弹（命中叠幻痕，由子弹命中段处理）
+      this.phAtkCD -= dt;
+      if (this.phAtkCD <= 0 && td < 430){
+        this.phAtkCD = p.atkInterval != null ? p.atkInterval : 0.6;
+        const bs = 360 + this.vx * 0.1;
+        const lead = 0.08;
+        const tx = target.x + target.vx * lead, ty = target.y + target.vy * lead;
+        const adx = tx - this.x, ady = ty - this.y;
+        const ad = Math.max(1, Math.hypot(adx, ady));
+        const bul = new Bullet(
+          this.x + (adx/ad)*this.size, this.y + (ady/ad)*this.size,
+          (adx/ad)*bs, (ady/ad)*bs, p.crowDmg != null ? p.crowDmg : 12, '#7b3ff2', this.team, this
+        );
+        bul.isPhantomCrow = true; bul.crowClone = false; bul.size = 5;
+        bullets.push(bul);
+        // 施放即获得0.5层幻瞳能量（普攻命中再+，集中在此处体现）
+        this.phEn = Math.min(3, this.phEn + 0.5);
+        for (let i=0;i<5;i++){
+          const a = Math.atan2(ady,adx) + (Math.random()-0.5)*0.7;
+          particles.push(new Particle(this.x, this.y, '#8a5ce0', {ang:a, speed:90+Math.random()*50, life:0.3, size:2.2}));
+        }
+      }
+
+      // 虚境幻防·防反已改为「冷却就绪、受击即释放」（近战/子弹均可自动防反），不再由AI主动开启招架姿态
+      this.phGuardCD -= dt;
+    }
+
     // ===== 人偶 AI =====
     aiDoll(dt, enemy, d, dirX, dirY, spdMul, bullets, particles){
       // 全程远程风筝（取消自爆机制）
@@ -11899,6 +12524,78 @@
       if (!this.alive) return;
       // 凌朔【锁锋擒斩】·破霸（霸体=免伤）：破霸期间目标所有免伤/减伤/护盾吸收全部失效
       const broken = !isDot && this.linBreakT && Date.now() < this.linBreakT;
+      // 幻魇侵蚀：被幻魇侵蚀困扰的单位，其攻击有概率落空（不命中，纯精神干扰）
+      if (!broken && !isDot && attacker && attacker.alive && attacker.team !== this.team && attacker._nightmareT > 0){
+        const mBy = attacker._nightmareBy;
+        const mp = (mBy && mBy.params.missChance != null) ? mBy.params.missChance : 35;
+        if (Math.random() * 100 < mp){
+          if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '幻魇·落空', '#b06bff', {life: 0.6, size: 11}));
+          for (let i=0;i<4;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, '#7b3ff2', {ang:a, speed:60, life:0.25, size:1.6}));
+          }
+          return;
+        }
+      }
+      // 虚境幻防·防反（受击自动释放）：冷却就绪时，受到任意非持续攻击（近战或子弹）立即幻术防反
+      if (!broken && this.cls === 'illusionist' && !this.isClone && !this.isDecoy && !this.isDoll && this.phGuardCD <= 0 && !isDot && attacker && attacker.team !== this.team){
+        // 抓取/相撞强控不参与防反，交给姿态维护（姿态受强控会失效）。此处处理正常命中（近战或子弹）→ 防反成功
+        this.phStance = false; this.phGuardT = 0;
+        this.phGuardCD = this.params.guardCD != null ? this.params.guardCD : 7; // 受击触发后进入冷却
+        // 本体潜影消失，在敌人身后生成幻鸦反扑，敌人看到命中假象但无伤害
+        this.phGuardPhantom = 1.1;           // 潜影窗口（供 AI 决定幻境禁锢 或 回归）
+        this.phGuardEyeFX = 1.0;             // 防反成功瞬间自身大写轮眼爆发特效：约1s内慢慢变淡消失
+        this.invisible = true; this.invisibleTime = 20; // 敌方不锁定隐形单位
+        // 在攻击者（敌人）身后生成幻术师·幻鸦，随后冲向该敌人自爆并留下黑炎（替代原原地留替身）
+        const offAng = Math.atan2(this.y - attacker.y, this.x - attacker.x); // 敌人身后方向
+        const bdist = attacker.size + 45;
+        const cx2 = attacker.x - Math.cos(offAng) * bdist;
+        const cy2 = attacker.y - Math.sin(offAng) * bdist;
+        const cratio = this.params.cloneHpRatio != null ? this.params.cloneHpRatio : 40;
+        const cHp = Math.max(5, Math.floor(this.maxHp * cratio / 100));
+        const crow = new Ball(this.team, this.cls, cx2, cy2, {
+          name: this.name + '·幻鸦', color: this.color, size: this.size * 0.88,
+          speed: this.baseSpeed, params: { ...this.params }
+        });
+        crow.isClone = true; crow.isDecoy = false;
+        crow.cloneDepth = (this.cloneDepth || 0) + 1;
+        crow.phOwner = this; crow.owner = this;
+        crow.maxHp = cHp; crow.hp = cHp;
+        crow.phCloneLife = this.params.cloneDur != null ? this.params.cloneDur : 6;
+        crow.phDelay = 0.32; // 防反召唤的幻鸦：落地原地顿挫一下再扑向敌人自爆
+        crow.phEn = 0; crow.phVoidUsed = true; crow.phCloneCD = 999; crow.phStance = false;
+        balls.push(crow);
+        // 召唤特效：紫红爆散 + 写轮眼印记环（与技能幻鸦一致）
+        for (let i=0;i<16;i++){
+          const a = (i/16)*Math.PI*2;
+          particles.push(new Particle(cx2, cy2, i%3 ? '#7b3ff2' : '#ff2a40', {ang:a, speed:110 + (i%2)*40, life:0.5, size:3}));
+        }
+        for (let i=0;i<8;i++){
+          const a = (i/8)*Math.PI*2;
+          particles.push(new Particle(cx2 + Math.cos(a)*(this.size+8), cy2 + Math.sin(a)*(this.size+8), '#c0392b', {ang:0, speed:0, life:0.6, size:2.2}));
+        }
+        // 标记攻击者为幻魇
+        if (attacker.alive){
+          const pmd = this.params.phantomMarkDur != null ? this.params.phantomMarkDur : 2.5;
+          attacker._phantomT = pmd; attacker._phantomOwner = this;
+        }
+        // 防反强势冲击：紫红白光爆闪 + 幻术写轮眼扩散环 + 震屏
+        if (typeof shake !== 'undefined') shake = Math.max(shake, 12);
+        for (let i=0;i<26;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, i%3===0 ? '#ffffff' : (i%2 ? '#e38bff' : '#ff4d8f'), {ang:a, speed:150 + Math.random()*210, life:0.4+Math.random()*0.3, size:2.5+Math.random()*2.5}));
+        }
+        for (let i=0;i<8;i++){
+          const a = (i/8)*Math.PI*2;
+          const ringD = this.size*0.8 + i*2;
+          particles.push(new Particle(this.x + Math.cos(a)*ringD, this.y + Math.sin(a)*ringD, i%2 ? '#e38bff' : '#7b1fa2', {ang:0, speed:0, life:0.5, size:2}));
+        }
+        if (typeof floatTexts !== 'undefined'){
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '虚境·防反!', '#e38bff', {life: 1.1, size: 16}));
+          floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '瞳术·幻反', '#ff2a40', {life: 1.2, size: 13}));
+        }
+        return; // 本次伤害被幻术抵消
+      }
       // 霜冻法师·被动【寒冰护盾】：受到近战攻击时给攻击者叠加1层寒霜（内置冷却，远程投射/持续伤害不触发）
       if (this.cls === 'frostMage' && !this.isDoll && !this.isClone && !isDot && attacker && attacker.alive && attacker.team !== this.team){
         if (Date.now() >= (this.frostShieldReadyAt || 0)){
@@ -12381,10 +13078,13 @@
           if (u.team === this.team && u.cls === 'dash' && u.isClone && u.alive) cloneCount++;
         }
         const maxClones = 2;
-        if (cloneCount < maxClones){
-          this.spawnClone(balls, particles, Math.random() < 0.5);
+        const nClones = Math.min(2, maxClones - cloneCount);
+        if (nClones > 0){
+          for (let k = 0; k < nClones; k++){
+            this.spawnClone(balls, particles, k % 2 === 0); // 一个身前、一个身后，夹击
+          }
           this.cloneCD = this.params.cloneCD != null ? this.params.cloneCD : 4;
-          if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '影分身!', '#b06bff', {life: 0.7, size: 12}));
+          if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, nClones > 1 ? '影分身×2!' : '影分身!', '#b06bff', {life: 0.7, size: 13}));
         }
       }
       // 超时空战士·死亡被动【时空崩塌】：阵亡瞬间触发一次，范围内敌人大幅减速+中等范围伤害
@@ -12492,6 +13192,41 @@
         }
         if (typeof shake !== 'undefined') shake = Math.max(shake, 12);
         floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '极寒爆发!', '#a8f0ff', {life: 1.5, size: 18}));
+      }
+      // 幻瞳师·死亡被动【残梦碎境】：阵亡瞬间触发（一局一次），3格范围爆发破碎幻境波纹，范围内带幻痕/幻魇标记的敌人短暂精神冲击减速，不造成伤害
+      if (this.cls === 'illusionist' && !this.isDoll && !this.isClone && this.hp <= 0 && this.alive && !this.phBurstUsed){
+        this.phBurstUsed = true;
+        const R = 210; // 3格
+        const shockSlow = 0.45;   // 移速降低45%
+        const shockDur = 2;       // 持续2秒
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          const hasMark = b._phMarkStacks > 0 || (b._phantomT > 0);
+          if (!hasMark) continue;                       // 仅影响带幻痕/幻魇标记的敌人
+          const dd = Math.hypot(b.x - this.x, b.y - this.y);
+          if (dd < R + b.size){
+            // 精神冲击：大幅减速，复用残梦减速通道（结束自动清除）
+            b.slow = Math.max(b.slow || 0, shockSlow);
+            b._mindShockT = shockDur;
+            b._mindShockSlow = shockSlow;
+          }
+        }
+        // 残梦碎境视觉：紫青破碎幻境波纹扩散 + 梦境碎片激荡 + 屏幕微震
+        for (let i=0;i<60;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, Math.random()<0.5 ? '#9d6bff' : '#5c8cff', {ang:a, speed:90+Math.random()*190, life:0.7+Math.random()*0.6, size:2.5+Math.random()*3.2}));
+        }
+        for (let i=0;i<20;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#ffffff', {ang:a, speed:60+Math.random()*100, life:0.8, size:2}));
+        }
+        const segs = 30;
+        for (let s=0;s<=segs;s++){
+          const a = (s/segs)*Math.PI*2;
+          particles.push(new Particle(this.x + Math.cos(a)*(R*0.8), this.y + Math.sin(a)*(R*0.8), '#b06bff', {speed:160, life:0.8, size:3.5}));
+        }
+        if (typeof shake !== 'undefined') shake = Math.max(shake, 9);
+        floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '残梦碎境!', '#b06bff', {life:1.5, size:18}));
       }
       // 白厄锁血【焚身不死】：受到致命伤害时不会阵亡，回血并发动最终裁决一击（每场一次）
       if (this.hp <= 0 && this.alive && this.cls === 'whiteEmber' && !this.fatalLockUsed){
@@ -12652,6 +13387,20 @@
     }
 
     die(particles){
+      // 幻瞳师·幻鸦分身被拦截/击杀阵亡：留下黑炎并爆散（区别于主动自爆，规模略小）
+      if (this.isClone && this.cls === 'illusionist'){
+        const src = this.phOwner || this.owner || this;
+        const blackDur = this.params.blackFireDur != null ? this.params.blackFireDur : 5;
+        const blackR = this.params.blackFireR != null ? this.params.blackFireR : 90;
+        const blackDmg = src !== this ? Math.max(1, Math.round((src.params.crowDmg != null ? src.params.crowDmg : 12) * 0.18)) : 1;
+        if (typeof phBlackFires !== 'undefined') phBlackFires.push(new PhBlackFire(this.x, this.y, this.team, blackR, blackDur, blackDmg, src));
+        if (typeof shake !== 'undefined') shake = Math.max(shake, 4);
+        for (let i=0;i<14;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, i%2 ? '#ff6b3d' : '#8a0f0f', {ang:a, speed:90 + Math.random()*150, life:0.4, size:2 + Math.random()*2.5}));
+        }
+        if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '黑炎·拦截!', '#ff6b3d', {life: 0.8, size: 12}));
+      }
       // ===== 战斗数据追踪：记录击杀 =====
       if (this.lastAttacker && this.lastAttacker.alive && this.lastAttacker.stats){
         this.lastAttacker.stats.kills++;
@@ -12792,6 +13541,77 @@
       for (let i=0;i<14;i++){
         particles.push(new Particle(this.x, this.y, '#ffffff', {speed:180, life:0.6, size:3}));
       }
+    }
+
+    // 幻瞳师·幻鸦替身绘制：防反留影呈现为一只静立幻鸦
+    drawCrowGhost(ctx, cx, cy, t){
+      const s = Math.max(6, this.size);
+      ctx.save();
+      ctx.translate(cx, cy);
+      // 淡紫幻雾底盘
+      const mg = ctx.createRadialGradient(0, s*0.5, 2, 0, s*0.5, s*1.6);
+      mg.addColorStop(0, rgba('#5a2a9e', 0.45));
+      mg.addColorStop(1, rgba('#5a2a9e', 0));
+      ctx.fillStyle = mg;
+      ctx.beginPath(); ctx.arc(0, s*0.5, s*1.6, 0, Math.PI*2); ctx.fill();
+      // 悬浮晃动 + 轻扇翅
+      const flap = Math.sin(t*0.014);
+      ctx.rotate(Math.sin(t*0.006)*0.04);
+      // 尾羽（左后）
+      ctx.fillStyle = '#1a1026';
+      ctx.beginPath();
+      ctx.moveTo(-s*0.55, -s*0.05);
+      ctx.quadraticCurveTo(-s*1.02, -s*0.1, -s*1.08, s*0.06);
+      ctx.quadraticCurveTo(-s*0.85, s*0.14, -s*0.55, s*0.14);
+      ctx.closePath();
+      ctx.fill();
+      // 身体（暗紫黑椭圆）
+      const bg = ctx.createRadialGradient(-s*0.05, -s*0.15, 2, 0, 0, s*0.8);
+      bg.addColorStop(0, '#3a1a52');
+      bg.addColorStop(1, '#1a0d28');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.ellipse(-s*0.05, 0, s*0.6, s*0.45, 0, 0, Math.PI*2);
+      ctx.fill();
+      ctx.strokeStyle = rgba('#8a5ce0', 0.6);
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      // 翅膀（半张，随 flap 扇动）
+      ctx.fillStyle = '#241533';
+      ctx.beginPath();
+      ctx.moveTo(-s*0.25, -s*0.15);
+      ctx.quadraticCurveTo(-s*0.1, -s*0.6 - Math.abs(flap)*s*0.18, s*0.2, -s*0.52 - Math.abs(flap)*s*0.18);
+      ctx.quadraticCurveTo(s*0.1, -s*0.3, -s*0.1, -s*0.22);
+      ctx.closePath();
+      ctx.fill();
+      // 头（右前）
+      ctx.fillStyle = '#241533';
+      ctx.beginPath();
+      ctx.arc(s*0.44, -s*0.28, s*0.26, 0, Math.PI*2);
+      ctx.fill();
+      // 喙
+      ctx.fillStyle = '#d8a63c';
+      ctx.beginPath();
+      ctx.moveTo(s*0.52, -s*0.32);
+      ctx.quadraticCurveTo(s*0.84, -s*0.36, s*0.6, -s*0.16);
+      ctx.closePath();
+      ctx.fill();
+      // 眼睛：暗红凶光
+      ctx.fillStyle = '#ff2a4a';
+      ctx.shadowColor = '#ff2a4a'; ctx.shadowBlur = 7;
+      ctx.beginPath(); ctx.arc(s*0.52, -s*0.32, s*0.05, 0, Math.PI*2); ctx.fill();
+      ctx.shadowBlur = 0;
+      // 胸口幻瞳小纹（呼应幻术）
+      ctx.globalAlpha = 0.5;
+      ctx.fillStyle = '#7b1fa2';
+      ctx.beginPath(); ctx.arc(0, s*0.14, s*0.09, 0, Math.PI*2); ctx.fill();
+      ctx.globalAlpha = 1;
+      // 头顶「幻鸦」标识
+      ctx.fillStyle = rgba('#b06bff', 0.9);
+      ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('幻鸦', 0, -s*1.05);
+      ctx.restore();
     }
 
     draw(ctx){
@@ -13686,6 +14506,26 @@
           ctx.beginPath(); ctx.arc(x, y, this.size + 8, 0, Math.PI*2); ctx.stroke();
           ctx.shadowBlur = 0;
         }
+        // 电量环：围绕球身显示当前电量/上限（青色渐变弧）
+        {
+          const cmax = this.params.anchorMax || 4;
+          const cf = Math.max(0, Math.min(1, (this.chronoAnchor || 0) / cmax));
+          const r0 = this.size + 3;
+          ctx.save();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = 'rgba(18,34,52,0.55)';
+          ctx.beginPath(); ctx.arc(x, y, r0, 0, Math.PI * 2); ctx.stroke();
+          if (cf > 0){
+            const grad = ctx.createLinearGradient(x - r0, y, x + r0, y);
+            grad.addColorStop(0, '#4ad2ff'); grad.addColorStop(1, '#7b3ff2');
+            ctx.strokeStyle = grad;
+            ctx.shadowColor = '#4ad2ff'; ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(x, y, r0, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * cf);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
         // 头顶时空锚点亮层
         const al = this.chronoAnchor || 0;
         ctx.textAlign = 'center';
@@ -13790,6 +14630,245 @@
           ctx.fillStyle = 'rgba(192,139,255,0.9)';
           ctx.font = 'bold 9px sans-serif';
           ctx.fillText('⚡攻速x' + this.arcSpeedStack, x, y - this.size - 20);
+        }
+      }
+
+      // 幻瞳师视觉：暗绛紫漩涡 + 环绕幻鸦虚影 + 暗红瞳光 + 幻瞳能量层 + 分身辨识
+      if (this.cls === 'illusionist'){
+        const t = Date.now()*0.005;
+        ctx.textAlign = 'center';
+        // 暗绛紫双环旋转漩涡流光
+        for (let L=0; L<2; L++){
+          const dir = L%2===0 ? 1 : -1;
+          const rr = this.size + 4 + L*4;
+          ctx.shadowColor = '#581c5c'; ctx.shadowBlur = 14;
+          ctx.strokeStyle = rgba(L===0 ? '#7b3ff2' : '#a15fe0', 0.5 + 0.25*Math.sin(t*2+L));
+          ctx.beginPath();
+          ctx.arc(x, y, rr, t*dir, t*dir + Math.PI*1.6);
+          ctx.stroke();
+        }
+        ctx.shadowBlur = 0;
+        // 环绕半透明幻鸦虚影（2只沿扁椭轨道盘旋，翅振+暗红瞳光）
+        for (let i=0;i<2;i++){
+          const a = t*1.3 + i*Math.PI;
+          const ox = x + Math.cos(a)*(this.size + 9 + Math.sin(t*2+i)*2);
+          const oy = y + Math.sin(a)*(this.size + 7);
+          const flap = Math.sin(t*10 + i*3) * 0.14;
+          ctx.save();
+          ctx.globalAlpha = 0.5 + 0.22*Math.sin(t*4+i);
+          ctx.translate(ox, oy);
+          // 鸦身
+          ctx.fillStyle = '#3a1440';
+          ctx.beginPath();
+          ctx.moveTo(0, -3.2);
+          ctx.quadraticCurveTo(2 + flap*5, 0, 0, 3.2);
+          ctx.quadraticCurveTo(-2 - flap*5, 0, 0, -3.2);
+          ctx.fill();
+          // 鸦翼
+          ctx.strokeStyle = '#5c2a66';
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(0, -1);
+          ctx.lineTo(-3.2, -3.4 - flap*6);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(0, 1);
+          ctx.lineTo(3.2, 3.4 - flap*6);
+          ctx.stroke();
+          // 鸦眼暗红瞳光
+          ctx.fillStyle = '#ff2a40';
+          ctx.shadowColor = '#ff2a40'; ctx.shadowBlur = 6;
+          ctx.beginPath(); ctx.arc(0.7, -0.4, 0.7, 0, Math.PI*2); ctx.fill();
+          ctx.restore();
+        }
+        // 本体暗红瞳光：双眼闪烁
+        const eyeP = 0.65 + 0.35*Math.sin(t*7);
+        ctx.save();
+        ctx.fillStyle = rgba('#ff2a40', eyeP);
+        ctx.shadowColor = '#ff2a40'; ctx.shadowBlur = 8;
+        for (let s=-1;s<=1;s+=2){
+          ctx.beginPath(); ctx.arc(x + s*(this.size*0.28), y - 1, 1.9, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+        // 幻瞳能量层（实心上限3格）
+        if ((this.phEn || 0) > 0){
+          ctx.fillStyle = 'rgba(217,163,255,0.95)';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.fillText('◆'.repeat(Math.min(3, this.phEn)), x, y - this.size - 8);
+        }
+        // 虚境幻防·防御反馈：招架期间仅显示淡紫虚线圈（不提前暴露幻瞳）
+        if (this.phStance && !(this.phGuardEyeFX > 0)){
+          const gp = 0.4 + 0.2*Math.sin(Date.now()*0.01);
+          ctx.save();
+          ctx.strokeStyle = rgba('#b06bff', gp);
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath(); ctx.arc(x, y, this.size + 6 + Math.sin(Date.now()*0.008)*2, 0, Math.PI*2); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+        }
+        // 防反成功瞬间：自身上幻瞳大眼爆发（播完即消失，幻术随后转移到敌人身上）
+        if ((this.phGuardEyeFX || 0) > 0){
+          const er = this.size * 2.6;
+          // 写轮眼主体透明度随剩余时长线性淡出（1→0），约1s后完全消失
+          const eyeAlpha = (0.75 + 0.25*Math.sin(Date.now()*0.06)) * Math.max(0, this.phGuardEyeFX);
+          drawIllusionSharingan(ctx, x, y, er, { alpha: eyeAlpha, rotateSpeed: 0.012 });
+          // 防反爆发：紫红冲击环扩散并随剩余时长减弱
+          const fr = er * (1 + (1.0 - this.phGuardEyeFX)*0.9);
+          ctx.save();
+          ctx.strokeStyle = rgba('#e38bff', 0.55*this.phGuardEyeFX);
+          ctx.lineWidth = 3 + this.phGuardEyeFX*4;
+          ctx.shadowColor = '#e38bff'; ctx.shadowBlur = 18;
+          ctx.beginPath(); ctx.arc(x, y, fr, 0, Math.PI*2); ctx.stroke();
+          ctx.restore();
+        }
+        // 幻鸦（分身与防反替身）头顶「幻」字辨识
+        if (this.isClone || this.isDecoy){
+          ctx.fillStyle = 'rgba(177,107,255,0.92)';
+          ctx.font = 'bold 9px sans-serif';
+          ctx.fillText('『幻』', x, y + this.size + 10);
+        }
+      }
+
+      // ==== 幻瞳师·敌方幻术状态标记（任意受术单位身上通用） ====
+      if ((this._phMarkStacks || 0) > 0 || (this._phantomT || 0) > 0 || (this._phPhraseGroundedT || 0) > 0 || (this._phVoidT || 0) > 0 || (this._mindExhaustT || 0) > 0){
+        ctx.textAlign = 'center';
+        // 幻痕层数
+        if ((this._phMarkStacks || 0) > 0){
+          const mk = Math.min(3, this._phMarkStacks);
+          const mp = (0.5 + 0.5*Math.sin(Date.now()*0.012)) * (0.45 + mk*0.15);
+          ctx.save();
+          ctx.lineCap = 'round';
+          ctx.shadowColor = '#ff3949'; ctx.shadowBlur = 6 + mk*3;
+          // 按层数在敌人身上轮转布置幻鸦爪痕（每层一组、每组三道V形爪痕，暗红流光）
+          const baseAng = Date.now()*0.002;
+          for (let k=0;k<mk;k++){
+            const a0 = baseAng + (k===1 ? Math.PI*0.66 : 0) + (k===2 ? Math.PI*1.32 : 0);
+            const inside = this.size*0.9;
+            ctx.strokeStyle = rgba('#ff4a5a', 0.85 + 0.15*Math.sin(Date.now()*0.012 + k*2));
+            ctx.lineWidth = 2.2;
+            for (let s=-1;s<=1;s++){
+              const ca = a0 + s*0.22;
+              const grax = x + Math.cos(ca)*inside, gray = y + Math.sin(ca)*inside;
+              const tip = inside*1.55 + mp*8;
+              ctx.beginPath();
+              ctx.moveTo(grax, gray);
+              ctx.quadraticCurveTo(
+                grax + Math.cos(ca)*tip,
+                gray + Math.sin(ca)*tip,
+                grax + Math.cos(ca+s*0.3)*tip*0.9,
+                gray + Math.sin(ca+s*0.3)*tip*0.9
+              );
+              ctx.stroke();
+            }
+          }
+          // 环绕敌人的暗红流速动圈（持续强调幻痕）
+          ctx.strokeStyle = rgba('#ff4a5a', 0.5 + 0.25*Math.sin(Date.now()*0.01));
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4,5]);
+          ctx.lineDashOffset = -Date.now()*0.012;
+          ctx.beginPath(); ctx.arc(x, y, this.size + 9 + Math.sin(Date.now()*0.008)*1.5, Date.now()*0.003, Date.now()*0.003 + Math.PI*1.8); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.shadowBlur = 0;
+          // 层数文字（暗红发光，更醒目）
+          ctx.fillStyle = rgba('#ff6a78', 0.95);
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText('幻痕×' + mk, x, y + this.size + 17);
+          ctx.restore();
+        }
+        // 幻魇标记（成功防反打出）：敌人头顶浮现【幻魇】紫色发光标签
+        if ((this._phantomT || 0) > 0 && this._phantomOwner && this._phantomOwner.alive){
+          // 敌人身上套紫色封印十字架：出现渐入、结束前淡出，持续到幻魇标记结束自动消失
+          const pmDur = this._phantomOwner.params ? (this._phantomOwner.params.phantomMarkDur != null ? this._phantomOwner.params.phantomMarkDur : 2.5) : 2.5;
+          const inA = Math.min(1, (pmDur - this._phantomT) * 2.5 + 0.15);
+          const outA = Math.min(1, this._phantomT / 0.4);
+          const pa = Math.max(0, Math.min(1, inA * outA));
+          const ppu = 0.75 + 0.25*Math.sin(Date.now()*0.01);
+          ctx.save();
+          ctx.translate(x, y);
+          // 旋转虚线外环（封印锁定感）
+          ctx.strokeStyle = rgba('#b06bff', (0.45 + 0.2*ppu) * pa);
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([6,4]);
+          const prr = Date.now()*0.004;
+          ctx.beginPath(); ctx.arc(0, 0, this.size + 10 + Math.sin(Date.now()*0.006)*1.5, prr, prr + Math.PI*2); ctx.stroke();
+          ctx.setLineDash([]);
+          // 十字架（封印准星）：横竖紫金发光粗带
+          const pL = this.size*1.7;
+          const pW = 4 + ppu*2;
+          ctx.shadowColor = '#e38bff'; ctx.shadowBlur = 12*pa;
+          ctx.strokeStyle = rgba('#e38bff', 0.9*pa);
+          ctx.lineWidth = pW;
+          ctx.lineCap = 'butt';
+          ctx.beginPath(); ctx.moveTo(-pL,0); ctx.lineTo(pL,0); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0,-pL); ctx.lineTo(0,pL); ctx.stroke();
+          // 四端点金色封印小方块
+          ctx.lineCap = 'round';
+          ctx.fillStyle = rgba('#ffd76b', 0.85*pa);
+          const pcap = 3.4 + ppu*1.2;
+          for (const pcc of [[-pL,0],[pL,0],[0,-pL],[0,pL]]){
+            ctx.fillRect(pcc[0]-pcap/2, pcc[1]-pcap/2, pcap, pcap);
+          }
+          // 中央幻瞳烙印（呼应幻瞳师）
+          drawIllusionSharingan(ctx, 0, 0, this.size*0.7, { alpha: 0.85*pa, haloA: 0.35, rotateSpeed: 0.01 });
+          ctx.restore();
+        }
+        // 幻境禁锢穹顶：紫青棱镜座
+        if ((this._phPhraseGroundedT || 0) > 0){
+          const pr = 0.55 + 0.3*Math.sin(Date.now()*0.01);
+          ctx.save();
+          ctx.strokeStyle = rgba('#c77dff', 0.4 + 0.35*pr);
+          ctx.lineWidth = 1.8;
+          ctx.shadowColor = '#c77dff'; ctx.shadowBlur = 12;
+          ctx.setLineDash([6, 5]);
+          ctx.beginPath(); ctx.arc(x, y, this.size + 8 + Math.sin(Date.now()*0.006)*2, 0, Math.PI*2); ctx.stroke();
+          ctx.setLineDash([]);
+          const rot = Date.now()*0.002;
+          for (let k=0;k<3;k++){
+            const a0 = rot + k*Math.PI*2/3;
+            ctx.beginPath();
+            ctx.moveTo(x + Math.cos(a0)*(this.size+4), y + Math.sin(a0)*(this.size+4));
+            ctx.lineTo(x + Math.cos(a0)*(this.size+13), y + Math.sin(a0)*(this.size+13));
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+        // 永夜囚笼：敌人身上巨大幻术写轮眼（比带土神威更大）+ 紫黑幻境穹顶
+        if ((this._phVoidT || 0) > 0){
+          const vs = this._phVoidT;
+          const vr = 0.5 + 0.4*Math.sin(Date.now()*0.008);
+          // 永夜囚笼·专属写轮眼（最终形态，独立于其他幻术，放大覆盖敌人）
+          drawVoidSharingan(ctx, x, y, this.size*3.0, { alpha: 0.85 + 0.15*Math.sin(Date.now()*0.012), rotateSpeed: 0.014 });
+          // 紫黑幻境穹顶（包裹写轮眼）
+          ctx.save();
+          const vg = ctx.createRadialGradient(x, y, this.size*0.5, x, y, this.size+18);
+          vg.addColorStop(0, rgba('#2a0a3f', 0.12*vr));
+          vg.addColorStop(1, rgba('#5a1a72', 0.36 + 0.22*vr));
+          ctx.fillStyle = vg;
+          ctx.beginPath(); ctx.arc(x, y, this.size*3.0 + 10, 0, Math.PI*2); ctx.fill();
+          ctx.strokeStyle = rgba('#e3b1ff', 0.55 + 0.4*vr);
+          ctx.lineWidth = 2.6;
+          ctx.shadowColor = '#a135c9'; ctx.shadowBlur = 18;
+          ctx.beginPath(); ctx.arc(x, y, this.size*3.0 + Math.sin(Date.now()*0.006)*2, 0, Math.PI*2); ctx.stroke();
+          // 双圈反向旋转紫青虚线环（幻境空间扭曲）
+          ctx.setLineDash([10, 6, 3, 8, 2, 6]);
+          ctx.strokeStyle = rgba('#7b1fa2', 0.4*vr);
+          ctx.lineWidth = 1.6;
+          ctx.beginPath(); ctx.arc(x, y, this.size*3.0 + 8, Date.now()*0.002, Date.now()*0.002 + Math.PI*1.8); ctx.stroke();
+          ctx.setLineDash([8, 5, 12, 4]);
+          ctx.strokeStyle = rgba('#e38bff', 0.3*vr);
+          ctx.beginPath(); ctx.arc(x, y, this.size*3.0 + 4, -Date.now()*0.002, -Date.now()*0.002 + Math.PI*1.6); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.restore();
+          ctx.fillStyle = rgba('#e3b1ff', 0.95);
+          ctx.font = 'bold 9px sans-serif';
+          ctx.fillText('永夜' + vs.toFixed(1), x, y - this.size*3.0 - 12);
+        }
+        // 精神损耗：幻境结束后冷却迟缓提示
+        if ((this._mindExhaustT || 0) > 0){
+          ctx.fillStyle = rgba('#b06bff', 0.95);
+          ctx.font = 'bold 9px sans-serif';
+          ctx.fillText('精神损耗', x, y + this.size + 27);
         }
       }
 
@@ -15198,7 +16277,7 @@
   }
 
   // ============== 游戏状态 ==============
-  let balls = [], bullets = [], traps = [], aoes = [], healWaves = [], particles = [], frostZones = [], timeMarks = [], ironWalls = [], floatTexts = [], ninjaBombs = [];
+  let balls = [], bullets = [], traps = [], aoes = [], healWaves = [], particles = [], frostZones = [], timeMarks = [], ironWalls = [], floatTexts = [], ninjaBombs = [], phBlackFires = [];
   let trapField = []; // 陷阱师专属三类陷阱（捕足夹/震荡地雷/阻网绊索）
   let emberWeakAuraBuff = 0; // 白厄虚弱期全队移速加成光环（作用于其它友军）
   let _thunderLinkTimer = 0; // 雷印雷电链接结算计时器
@@ -15256,7 +16335,7 @@
   }
 
   function startMatch(){
-    balls = []; bullets = []; traps = []; aoes = []; healWaves = []; particles = []; frostZones = []; timeMarks = []; ironWalls = []; floatTexts = []; trapField = [];
+    balls = []; bullets = []; traps = []; aoes = []; healWaves = []; particles = []; frostZones = []; timeMarks = []; ironWalls = []; floatTexts = []; trapField = []; phBlackFires = [];
     _thunderLinkTimer = 0;
     if (currentMode === 'battleroyale'){
       brInit();
@@ -15557,6 +16636,21 @@
             break;
           }
           b.takeDamage(bul.dmg, bul.color, particles, bul.owner);
+          // 幻瞳师·幻鸦飞弹命中：叠加幻痕（本体命中叠层；分身只造成伤害不叠层）；满3层触发幻魇侵蚀
+          if (bul.isPhantomCrow && bul.owner && bul.owner.alive && bul.owner.cls === 'illusionist' && !bul.crowClone && !bul.owner.isClone){
+            const mDur = bul.owner.params.markDur != null ? bul.owner.params.markDur : 4;
+            if (b._phMarkOwner !== bul.owner){ b._phMarkOwner = bul.owner; b._phMarkStacks = 0; }
+            b._phMarkStacks = Math.min(3, b._phMarkStacks + 1);
+            b._phMarkT = mDur;
+            for (let i=0;i<5;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(b.x, b.y, '#9d6bff', {ang:a, speed:50+Math.random()*60, life:0.3, size:2}));
+            }
+            if (b._phMarkStacks >= 3){
+              b._nightmareT = 3; b._nightmareBy = bul.owner;
+              if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(b.x, b.y - b.size - 16, '幻魇侵蚀!', '#c77dff', {life: 1.0, size: 12}));
+            }
+          }
           // 霜冻法师·冰刺命中：叠加1层寒霜（≥2层减速，积满4层冻结）
           if (bul.frostSpike && bul.owner && bul.owner.alive && bul.owner.cls === 'frostMage'){
             const sRatio = bul.owner.params.frostSlow != null ? bul.owner.params.frostSlow : 25;
@@ -16528,6 +17622,7 @@
       for (const p of particles) p.update(dt);
       for (const ft of floatTexts) ft.update(dt);
       for (const fz of frostZones) fz.update(dt, balls, particles);
+      for (const phf of phBlackFires) phf.update(dt, balls, particles);
       for (const w of ironWalls) w.update(dt, balls, particles);
       for (const tm of timeMarks) tm.update(dt, balls, particles);
       timeMarks = timeMarks.filter(tm => tm.life > 0);
@@ -16555,6 +17650,7 @@
       particles = particles.filter(p => p.life > 0);
       floatTexts = floatTexts.filter(t => t.life > 0);
       frostZones = frostZones.filter(fz => fz.life > 0);
+      phBlackFires = phBlackFires.filter(phf => phf.life > 0);
       ironWalls = ironWalls.filter(w => w.life > 0);
 
       const aAlive = balls.some(b => b.team==='A' && b.alive);
@@ -16725,6 +17821,7 @@
     drawTrapField(ctx);
     for (const a of aoes) a.draw(ctx);
     for (const nb of ninjaBombs) nb.draw(ctx);
+    for (const phf of phBlackFires) phf.draw(ctx);
     for (const w of healWaves) w.draw(ctx);
     for (const fz of frostZones) fz.draw(ctx);
     for (const w of ironWalls) w.draw(ctx);
