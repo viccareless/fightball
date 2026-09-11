@@ -9894,6 +9894,16 @@
         if (this.windHitDecayT <= 0){
           this.windHitDecayT = 4;
           this.windHitStacks--;
+          // 掉层反馈：下坠青灰粒子 + 飘字
+          if (particles){
+            for (let i=0;i<4;i++){
+              const a = -Math.PI/2 + (Math.random()-0.5)*1.6;
+              particles.push(new Particle(this.x + (Math.random()-0.5)*12, this.y - this.size - 6, '#9fb8c0', {ang:a, speed:22+Math.random()*28, life:0.6, size:2, g:30}));
+            }
+          }
+          if (typeof floatTexts !== 'undefined'){
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 34, '疾风-1', '#9fd6cf', {life: 0.9, size: 12}));
+          }
         }
       }
       // ===== 冲刺位移中：高速移动+残影+风拖尾 =====
@@ -13777,50 +13787,56 @@
           ctx.stroke();
           ctx.shadowBlur = 0;
         }
-        // 疾风骤影叠层指示（头上，满层金光高亮）
+        // 疾风骤影叠层指示（头上，进度条+数字层数，满层金色横幅高亮）
         if (!this.isClone && !this.isDecoy && this.windHitStacks > 0){
           const cap = 10;
           const st = this.windHitStacks;
           const maxed = st >= cap;
-          const gap = 5;
-          const badgeW = 14 + (cap - 1) * gap + 6;
-          const badgeH = 16;
-          const by = y - this.size - 20;
-          // 标牌底
-          ctx.fillStyle = rgba('#082b33', 0.75);
+          const by = y - this.size - 16;
+          const bw = 58, bh = 13;
+          // 进度条底
+          ctx.fillStyle = rgba('#082b33', 0.82);
           ctx.strokeStyle = maxed ? '#ffd86b' : '#a8f0e8';
-          ctx.lineWidth = maxed ? 2 : 1.2;
+          ctx.lineWidth = 1.5;
           ctx.beginPath();
-          ctx.roundRect ? ctx.roundRect(x - badgeW/2, by - badgeH/2, badgeW, badgeH, 4) : ctx.rect(x - badgeW/2, by - badgeH/2, badgeW, badgeH);
+          ctx.roundRect ? ctx.roundRect(x - bw/2, by, bw, bh, 6) : ctx.rect(x - bw/2, by, bw, bh);
           ctx.fill(); ctx.stroke();
-          // 层数风刻点（三角）
-          const startX = x - (cap - 1) * gap / 2;
-          ctx.font = 'bold 8px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          for (let i = 0; i < cap; i++){
-            const cx = startX + i * gap;
-            if (i < st){
-              ctx.fillStyle = maxed ? '#ffd86b' : '#a8f0e8';
-              ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = maxed ? 9 : 5;
-              ctx.beginPath(); ctx.moveTo(cx, by + 2); ctx.lineTo(cx - 3, by - 2); ctx.lineTo(cx + 3, by - 2); ctx.closePath(); ctx.fill();
-            } else {
-              ctx.fillStyle = rgba('#ffffff', 0.25);
-              ctx.beginPath(); ctx.arc(cx, by, 1.7, 0, Math.PI * 2); ctx.fill();
-            }
-            ctx.shadowBlur = 0;
+          // 已叠层填充
+          const fillW = (bw - 2) * (st / cap);
+          if (fillW > 0){
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect ? ctx.roundRect(x - bw/2 + 1, by + 1, fillW, bh - 2, 5) : ctx.rect(x - bw/2 + 1, by + 1, fillW, bh - 2);
+            ctx.clip();
+            const grd = ctx.createLinearGradient(x - bw/2, 0, x + bw/2, 0);
+            grd.addColorStop(0, maxed ? '#ffd86b' : '#7fe3d8');
+            grd.addColorStop(1, maxed ? '#ffb02e' : '#37b8c8');
+            ctx.fillStyle = grd;
+            ctx.fillRect(x - bw/2, by, bw, bh);
+            ctx.restore();
           }
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'alphabetic';
-          // 满层高亮文字
+          // 层数文字 风×N/10
+          ctx.font = 'bold 9px "Microsoft YaHei", sans-serif';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillStyle = maxed ? '#ffd86b' : '#eafffb';
+          ctx.shadowColor = '#0a0a0a'; ctx.shadowBlur = 3;
+          ctx.fillText('风 × ' + st + ' / ' + cap, x, by + bh / 2 + 1);
+          ctx.shadowBlur = 0;
+          ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+          // 满层金色横幅
           if (maxed){
-            ctx.shadowColor = '#ffd86b'; ctx.shadowBlur = 8;
+            ctx.fillStyle = rgba('#191003', 0.92);
+            ctx.strokeStyle = '#ffd86b'; ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect ? ctx.roundRect(x - 32, by - 17, 64, 15, 8) : ctx.rect(x - 32, by - 17, 64, 15);
+            ctx.fill(); ctx.stroke();
+            ctx.shadowColor = '#ffd86b'; ctx.shadowBlur = 9;
             ctx.fillStyle = '#ffd86b';
-            ctx.font = 'bold 11px "Microsoft YaHei", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('攻速MAX', x, by - badgeH / 2 - 3);
+            ctx.font = 'bold 10px "Microsoft YaHei", sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText('攻速MAX', x, by - 9.5);
             ctx.shadowBlur = 0;
-            ctx.textAlign = 'left';
+            ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
           }
         }
       }
