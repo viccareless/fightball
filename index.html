@@ -2371,6 +2371,7 @@
         { key: 'cloneHp', label: '分身血量', min: 10, max: 60, step: 5, def: 25, int: true },
         { key: 'cloneDur', label: '分身持续秒', min: 2, max: 10, step: 0.5, def: 5, int: false },
         { key: 'cloneCD', label: '受击分身冷却秒', min: 1, max: 12, step: 0.5, def: 4, int: false },
+        { key: 'cloneMax', label: '分身上限个', min: 1, max: 5, step: 1, def: 3, int: true },
         { key: 'cloneAtkRatio', label: '分身攻击比例', min: 0.2, max: 1.2, step: 0.1, def: 0.5, int: false },
         { key: 'cloneAtkRate', label: '分身攻击间隔秒', min: 0.25, max: 1.5, step: 0.05, def: 0.55, int: false }
       ]
@@ -7225,6 +7226,9 @@
         }
       }
       if (!enemy || !enemy.alive){ this.vx *= 0.92; this.vy *= 0.92; return; }
+
+      // 受击分身冷却计时：战斗中每帧回落，冷却好后再受击即可继续召唤（支持重复召唤）
+      if (this.cloneCD > 0) this.cloneCD -= dt;
 
       // ===== 居合斩冲刺撞击中：极高速冲向目标，命中即结算（伤害+后撤） =====
       if (this.dashing > 0){
@@ -13161,20 +13165,18 @@
           if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '破隐!', '#b06bff', {life: 0.7, size: 12}));
         }
       }
-      // 刺客·影分身：本体受击时生成贴身连斩分身（冷却限制 + 在场上限）
+      // 刺客·影分身：本体受击时按 CD 逐个生成贴身连斩分身（冷却限制 + 场上上限）
       if (this.cls === 'dash' && !this.isClone && !this.isDecoy && this.cloneDepth === 0 && this.hp > 0 && this.cloneCD <= 0){
         let cloneCount = 0;
         for (const u of balls){
           if (u.team === this.team && u.cls === 'dash' && u.isClone && u.alive) cloneCount++;
         }
-        const maxClones = 2;
-        const nClones = Math.min(2, maxClones - cloneCount);
-        if (nClones > 0){
-          for (let k = 0; k < nClones; k++){
-            this.spawnClone(balls, particles, k % 2 === 0); // 一个身前、一个身后，夹击
-          }
+        const maxClones = this.params.cloneMax != null ? this.params.cloneMax : 3;
+        if (cloneCount < maxClones){
+          // 每次触发只生成1个，方向前后交替制造夹击
+          this.spawnClone(balls, particles, cloneCount % 2 === 0);
           this.cloneCD = this.params.cloneCD != null ? this.params.cloneCD : 4;
-          if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, nClones > 1 ? '影分身×2!' : '影分身!', '#b06bff', {life: 0.7, size: 13}));
+          if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '影分身!(' + (cloneCount + 1) + '/' + maxClones + ')', '#b06bff', {life: 0.7, size: 13}));
         }
       }
       // 超时空战士·死亡被动【时空崩塌】：阵亡瞬间触发一次，范围内敌人大幅减速+中等范围伤害
