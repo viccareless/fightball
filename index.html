@@ -2403,7 +2403,7 @@
         { key: 'anchorMax', label: '时空锚点叠加上限', min: 2, max: 6, step: 1, def: 4, int: true },
         { key: 'dashCD', label: '时空穿梭冷却秒', min: 3, max: 12, step: 0.5, def: 6, int: false },
         { key: 'dashDmg', label: '穿梭强化斩击伤害', min: 8, max: 40, step: 1, def: 16, int: true },
-        { key: 'recallCD', label: '时空回溯冷却秒', min: 15, max: 40, step: 1, def: 20, int: true },
+        { key: 'recallCD', label: '时空回溯冷却秒', min: 4, max: 40, step: 1, def: 6, int: true },
         { key: 'overloadBonus', label: '过载普攻增伤%', min: 10, max: 60, step: 5, def: 30, int: true },
         { key: 'backRange', label: '回溯时间跨度秒', min: 2, max: 5, step: 0.5, def: 3, int: false },
         { key: 'burstRadius', label: '时空崩塌范围', min: 100, max: 300, step: 10, def: 210, int: true },
@@ -5124,11 +5124,11 @@
       this.chronoWarpTime = 0; // 跃迁状态剩余时间
       this.chronoTeleportCD = 0; // 跃迁期间瞬移间隔冷却
       // 超时空战士·全新状态（时空锚点/穿梭/回溯/过载/崩塌）
-      this.chronoAnchor = 0;            // 时空锚点层数（0-上限）
-      this.chronoAnchorT = 0;           // 锚点未命中计时（命中重置；耗尽后逐层衰减）
-      this.chronoAnchorDecT = 0;        // 锚点逐层衰减计时
+      this.chronoAnchor = 2;            // 电量点数（时空锚点改电量机制，每2s自动充1点）；开局携2点助首击切c
+      this.chronoChargeT = 0;           // 电量充能计时（每2s +1，上限anchorMax）
+      this.chronoAnchorDecT = 0;        // 兼容旧字段（不再用于电量）
       this.chronoAtkCD = 0;             // 时空刃普攻冷却
-      this.chronoDashCD = 0;            // 时空穿梭冷却
+      this.chronoDashCD = 1.5;          // 时空穿梭冷却（开局给1.5s初始冷却后即可首次瞬身）
       this.chronoDashIFrame = 0;        // 穿梭无敌帧剩余时间（落地后结束）
       this.chronoRecallCD = 0;          // 时空回溯冷却
       this.chronoRecallBuffer = [];     // 回溯快照环形缓冲 {t,x,y,hp}
@@ -5748,17 +5748,13 @@
           this.chronoOverloadT -= dt;
           if (this.chronoOverloadT <= 0) this.chronoOverload = 0;
         }
-        // 时空锚点衰减：连续未命中过一段时间后每秒衰减1层
-        if (this.chronoAnchor > 0){
-          this.chronoAnchorT -= dt;
-          if (this.chronoAnchorT <= 0){
-            this.chronoAnchorDecT -= dt;
-            if (this.chronoAnchorDecT <= 0){
-              this.chronoAnchorDecT = 1;
-              this.chronoAnchor--;
-              if (this.chronoAnchor < 0) this.chronoAnchor = 0;
-              floatTexts.push(new FloatText(this.x, this.y - this.size - 8, '锚点-1', '#8ab4ff', {life: 0.6, size: 10}));
-            }
+        // 电量充能：每2s自动充1点（上限anchorMax），替代旧的命中叠层/衰减机制
+        if (this.chronoAnchor < (this.params.anchorMax || 4)){
+          this.chronoChargeT += dt;
+          if (this.chronoChargeT >= 2){
+            this.chronoChargeT = 0;
+            this.chronoAnchor++;
+            floatTexts.push(new FloatText(this.x, this.y - this.size - 8, '电量+1', '#8ab4ff', {life: 0.6, size: 10}));
           }
         }
         // 回溯快照采样：每0.2s记录一次，保留 backRange 秒窗口
@@ -8515,9 +8511,22 @@
         this.useChronoRecall(particles);
       }
 
-      // ----- 主动【时空穿梭】：消耗2层锚点 瞬移贴脸+强化斩击 -----
+      // ----- 主动【时空穿梭】：消耗2层锚点 瞬移贴脸+强化斩击；距离无限，优先瞬身切敌方后排核心 -----
       if (this.chronoAnchor >= 2 && this.chronoDashCD <= 0){
-        this.useChronoDash(target, particles, this.params.dashDmg || 16, overloadB);
+        let dashTarget = target;
+        const backline = ['healer','mage','frostMage','timeMage','empMage','whiteEmber','foehn','sniper','fireBow','puppeteer','tongShi','summoner','plague','windRanger','thunderLord','liangyi','lingShuo','chrono'];
+        if (balls){
+          let bestB = null, bestD = Infinity;
+          for (const b of balls){
+            if (b === this || b.team === this.team || !b.alive) continue;
+            if (b.isClone || b.isDecoy || b.isDoll) continue;
+            if (backline.indexOf(b.cls) < 0) continue;
+            const dd = Math.hypot(b.x - this.x, b.y - this.y);
+            if (dd < bestD){ bestD = dd; bestB = b; } // 距离无限：全球场锁定后排核心
+          }
+          if (bestB) dashTarget = bestB;
+        }
+        this.useChronoDash(dashTarget, particles, this.params.dashDmg || 16, overloadB);
       }
 
       // ----- 普攻：时空刃近战 -----
@@ -8531,9 +8540,7 @@
           floatTexts.push(new FloatText(target.x, target.y - target.size - 10, '时空过载!', '#5fd4ff', {life: 0.8, size: 12}));
         }
         target.takeDamage(dmgv, this.color, particles, this);
-        // 命中叠加时空锚点（上限）
-        if (this.chronoAnchor < anchorMax) this.chronoAnchor++;
-        this.chronoAnchorT = 2; this.chronoAnchorDecT = 0;
+        // 电量机制：普攻不再叠层，电量仅靠每2s自动充能
         // 时空刃命中特效：靛蓝刀光迸溅
         for (let i=0;i<6;i++){
           particles.push(new Particle(target.x, target.y, '#5fd4ff', {ang: Math.random()*Math.PI*2, speed: 70+Math.random()*90, life: 0.3, size: 2.5}));
@@ -8558,13 +8565,32 @@
       this.chronoAnchorT = 0; this.chronoAnchorDecT = 0;
       const td = Math.max(1, Math.hypot(target.x - this.x, target.y - this.y));
       const tX = (target.x - this.x)/td, tY = (target.y - this.y)/td;
-      // 增加冲刺距离（允许贴脸冲刺任何目标，距离最大化）
-      const dist = Math.max(this.size + target.size + 10, td - target.size - this.size);
+      // 瞬移距离无限：直接越过敌人落于其身后背侧贴脸
+      const dist = td + target.size + this.size + 2;
       // 起点残影
       this.afterimages.push({ x: this.x, y: this.y, life: 0.4, maxLife: 0.4 });
+      // 远距离瞬移：原点空间裂隙展开反馈（青蓝迸发 + 旋转裂隙环）
+      const startXa = this.x, startYa = this.y;
+      for (let i=0;i<10;i++){
+        const a = Math.random()*Math.PI*2;
+        particles.push(new Particle(startXa, startYa, '#86f0ff', {ang:a, speed:150+Math.random()*130, life:0.5, size:3+Math.random()*2}));
+      }
+      for (let i=0;i<14;i++){
+        const a = (i/14)*Math.PI*2;
+        particles.push(new Particle(startXa + Math.cos(a)*(this.size+10), startYa + Math.sin(a)*(this.size+10), '#86f0ff', {speed:0, life:0.45, size:2.5}));
+      }
       this.x = Math.max(this.size + 2, Math.min(VIEW.w - this.size - 2, this.x + tX*dist));
       this.y = Math.max(this.size + 2, Math.min(VIEW.h - this.size - 2, this.y + tY*dist));
       this.afterimages.push({ x: this.x, y: this.y, life: 0.5, maxLife: 0.5 });
+      // 远距离瞬移落点：时空落点冲击环 + 上升光柱
+      for (let i=0;i<12;i++){
+        const a = (i/12)*Math.PI*2;
+        particles.push(new Particle(this.x + Math.cos(a)*(this.size+6), this.y + Math.sin(a)*(this.size+6), '#ffffff', {speed:0, life:0.5, size:2}));
+      }
+      for (let i=0;i<14;i++){
+        const a = -Math.PI/2 + (Math.random()-0.5)*1.8;
+        particles.push(new Particle(this.x + (Math.random()-0.5)*this.size, this.y, '#7fd8ff', {ang:a, speed:60+Math.random()*95, life:0.55, size:2.5}));
+      }
       // 位移时空光束连线（增加段数，视觉更清晰）
       for (let i=0;i<12;i++){
         const tt = i/12;
@@ -13667,6 +13693,32 @@
           ctx.fillStyle = 'rgba(95,212,255,0.95)';
           ctx.font = 'bold 11px sans-serif';
           ctx.fillText('◆'.repeat(al), x, y - this.size - 8);
+        }
+        // 时空回溯锚点提示：约 backRange 秒前所在位置（淡青幽灵环 + 标签）
+        if (this.alive && this.chronoRecallHas && this.chronoRecallBuffer && this.chronoRecallBuffer.length){
+          const backRange = this.params.backRange || 3;
+          const nowT = this.chronoAge || 0;
+          let bsnap = null, bd = Infinity;
+          for (const s of this.chronoRecallBuffer){
+            const d = Math.abs((nowT - s.t) - backRange);
+            if (d < bd){ bd = d; bsnap = s; }
+          }
+          if (bsnap){
+            const pulse = 0.5 + 0.3 * Math.sin(Date.now() * 0.005);
+            ctx.save();
+            ctx.globalCompositeOperation = 'lighter';
+            ctx.shadowColor = '#7fd8ff'; ctx.shadowBlur = 14;
+            ctx.strokeStyle = rgba('#7fd8ff', 0.15 + 0.35 * pulse);
+            ctx.lineWidth = 1.6;
+            ctx.setLineDash([5, 4]);
+            ctx.beginPath(); ctx.arc(bsnap.x, bsnap.y, this.size + 8 + Math.sin(Date.now() * 0.006) * 2, 0, Math.PI * 2); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = rgba('#bfefff', 0.9);
+            ctx.font = 'bold 10px "Microsoft YaHei", sans-serif';
+            ctx.fillText('↶回溯锚点', bsnap.x, bsnap.y - this.size - 12);
+            ctx.restore();
+          }
         }
         // 时空过载：刀锋白光提示
         if (this.chronoOverload > 0){
