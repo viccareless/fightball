@@ -2685,7 +2685,7 @@
         { key: 'guardHp', label: '卫士血量', min: 20, max: 80, step: 5, def: 45, int: true },
         { key: 'guardAtk', label: '卫士攻击', min: 4, max: 20, step: 1, def: 10, int: true },
         { key: 'guardAtkRate', label: '卫士攻击间隔秒', min: 0.8, max: 2.5, step: 0.1, def: 1.5, int: false },
-        { key: 'maxGuards', label: '最大卫士数', min: 2, max: 8, step: 1, def: 5, int: true },
+        { key: 'maxGuards', label: '最大卫士数', min: 2, max: 8, step: 1, def: 3, int: true },
         { key: 'shellDefBonus', label: '单层壳减伤%', min: 1, max: 8, step: 1, def: 3, int: true },
         { key: 'shieldHP', label: '满层护盾厚度', min: 20, max: 120, step: 10, def: 60, int: true },
         { key: 'deathAoeDmg', label: '卫士死亡AOE伤害', min: 5, max: 30, step: 1, def: 15, int: true },
@@ -11746,7 +11746,7 @@
       this.moltenSummonCD -= dt;
       if (this.moltenSummonCD <= 0){
         const guardCount = balls.filter(b => b.alive && b.team === this.team && b.isMoltenGuard && b.owner === this).length;
-        const maxG = p.maxGuards || 5;
+        const maxG = p.maxGuards || 3;
         if (guardCount < maxG){
           this.moltenSummonCD = p.summonCD || 4;
           const ang = Math.random() * Math.PI * 2;
