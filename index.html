@@ -4287,7 +4287,7 @@
     pain: {
       atk: { name: '黑棒穿刺', cds: ['painAtkCD'], max: 1.5 },
       slots: [
-        { name: '神罗天征', cds: ['painShinraCD'], max: 9, custom: 'shinra' },
+        { name: '神罗天征', cds: ['painShinraCD'], max: 9, custom: 'shinra', readyWhen: b => !!b.painTenduoActive },
         { name: '修罗道导弹', cds: ['painSkillCD'], max: 3 },
         { name: '畜生道通灵', cds: ['painBeastCD'], max: 4 },
       ]
@@ -7919,16 +7919,41 @@
 
       let enemy = this.isDoll ? this.markedOrNearestEnemy(balls) : ((this.cls === 'dash') ? this.preferBacklineEnemy(balls)
         : ((this.cls === 'ninja' || this.cls === 'berserker' || this.cls === 'sniper') ? this.lowestHpEnemy(balls) : this.nearestEnemy(balls)));
-      if (!enemy){ this.vx*=0.95; this.vy*=0.95; this._integrate(dt); return; }
+      if (!enemy){
+        // 无可见敌人（如对手隐身）
+        if (this.frozenTime > 0){ this.vx*=0.95; this.vy*=0.95; this._integrate(dt); return; }
+        if (!this.isManual){
+        // AI：不静止，朝最后已知位置搜索移动
+        const lx = (this._lastEnemyX != null) ? this._lastEnemyX : VIEW.w * 0.5;
+        const ly = (this._lastEnemyY != null) ? this._lastEnemyY : VIEW.h * 0.5;
+        const sdx = lx - this.x, sdy = ly - this.y;
+        const sd = Math.max(1, Math.hypot(sdx, sdy));
+        if (sd > 28){
+          this.vx += (sdx/sd) * this.baseSpeed * spdMul * dt * 4;
+          this.vy += (sdy/sd) * this.baseSpeed * spdMul * dt * 4;
+          this.facing = Math.atan2(sdy, sdx);
+        } else {
+          // 已抵达搜索点：原地小幅游走，保持警戒
+          this._searchA = (this._searchA == null ? Math.random()*Math.PI*2 : this._searchA + dt * 1.2);
+          this.vx += Math.cos(this._searchA) * this.baseSpeed * spdMul * dt * 2.5;
+          this.vy += Math.sin(this._searchA) * this.baseSpeed * spdMul * dt * 2.5;
+          this.facing = this._searchA;
+        }
+        this._integrate(dt);
+        return;
+        }
+      } else {
+        this._lastEnemyX = enemy.x; this._lastEnemyY = enemy.y;
+      }
 
-      let dx = enemy.x - this.x;
-      let dy = enemy.y - this.y;
-      let d = Math.max(1, Math.hypot(dx,dy));
-      let dirX = dx/d, dirY = dy/d;
-      this.facing = Math.atan2(dy, dx);
+      let dx = enemy ? (enemy.x - this.x) : 0;
+      let dy = enemy ? (enemy.y - this.y) : 0;
+      let d = enemy ? Math.max(1, Math.hypot(dx,dy)) : 9999;
+      let dirX = enemy ? dx/d : 0, dirY = enemy ? dy/d : 0;
+      if (enemy) this.facing = Math.atan2(dy, dx);
 
       // 卫士嘲讽：被嘲讽敌人强制切换攻击目标为卫士
-      if (this._gdTauntBy && this._gdTauntBy.alive && this._gdTauntBy._gdTauntTime > 0 && this._gdTauntBy.team !== this.team){
+      if (enemy && this._gdTauntBy && this._gdTauntBy.alive && this._gdTauntBy._gdTauntTime > 0 && this._gdTauntBy.team !== this.team){
         const g = this._gdTauntBy;
         if (Math.hypot(g.x - this.x, g.y - this.y) < 700){
           enemy = g;
@@ -8170,6 +8195,7 @@
 // ===== 玩家手操：走位 + 按键触发原生技能 =====
     // 原生 AI 分发（技能/普攻/被动逻辑完全不变，仅触发方式改为按键）
     _dispatchAI(adt, enemy, d, dirX, dirY, spdMul){
+      if (!enemy || !enemy.alive) return;   // 无目标：不派遣 AI（手操下对手隐身等）
       switch(this.cls){
         case 'fireBow': this.aiFireBow(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, aoes, particles); break;
         case 'trap':    this.aiTrap(adt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles); break;
@@ -8424,7 +8450,7 @@
       this._lyApplyForm(this.lyForm === 'yin' ? 'yang' : 'yin');
     }
 
-    // 佩恩·神罗天征（手操专用）：按键即释放，无需天道超形态/敌人距离条件
+    // 佩恩·神罗天征（手操专用）：仅「天道超」形态可用，按键释放
     _manualShinraGate(dt, inp, slotIdx){
       if (!this._mShadow) this._mShadow = {};
       const key = inp.keys[slotIdx];
@@ -8432,7 +8458,12 @@
       const edge = on && !this._mPrevShinraKey;
       this._mPrevShinraKey = on;
       this._mShadow.painShinraCD = Math.max(0, this.painShinraCD);   // HUD 冷却镜像真实值
-      if (!edge || this.painShinraCD > 0) return;
+      if (!edge) return;
+      if (!this.painTenduoActive){
+        if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 20, '需天道超形态', '#9a7ec0', {life:0.7, size:12}));
+        return;
+      }
+      if (this.painShinraCD > 0) return;
       this._painShinraTensei(balls, particles, this.params);
       this.painChakra = Math.min((this.params.chakraMax || 9), (this.painChakra || 0) + 1);   // 与 AI 版一致：每次释放叠1层查克拉
     }
