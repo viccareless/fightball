@@ -1951,7 +1951,7 @@
         { key: 'howlTakeExtra', label: '狂化承伤%', min: 10, max: 60, step: 5, def: 25, int: true },
         { key: 'howlSpdUp', label: '狂化移速%', min: 0, max: 200, step: 10, def: 70, int: true },
         { key: 'howlBurnPct', label: '狂化灼血%', min: 0.5, max: 8, step: 0.5, def: 2, int: false },
-        { key: 'howlBurnInterval', label: '灼血间隔秒', min: 0.2, max: 2, step: 0.1, def: 0.5, int: false },
+        { key: 'howlBurnInterval', label: '灼血间隔秒', min: 0.1, max: 2, step: 0.05, def: 0.25, int: false },
         { key: 'howlBurnDmgPer', label: '每层血刃增伤%', min: 2, max: 20, step: 1, def: 10, int: true },
         { key: 'harvestHeal', label: '收割回复%', min: 5, max: 30, step: 1, def: 12, int: true },
         { key: 'harvestSpd', label: '收割移速%', min: 10, max: 60, step: 5, def: 30, int: true },
@@ -2282,7 +2282,7 @@
         { key: 'snipeDmg', label: '狙击伤害百分比', min: 5, max: 50, step: 1, def: 25, int: true },
         { key: 'snipeCharge', label: '蓄力时间秒', min: 1, max: 5, step: 0.1, def: 2.75, int: false },
         { key: 'snipeRange', label: '狙击触发距离', min: 200, max: 500, step: 20, def: 280, int: true },
-        { key: 'snipeSpeed', label: '狙击弹速度', min: 600, max: 1600, step: 50, def: 1000, int: true },
+        { key: 'snipeSpeed', label: '狙击弹速度', min: 600, max: 3000, step: 100, def: 2000, int: true },
         { key: 'headshotMul', label: '爆头伤害倍率', min: 1.2, max: 3.5, step: 0.1, def: 1.5, int: false },
         { key: 'headshotRange', label: '爆头触发距离', min: 150, max: 400, step: 10, def: 260, int: true },
         { key: 'markDur', label: '标记持续秒', min: 2, max: 10, step: 0.5, def: 5, int: false },
@@ -2290,7 +2290,7 @@
         { key: 'trapDmg', label: '诡雷伤害', min: 8, max: 35, step: 1, def: 15, int: true },
         { key: 'trapCD', label: '诡雷生成秒', min: 3, max: 15, step: 0.5, def: 6, int: false },
         { key: 'maxTraps', label: '最大诡雷数', min: 1, max: 5, step: 1, def: 3, int: true },
-        { key: 'dodgeCD', label: '闪避冷却秒', min: 4, max: 12, step: 0.5, def: 8, int: false },
+        { key: 'dodgeCD', label: '闪避冷却秒', min: 2, max: 12, step: 0.5, def: 3, int: false },
         { key: 'focusMaxBonus', label: '专注最大增伤', min: 0.1, max: 0.6, step: 0.05, def: 0.25, int: false },
         { key: 'recoilForce', label: '后坐力力度', min: 200, max: 1500, step: 20, def: 1000, int: true }
       ]
@@ -2739,7 +2739,7 @@
       atk: { name: '蓄力狙击', cds: ['sniperFireCD'], max: 0.8 },
       slots: [
         { name: '诡雷', cds: ['sniperTrapCD'], max: 6 },
-        { name: '后撤闪避', cds: ['sniperDodgeCD'], max: 8, custom: 'dodge' },
+        { name: '后撤闪避', cds: ['sniperDodgeCD'], max: 3, custom: 'dodge' },
       ]
     },
     titan: {
@@ -5681,7 +5681,7 @@
         if (this.howlT > 0 && !this.deathPersist){
           this.howlBurnT -= dt;
           if (this.howlBurnT <= 0){
-            this.howlBurnT = this.params.howlBurnInterval != null ? this.params.howlBurnInterval : 0.5;
+            this.howlBurnT = this.params.howlBurnInterval != null ? this.params.howlBurnInterval : 0.25;
             const burnPct = (this.params.howlBurnPct != null ? this.params.howlBurnPct : 2) / 100;
             this.hp = Math.max(1, this.hp - this.maxHp * burnPct);
             this.howlBurn = (this.howlBurn || 0) + 1;
@@ -7036,7 +7036,7 @@
       } else {
         dx = -Math.cos(this.facing); dy = -Math.sin(this.facing);
       }
-      this.sniperDodgeCD = this.params.dodgeCD || 8;
+      this.sniperDodgeCD = this.params.dodgeCD || 3;
       this.sniperDodging = 0.25;
       this.sniperDodgeDirX = dx;
       this.sniperDodgeDirY = dy;
@@ -8459,7 +8459,7 @@
           this.sniperChargeTime = 0;
           // 专注瞄准增伤
           const focusBonus = 1 + Math.min(1, this.sniperFocusTime / 3) * (this.params.focusMaxBonus || 0.25);
-          const ss = (this.params.snipeSpeed != null ? this.params.snipeSpeed : 1000);
+          const ss = (this.params.snipeSpeed != null ? this.params.snipeSpeed : 2000);
           const snipe = new Bullet(
             muzzleX, muzzleY,
             dirX*ss, dirY*ss,
@@ -8544,7 +8544,7 @@
 
       // 低血量触发闪避（手操模式改为按键触发，AI 不自动后撤）
       if (!this.isManual && this.sniperDodgeCD <= 0 && this.hp / this.maxHp < 0.35 && d < 180){
-        this.sniperDodgeCD = this.params.dodgeCD || 8;
+        this.sniperDodgeCD = this.params.dodgeCD || 3;
         this.sniperDodging = 0.25;
         this.sniperDodgeDirX = -dirX;
         this.sniperDodgeDirY = -dirY;
