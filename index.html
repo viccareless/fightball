@@ -2137,11 +2137,14 @@
         { key: 'spikeCD', label: '木遁棘刺冷却/秒', min: 3, max: 15, step: 0.5, def: 10, int: false },
         { key: 'rootDur', label: '束缚禁锢时长/秒', min: 1, max: 5, step: 0.5, def: 1.5, int: false },
         { key: 'rootMax', label: '同时束缚上限', min: 1, max: 5, step: 1, def: 3, int: true },
-        { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 4, max: 15, step: 1, def: 7, int: true },
+        { key: 'chakraInterval', label: '瞳力积蓄间隔/秒', min: 1, max: 15, step: 0.25, def: 1.5, int: false },
         { key: 'kamuiDur', label: '虚化持续时间/秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
         { key: 'fireAoe', label: '爆风乱舞AOE范围', min: 80, max: 300, step: 10, def: 300, int: true },
         { key: 'burnDmg', label: '灼烧伤害/秒', min: 2, max: 15, step: 1, def: 5, int: true },
         { key: 'atkInterval', label: '普攻释放间隔/秒', min: 0.5, max: 3, step: 0.1, def: 1.5, int: false },
+        { key: 'meleeDmg', label: '近战普攻伤害', min: 2, max: 20, step: 1, def: 6, int: true },
+        { key: 'meleeInterval', label: '近战普攻间隔/秒', min: 0.3, max: 2, step: 0.1, def: 0.9, int: false },
+        { key: 'fireInterval', label: '爆风乱舞冷却/秒', min: 1, max: 8, step: 0.5, def: 2.5, int: false },
         { key: 'spikeDmg', label: '木棘伤害', min: 3, max: 25, step: 1, def: 5, int: true },
         { key: 'fireDmg', label: '爆风乱舞伤害', min: 3, max: 25, step: 1, def: 8, int: true },
         { key: 'kamuiBonusDmg', label: '神威附加伤害', min: 5, max: 40, step: 1, def: 30, int: true },
@@ -2150,7 +2153,7 @@
         { key: 'kamuiFailCdExtra', label: '虚化空放追加锁定/秒', min: 0, max: 8, step: 0.5, def: 3, int: false },
         { key: 'kamuiFailEffectMul', label: '虚化空放抓取效果倍率', min: 0.2, max: 1, step: 0.1, def: 0.5, int: false },
         { key: 'kamuiPerfectEffectMul', label: '完美虚化抓取效果倍率', min: 1, max: 3, step: 0.1, def: 1.0, int: false },
-        { key: 'kamuiPerfectRefund', label: '完美虚化瞳力返还', min: 0, max: 5, step: 1, def: 2, int: true },
+        { key: 'kamuiPerfectRefund', label: '完美虚化瞳力返还', min: 0, max: 10, step: 1, def: 2, int: true },
         { key: 'kamuiAiCloseRange', label: 'AI主动虚化近身距离', min: 60, max: 320, step: 10, def: 150, int: true },
         { key: 'kamuiAiHpPct', label: 'AI主动虚化残血阈值%', min: 0, max: 90, step: 5, def: 45, int: true },
         { key: 'comboFireDmg', label: '木火连击附加伤害', min: 3, max: 30, step: 1, def: 12, int: true },
@@ -2217,7 +2220,7 @@
         { key: 'teleportCd', label: '瞬移冷却秒', min: 0.8, max: 4, step: 0.1, def: 1.8, int: false },
         { key: 'rasenganDmg', label: '螺旋丸伤害', min: 10, max: 50, step: 1, def: 25, int: true },
         { key: 'flashBonus', label: '闪光增益%', min: 5, max: 40, step: 5, def: 15, int: true },
-        { key: 'ultCD', label: '大招冷却秒', min: 12, max: 40, step: 1, def: 22, int: true },
+        { key: 'ultCD', label: '大招冷却秒', min: 8, max: 40, step: 1, def: 16, int: true },
         { key: 'ultKunaiCount', label: '闪杀苦无件数', min: 3, max: 10, step: 1, def: 6, int: true },
         { key: 'ultFlashDmg', label: '闪杀单段斩伤', min: 8, max: 40, step: 1, def: 16, int: true }
       ]
@@ -2711,8 +2714,9 @@
       ]
     },
     obito: {
-      atk: { name: '火遁爆风乱舞', cds: ['obitoAtkCD'], max: 1.2 },
+      atk: { name: '写轮眼·体术', cds: ['obitoAtkCD'], max: 0.9 },
       slots: [
+        { name: '火遁·爆风乱舞', cds: ['obitoFireCD'], max: 2.5 },
         { name: '木遁棘刺', cds: ['obitoSpikeCD'], max: 6 },
         { name: '神威虚化', cds: ['obitoKamuiCD'], max: 20, custom: 'kamui' },
       ]
@@ -2727,11 +2731,11 @@
       ]
     },
     minato: {
-      atk: { name: '飞雷神苦无', cds: ['minatoKunaiCD'], max: 2.0 },
+      atk: { name: '飞雷神苦无', cds: ['minatoKunaiCD'], max: 1.6 },
       slots: [
-        { name: '螺旋丸', cds: ['minatoRasenganCD'], max: 4 },
+        { name: '螺旋丸', cds: ['minatoRasenganCD'], max: 3 },
         { name: '瞬移', cds: ['minatoTeleportCD'], max: 1.8 },
-        { name: '飞雷神·多重闪杀', cds: ['minatoUltCD'], max: 22 },
+        { name: '飞雷神·多重闪杀', cds: ['minatoUltCD'], max: 16 },
       ]
     },
     wuLiuQi: {
@@ -2841,8 +2845,8 @@
       { label: '召唤', color: '#9fe8ff', max: 3, get: (b, balls) => balls.filter(x => x.alive && x.isSoul && x.owner === b).length },
     ],
     obito: [
-      { label: '瞳力', color: '#c77dff', max: 5, get: b => b.obitoChakra || 0 },
-      { label: '充能锁定', color: '#ff6b6b', max: b => Math.round((b.params.chakraInterval || 7) * 5 * (b.params.kamuiFailCdMul != null ? b.params.kamuiFailCdMul : 1.8) + (b.params.kamuiFailCdExtra != null ? b.params.kamuiFailCdExtra : 3)), get: b => Math.ceil(b.obitoKamuiLockT || 0), show: b => (b.obitoKamuiLockT || 0) > 0 },
+      { label: '瞳力', color: '#c77dff', max: 10, get: b => b.obitoChakra || 0 },
+      { label: '充能锁定', color: '#ff6b6b', max: b => Math.round((b.params.chakraInterval || 1.25) * 5 * (b.params.kamuiFailCdMul != null ? b.params.kamuiFailCdMul : 1.8) + (b.params.kamuiFailCdExtra != null ? b.params.kamuiFailCdExtra : 3)), get: b => Math.ceil(b.obitoKamuiLockT || 0), show: b => (b.obitoKamuiLockT || 0) > 0 },
     ],
     illusionist: [
       { label: '幻瞳', color: '#c77dff', max: 5, get: b => b.phEn || 0 },
@@ -3069,19 +3073,20 @@
       if (this.trail.length>10) this.trail.shift();
       this.x += this.vx*dt; this.y += this.vy*dt;
       this.life -= dt;
-      // 子弹类普攻：轻微吸附（自动微调弹道，提升命中率）
+      // 子弹类普攻：轻微吸附（自动微调弹道，提升命中率；大幅下调让走位更易躲）
       // 仅普通弹种生效；弹射/回旋/激光/追踪/狙击/爆炸等特殊弹种跳过，避免干扰其固有逻辑
       if (!this.isCannon && !this.isWindBounce && !this.isScissor && !this.isSniper &&
           !this.isTitanCannon && !this.isTitanLaser && !this.isTitanMother &&
           !this.isPupHoming && !this.isPupSummon && !this.isLinBlade && !this.isEmpBolt &&
           !this.isPainMissile && !this.isPainBeast && !this.isWoodSpike &&
           !this.isTsThread && !this.isTsBeam && !this.isFireBomb && !this.isGrenade){
-        // 仅生命前 60% 生效，越接近终点越不修正，避免明显「锁头感」
+        // 仅生命前 30% 生效（原本 60%），大部分弹道保持原方向，走位即可躲开
         const lifeFrac = this._life0 > 0 ? (this.life / this._life0) : 0;
-        if (lifeFrac > 0.4){
+        if (lifeFrac > 0.7){
           const sp = Math.hypot(this.vx, this.vy);
           if (sp > 1){
-            let tgt = null, bd = 250*250;
+            // 搜索范围从 200 缩到 130（-35%），更近的敌人才参与吸附
+            let tgt = null, bd = 130*130;
             for (const b of balls){
               if (!b.alive || b.team === this.team || b.invisible) continue;
               const dx = b.x - this.x, dy = b.y - this.y;
@@ -3095,9 +3100,10 @@
               let diff = want - cur;
               while (diff > Math.PI) diff -= Math.PI*2;
               while (diff < -Math.PI) diff += Math.PI*2;
-              // 仅对小幅偏角做修正；偏角过大（含已越过目标）不修正
-              if (Math.abs(diff) < 0.95){
-                const turn = Math.sign(diff) * Math.min(Math.abs(diff), 2.2 * dt);
+              // 偏角阈值从 0.75 砍到 0.45（约 26°），绝大多数出膛偏角直接放过
+              if (Math.abs(diff) < 0.45){
+                // 转向速率从 1.6 砍到 0.9，吸附更迟钝
+                const turn = Math.sign(diff) * Math.min(Math.abs(diff), 0.9 * dt);
                 const na = cur + turn;
                 this.vx = Math.cos(na) * sp;
                 this.vy = Math.sin(na) * sp;
@@ -5301,10 +5307,11 @@
       // _mindExhaustDelayT/_mindExhaustT(精神损耗)  _mindShockT(残梦碎境)  _phPhraseCdUntil(幻境6s冷却)
       // ===== 宇智波带土相关状态 =====
       this.obitoSpikeCD = 1.5; // 木遁棘刺冷却
-      this.obitoChakra = 0; // 瞳力点数（初始0点，需蓄满5点才能虚化）
+      this.obitoChakra = 0; // 瞳力点数（初始0点，上限10点，虚化消耗5点）
       this.obitoChakraTimer = 0; // 瞳力积蓄计时
       this.obitoKamuiTime = 0; // 神威虚化剩余时间
-      this.obitoAtkCD = 0; // 普攻冷却
+      this.obitoAtkCD = 0; // 近战普攻冷却
+      this.obitoFireCD = 1.5; // 火遁·爆风乱舞技能冷却
       this.obitoRootedList = []; // 被木棘束缚的目标引用列表
       this.obitoKamuiManual = false; // 手操：本次虚化是否由按键开启
       this.obitoKamuiNegated = false; // 本次虚化是否成功闪避了攻击
@@ -5412,6 +5419,7 @@
       this.minatoKunaiCombo = 0; // 普攻连击计数（达到阈值后释放多重苦无）
       this.minatoUltCD = 0; // 大招·飞雷神多重闪杀 冷却
       this.minatoUlt = null; // 大招进行中状态机 {points, idx, t, step, hit}
+      this.minatoNextMark = null; // 下次瞬移将要去的标记（用于高光提示）
       // ===== 伍六七相关状态 =====
       this.wlqScissorCD = 0; // 剪刀攻击冷却
       this.wlqScissorOut = false; // 剪刀是否已飞出
@@ -6517,10 +6525,10 @@
             this.obitoKamuiLockT = Math.max(0, this.obitoKamuiLockT - dt);
           } else {
             this.obitoChakraTimer += dt;
-            const interval = this.params.chakraInterval || 7;
+            const interval = this.params.chakraInterval || 1.5;
             if (this.obitoChakraTimer >= interval){
               this.obitoChakraTimer = 0;
-              if (this.obitoChakra < 5){
+              if (this.obitoChakra < 10){
                 this.obitoChakra += 1;
                 floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '瞳力+1', '#b484ff', {life: 0.8, size: 11}));
               }
@@ -6548,7 +6556,7 @@
                 kamuiEffMul = this.params.kamuiFailEffectMul != null ? this.params.kamuiFailEffectMul : 0.5;
               }
             }
-            let killedByKamui = false;
+            let grabSucceeded = false;
             const target = this.nearestEnemy(balls);
             // 手操：虚化结束的跳跃抓取 → 跟随 WASD 的指向性位移（带落点提示）；AI：瞬移到敌人脸上
             if (this.obitoKamuiManual){
@@ -6559,7 +6567,7 @@
               const fb = getFieldBounds();
               const lx = Math.max(this.size, Math.min(fb.right - this.size, this.x + md.x * leapR));
               const ly = Math.max(this.size, Math.min(fb.bottom - this.size, this.y + md.y * leapR));
-              this._mDashLanding(lx, ly, 0.6, '#b484ff', 44);
+              this._mDashLanding(lx, ly, 0.6, '#b484ff', this._kamuiGrabR());
               this.afterimages.push({ x: this.x, y: this.y, life: 0.4, maxLife: 0.4, color: '#b484ff' });
               for (let i=0;i<16;i++){
                 const a = Math.random()*Math.PI*2;
@@ -6576,7 +6584,7 @@
                 this.y += (tdy/td) * blinkDist;
               }
             }
-            // 神威抓取目标：手操=落点附近敌人；AI=最近敌人
+            // 神威抓取目标：手操=落点附近敌人（判定范围扩大70%）；AI=最近敌人
             let grabTarget = target;
             if (this.obitoKamuiManual){
               grabTarget = null;
@@ -6584,10 +6592,13 @@
               for (const b of balls){
                 if (!b.alive || b.team === this.team) continue;
                 const dd = Math.hypot(b.x - this.x, b.y - this.y);
-                if (dd <= this.size + 48 + b.size && dd < gbd){ gbd = dd; grabTarget = b; }
+                if (dd <= this._kamuiGrabR(b.size) && dd < gbd){ gbd = dd; grabTarget = b; }
               }
             }
+            // 抓取范围特效：与判定范围同步
+            aoes.push(new SkillCircle(this.x, this.y, this._kamuiGrabR(grabTarget ? grabTarget.size : undefined), '#b484ff', 0.5, {fillAlpha: 0.12, lineWidth: 3}));
             if (grabTarget && grabTarget.alive){
+              grabSucceeded = true;
               // 神威抓取：造成伤害+眩晕
               const kamuiDmg = Math.max(1, Math.round((this.params.kamuiDmg || 25) * kamuiEffMul));
               grabTarget.takeDamage(kamuiDmg, '#6b2473', particles, this);
@@ -6605,20 +6616,17 @@
               }
               shake = Math.max(shake, 6);
               floatTexts.push(new FloatText(grabTarget.x, grabTarget.y - grabTarget.size - 10, '神威!', '#b484ff', {life: 1.0, size: 14}));
-              // 判断是否被神威抓取击杀
-              if (!grabTarget.alive) killedByKamui = true;
             }
-            // 清空瞳力
-            this.obitoChakra = 0;
+            // 虚化结束：瞳力已在开启时扣除5点，此处不清空
             this.obitoChakraTimer = 0;
-            // 手操虚化结算：完美=奖励(瞳力返还)；非完美闪避=无奖惩；空放=惩罚(瞳力充能锁定)
+            // 手操虚化结算：完美=奖励(额外瞳力返还)；非完美闪避=无奖惩；空放=惩罚(瞳力充能锁定)
             if (kamuiState === 'perfect'){
               const refund = this.params.kamuiPerfectRefund != null ? this.params.kamuiPerfectRefund : 2;
-              this.obitoChakra = Math.max(this.obitoChakra, refund);
+              this.obitoChakra = Math.min(10, this.obitoChakra + refund);
               this.obitoChakraTimer = 0;
               floatTexts.push(new FloatText(this.x, this.y - this.size - 30, '完美虚化·瞳力+' + refund, '#c77dff', {life: 1.3, size: 14}));
             } else if (kamuiState === 'fail'){
-              const interval = this.params.chakraInterval || 7;
+              const interval = this.params.chakraInterval || 1.5;
               const mul = this.params.kamuiFailCdMul != null ? this.params.kamuiFailCdMul : 1.8;
               const extra = this.params.kamuiFailCdExtra != null ? this.params.kamuiFailCdExtra : 3;
               this.obitoKamuiLockT = interval * 5 * mul + extra;
@@ -6629,10 +6637,10 @@
             this.obitoKamuiManual = false;
             this.obitoKamuiNegated = false;
             this.obitoKamuiPerfect = false;
-            // 神威抓取击杀：迅速恢复4点瞳力
-            if (killedByKamui){
-              this.obitoChakra = 4;
-              floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '神威收割·瞳力+4', '#b484ff', {life: 1.3, size: 13}));
+            // 神威成功抓取（含击杀）：返还5点瞳力
+            if (grabSucceeded){
+              this.obitoChakra = Math.min(10, this.obitoChakra + 5);
+              floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '神威抓取·瞳力+5', '#b484ff', {life: 1.3, size: 13}));
               for (let i=0;i<18;i++){
                 const ang = Math.random()*Math.PI*2;
                 particles.push(new Particle(this.x, this.y, '#b484ff', {ang, speed:50+Math.random()*90, life:0.6+Math.random()*0.4, size:2+Math.random()*2.5}));
@@ -7156,6 +7164,7 @@
         this.obitoKamuiNegated = false;
         this.obitoKamuiPerfect = false;
         this.obitoKamuiTime = this.params.kamuiDur || 3;
+        this.obitoChakra -= 5;
         // 虚化开启特效
         for (let i=0;i<20;i++){
           const ang = Math.random()*Math.PI*2;
@@ -7316,7 +7325,7 @@
       if (this.cls === 'obito' && this.obitoKamuiTime > 0){
         const defX = enemy ? (enemy.x - this.x) : Math.cos(this.facing);
         const defY = enemy ? (enemy.y - this.y) : Math.sin(this.facing);
-        push({ dist: (p.kamuiLeapRange != null ? p.kamuiLeapRange : 260) * MANUAL_DASH_MUL, color: '#b484ff', r: 44 }, defX, defY);
+        push({ dist: (p.kamuiLeapRange != null ? p.kamuiLeapRange : 260) * MANUAL_DASH_MUL, color: '#b484ff', r: this._kamuiGrabR() }, defX, defY);
       }
       this._dashPreview = list;
     }
@@ -7328,6 +7337,7 @@
       this.obitoKamuiNegated = false;
       this.obitoKamuiPerfect = false;
       this.obitoKamuiTime = this.params.kamuiDur || 3;
+      this.obitoChakra -= 5;
       for (let i=0;i<20;i++){
         const ang = Math.random()*Math.PI*2;
         particles.push(new Particle(this.x, this.y, '#6b2473', {ang, speed:80+Math.random()*120, life:0.5+Math.random()*0.3, size:3+Math.random()*2}));
@@ -7340,8 +7350,13 @@
     _obitoKamuiReadyCD(){
       if (this.obitoKamuiLockT > 0) return this.obitoKamuiLockT;
       if (this.obitoChakra >= 5) return 0;
-      const interval = this.params.chakraInterval || 7;
+      const interval = this.params.chakraInterval || 1.5;
       return Math.max(0, (5 - this.obitoChakra) * interval - this.obitoChakraTimer);
+    }
+
+    // 神威抓取判定范围（预览/特效共用以保持同步；系数 0.85 整体减半）
+    _kamuiGrabR(sz){
+      return (this.size + 48 + (sz != null ? sz : this.size)) * 0.85;   // 抓取范围 1.7 → 0.85（减半；特效同步通过此函数读取自动一致）
     }
 
     // 记录一次「虚化闪避」：手操虚化窗口内被攻击、或子弹穿过身体时调用；窗口早期=完美
@@ -7973,9 +7988,9 @@
 
       // 普攻：投掷飞雷神苦无（每3次后第4次释放三连扇形苦无）
       if (this.minatoKunaiCD <= 0 && d < 600){
-        this.minatoKunaiCD = 2.0;
+        this.minatoKunaiCD = 1.6;   // 普攻冷却 2.0 → 1.6（-20%）
         this.minatoKunaiCombo++;
-        const ks = 420;
+        const ks = 840;   // 苦无速度提升为原 2 倍（420→840），高速投射
         const isMulti = this.minatoKunaiCombo >= 4;
         if (isMulti){
           this.minatoKunaiCombo = 0;
@@ -7993,7 +8008,7 @@
             kunai.isKunai = true;
             kunai.kunaiOwner = this;
             kunai.size = 6;
-            kunai.life = 2.5;
+            kunai.life = 3.0;   // 速度翻倍后延长存在时间，保证飞行距离
             bullets.push(kunai);
           }
           // 多重苦无投掷特效
@@ -8014,7 +8029,7 @@
           kunai.isKunai = true;
           kunai.kunaiOwner = this;
           kunai.size = 6;
-          kunai.life = 2.5;
+          kunai.life = 3.0;   // 速度翻倍后延长存在时间
           bullets.push(kunai);
           // 投掷特效
           for (let i=0;i<6;i++){
@@ -8045,14 +8060,25 @@
           this.minatoTeleportCD = (this.params.teleportCd || 1.8) * tpCdMul;
         }
       }
+      // 预选"下次瞬移"的目标标记 → 渲染时高亮（玩家操控时尤其需要看清楚）
+      if (this.minatoMarks.length > 0){
+        let bestMark = null, bestD = Infinity;
+        for (const m of this.minatoMarks){
+          const md = m.target === enemy ? 0 : Math.hypot(m.x - enemy.x, m.y - enemy.y);
+          if (md < bestD){ bestD = md; bestMark = m; }
+        }
+        this.minatoNextMark = bestMark;
+      } else {
+        this.minatoNextMark = null;
+      }
 
       // 标记全部消失时自动补一枚苦无
       if (this.minatoMarks.length === 0){
         this.minatoAutoKunaiTimer -= dt;
         if (this.minatoAutoKunaiTimer <= 0 && this.minatoKunaiCD <= 0){
           this.minatoAutoKunaiTimer = 0.5;
-          this.minatoKunaiCD = 2.0;
-          const ks = 420;
+          this.minatoKunaiCD = 1.6;   // 普攻冷却 2.0 → 1.6（与手动保持一致）
+          const ks = 840;   // 苦无速度提升为原 2 倍（与普攻保持一致）
           const kunai = new Bullet(
             this.x + dirX*this.size, this.y + dirY*this.size,
             dirX*ks, dirY*ks,
@@ -8062,7 +8088,7 @@
           kunai.isKunai = true;
           kunai.kunaiOwner = this;
           kunai.size = 6;
-          kunai.life = 2.5;
+          kunai.life = 3.0;
           bullets.push(kunai);
         }
       } else {
@@ -8135,7 +8161,7 @@
 
     // 波风水门：螺旋丸
     _castRasengan(enemy, balls, particles, atkMul){
-      this.minatoRasenganCD = 4;
+      this.minatoRasenganCD = 3;   // 螺旋丸冷却 4 → 3（-25%）
       // 瞬移到敌人身旁
       const ang = Math.atan2(enemy.y - this.y, enemy.x - this.x);
       const offset = enemy.size + this.size + 5;
@@ -8232,7 +8258,7 @@
 
     // 波风水门：大招·飞雷神多重闪杀（瞬间大范围投掷苦无→标记点穿梭连斩）
     _castMultiFlash(enemy, balls, particles, atkMul){
-      this.minatoUltCD = this.params.ultCD || 22;
+      this.minatoUltCD = this.params.ultCD || 16;   // 大招默认 CD 22 → 16（约 -27%）
       const count = this.params.ultKunaiCount || 6;
       // 在目标敌人附近生成标记点位（环形分布，带随机偏移）
       const base = [];
@@ -13438,15 +13464,33 @@
         }
       }
 
-      // 普攻：火遁爆风乱舞（在带土面前呈扇形释放，优先打被束缚目标，消耗1点瞳力）
+      // 近战普攻：写轮眼·体术（近身快速打击，带土紫配色特效）
       this.obitoAtkCD -= dt;
-      if (this.obitoAtkCD <= 0 && td < 320 && this.obitoChakra >= 1){
-        this.obitoAtkCD = p.atkInterval || 1.2;
+      const meleeR = this.size + (enemy ? enemy.size : 20) + 10;
+      if (this.obitoAtkCD <= 0 && d < meleeR){
+        this.obitoAtkCD = p.meleeInterval || 0.9;
+        const meleeDmg = p.meleeDmg || 6;
+        enemy.takeDamage(meleeDmg, '#c77dff', particles, this);
+        // 近战命中特效（带土紫配色）
+        this._meleeHitFx(enemy, dirX, dirY, meleeDmg, {
+          color: Math.random() < 0.5 ? '#c77dff' : '#b484ff',
+          sparks: 12, arcR: 18, shake: 4, dmgColor: '#e6c8ff'
+        });
+        // 轻微击退
+        enemy.vx += dirX * 60;
+        enemy.vy += dirY * 60;
+      }
+
+      // 技能：火遁·爆风乱舞（在带土面前呈扇形释放，优先打被束缚目标，消耗1点瞳力）
+      this.obitoFireCD -= dt;
+      if (this.obitoFireCD <= 0 && td < 320 && this.obitoChakra >= 1){
+        this.obitoFireCD = p.fireInterval || 2.5;
         this.obitoChakra -= 1;
         const aoeR = p.fireAoe || 70;
         const fireDmg = p.fireDmg || 7;
         const burnDmg = p.burnDmg || 5;
         const fireAng = Math.atan2(tdy, tdx); // 朝向目标的角度
+        let hitFirst = null;
         // 以带土为顶点，向目标方向呈扇形AOE（角度±60度，距离aoeR）
         for (const b of balls){
           if (!b.alive || b.team === this.team) continue;
@@ -13459,6 +13503,13 @@
             b.takeDamage(fireDmg, '#ff6b1a', particles, this);
             b.burnDmg = Math.max(b.burnDmg, burnDmg);
             b.burnTime = Math.max(b.burnTime, 3);
+            if (!hitFirst) hitFirst = b;
+            // 近战命中特效（带土紫配色）
+            const bdl = Math.max(1, dd);
+            this._meleeHitFx(b, bdx / bdl, bdy / bdl, fireDmg, {
+              color: Math.random() < 0.5 ? '#c77dff' : '#b484ff',
+              sparks: 10, arcR: 20, shake: 3, dmgColor: '#e6c8ff', noSlash: hitFirst !== b, noArc: hitFirst !== b
+            });
             // 木火连击：被木棘束缚的目标受到额外伤害+控制延长
             const isRooted = this.obitoRootedList.includes(b) && b.stun > 0;
             if (isRooted){
@@ -13477,25 +13528,63 @@
         // 扇形范围框：用FanAOE绘制清晰的扇形边界
         const fxAng = fireAng;
         const halfAng = Math.PI*35/360; // 扇形半角17.5度（总角35度）
-        aoes.push(new FanAOE(this.x, this.y, fxAng, halfAng, aoeR, '#ff6600'));
-        // 火焰喷射粒子（动态效果）
-        for (let i=0;i<24;i++){
-          const t = i/24;
-          const a = fxAng - halfAng + t * (2*halfAng);
+        aoes.push(new FanAOE(this.x, this.y, fxAng, halfAng, aoeR, '#c77dff'));
+        // 挥砍刀光（带土紫配色，增加技能打击感）
+        this._spawnSlash(fxAng, aoeR, '#c77dff', {span: halfAng * 1.8, thickness: 4, life: 0.25});
+        // 释放瞬间紫色能量爆发
+        for (let i=0;i<16;i++){
+          const a = fxAng + (Math.random()-0.5)*1.2;
           particles.push(new Particle(
-            this.x + Math.cos(a)*this.size*0.8,
-            this.y + Math.sin(a)*this.size*0.8,
-            Math.random() < 0.5 ? '#ff6b1a' : '#ffcc00',
-            {ang:a, speed:120+Math.random()*100, life:0.45+Math.random()*0.25, size:3+Math.random()*4}
+            this.x + Math.cos(fxAng)*this.size*0.8,
+            this.y + Math.sin(fxAng)*this.size*0.8,
+            Math.random() < 0.5 ? '#c77dff' : '#b484ff',
+            {ang:a, speed:100+Math.random()*120, life:0.3+Math.random()*0.2, size:3+Math.random()*2.5}
           ));
         }
-        // 扇形中心热浪
-        for (let i=0;i<8;i++){
-          const a = fxAng + (Math.random()-0.5)*0.5;
+        // 火焰扇形延展特效：沿实际攻击扇形方向（fxAng±halfAng）由近到远分层喷射，
+        // 模拟爆风乱舞的"火焰"沿攻击范围扩散——每层各粒子有径向速度，并保留小角度抖动使扇形边界自然
+        const fireColors = ['#ff3300', '#ff6b1a', '#ffa040', '#ffcc00'];
+        for (let layer = 0; layer < 5; layer++){
+          // 远端稍偏出半角，模拟"火焰边缘抖动"；最近层收紧到扇形内
+          const t = layer / 4;                        // 0=近端 1=远端
+          const layerRadius = (this.size*0.6) + t * (aoeR - this.size*0.6);
+          const spread = halfAng * (1.05 + 0.15 * t); // 越远略扩散，火焰边缘不齐
+          const seedRand = (this._fireSeed = (this._fireSeed || 0) + 0.137) % 1;
+          for (let i=0;i<10;i++){
+            // 在扇形 ±spread 范围内均匀分布，靠近中心轴线更密
+            const u = (i + seedRand) / 10;
+            const aOff = (u - 0.5) * 2 * spread;
+            const a = fxAng + aOff;
+            const baseAng = a;
+            // 径向向外速度（沿攻击方向），叠加少量切向扰动 → 火焰被"风"吹散的感觉
+            const radial = 200 + 120 * t + Math.random() * 90;
+            const ang = baseAng + (Math.random() - 0.5) * 0.25;
+            particles.push(new Particle(
+              this.x + Math.cos(baseAng) * layerRadius,
+              this.y + Math.sin(baseAng) * layerRadius,
+              fireColors[(i + layer) % fireColors.length],
+              {ang, speed: radial, life: 0.45 + 0.25 * t, size: 3 + Math.random() * 3 + layer * 0.3}
+            ));
+          }
+        }
+        // 扇形中心热浪（最强主焰，向扇形正中快速推进）
+        for (let i=0;i<10;i++){
+          const a = fxAng + (Math.random()-0.5)*0.4;
           particles.push(new Particle(
             this.x + Math.cos(fxAng)*this.size,
             this.y + Math.sin(fxAng)*this.size,
-            '#ff3300', {ang:a, speed:180+Math.random()*80, life:0.35, size:4+Math.random()*3}
+            '#ff3300', {ang:a, speed:260+Math.random()*100, life:0.4, size:4+Math.random()*3}
+          ));
+        }
+        // 火墙残焰：在扇形外缘留下一圈沿 aoeR 的小火星，标记"火焰已蔓延到边界"
+        const edgeN = 14;
+        for (let i=0;i<edgeN;i++){
+          const a = fxAng - halfAng + (i/(edgeN-1)) * (2*halfAng);
+          particles.push(new Particle(
+            this.x + Math.cos(a) * (aoeR - 4),
+            this.y + Math.sin(a) * (aoeR - 4),
+            Math.random() < 0.5 ? '#ff6b1a' : '#ffcc00',
+            {ang: a + (Math.random()-0.5)*0.4, speed: 30 + Math.random()*50, life: 0.55, size: 2.5 + Math.random()*2}
           ));
         }
       }
@@ -19422,6 +19511,7 @@
         const t = Date.now() * 0.005;
         const lifeRatio = m.life / m.maxLife;
         const alpha = Math.min(1, m.life / 1.5);
+        const isNext = (b.minatoNextMark === m);   // 高亮：下次瞬移要去的标记
         // 位置标记（插在地上的苦无）
         if (!m.target){
           ctx.save();
@@ -19452,6 +19542,49 @@
           ctx.beginPath(); ctx.arc(0,0,3,0,Math.PI*2); ctx.fill();
           ctx.shadowBlur = 0;
           ctx.restore();
+          // 高光提示：仅当下次瞬移目标 = 此标记时显示（明亮外环+下落箭头）
+          if (isNext){
+            ctx.save();
+            const pulseHL = 0.65 + 0.35 * Math.sin(t * 6);
+            // 1. 高亮外环（双重，旋转+脉动）
+            ctx.translate(m.x, m.y);
+            ctx.rotate(-t * 0.8);
+            ctx.strokeStyle = rgba('#ffffff', 0.95 * alpha * pulseHL);
+            ctx.lineWidth = 3.5;
+            ctx.shadowColor = '#ffdd44'; ctx.shadowBlur = 22;
+            ctx.setLineDash([14, 8]);
+            ctx.lineDashOffset = -t * 60;
+            ctx.beginPath(); ctx.arc(0, 0, 30, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([]);
+            // 2. 静态高亮实心外环（黄白渐变）
+            const rg = ctx.createRadialGradient(0, 0, 20, 0, 0, 36);
+            rg.addColorStop(0, rgba('#ffdd44', 0));
+            rg.addColorStop(0.7, rgba('#ffdd44', 0.35 * alpha * pulseHL));
+            rg.addColorStop(1, rgba('#ffffff', 0.8 * alpha));
+            ctx.strokeStyle = rg;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.arc(0, 0, 34, 0, Math.PI*2); ctx.stroke();
+            ctx.shadowBlur = 0;
+            // 3. 指向箭头（向下）——明确告诉玩家"瞬移将落在这里"
+            ctx.translate(0, -52);
+            ctx.fillStyle = rgba('#ffdd44', 0.95 * alpha);
+            ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 16;
+            const bounce = Math.sin(t * 5) * 3;
+            ctx.beginPath();
+            ctx.moveTo(-7, 8 + bounce);
+            ctx.lineTo(7, 8 + bounce);
+            ctx.lineTo(0, 18 + bounce);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = rgba('#ffffff', 0.95 * alpha);
+            ctx.beginPath();
+            ctx.moveTo(-3, 4 + bounce);
+            ctx.lineTo(3, 4 + bounce);
+            ctx.lineTo(0, 10 + bounce);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
         }
         // 敌人身上的标记：明显的头顶符文+环绕脉冲环+进度条
         if (m.target && m.target.alive){
@@ -19520,6 +19653,32 @@
           ctx.fillText('飞雷神', tg.x, headY - 16);
           ctx.shadowBlur = 0;
           ctx.restore();
+          // 高光提示：仅当下次瞬移目标 = 此敌人身上的标记时显示（加亮外环+头顶高亮文字+箭头）
+          if (isNext){
+            ctx.save();
+            const pulseHL = 0.65 + 0.35 * Math.sin(t * 6);
+            // 加亮外环
+            ctx.translate(tg.x, tg.y);
+            ctx.rotate(-t * 0.8);
+            ctx.strokeStyle = rgba('#ffffff', 0.95 * alpha * pulseHL);
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#ffdd44'; ctx.shadowBlur = 22;
+            ctx.setLineDash([14, 8]);
+            ctx.lineDashOffset = -t * 60;
+            ctx.beginPath(); ctx.arc(0, 0, tg.size + 18, 0, Math.PI*2); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.shadowBlur = 0;
+            // "目标!" 醒目文字（头顶上方）
+            ctx.translate(0, -tg.size - 42);
+            const bounce2 = Math.sin(t * 5) * 2;
+            ctx.fillStyle = rgba('#ffdd44', 0.98 * alpha);
+            ctx.shadowColor = '#ffaa00'; ctx.shadowBlur = 14;
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('▼ 瞬移目标 ▼', 0, bounce2);
+            ctx.shadowBlur = 0;
+            ctx.restore();
+          }
         }
       }
     }
