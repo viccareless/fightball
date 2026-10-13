@@ -568,11 +568,6 @@
     .start-subtitle { font-size: 11px; letter-spacing: 1px; }
     .start-section-title { font-size: 13px; }
 
-    /* 预设卡片 */
-    .preset-options { grid-template-columns: 1fr; gap: 6px; }
-    .preset-card { padding: 10px; }
-    .preset-name { font-size: 14px; }
-    .preset-desc { font-size: 10px; }
 
     /* 单挑选择器 */
     .duel-selector { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
@@ -620,21 +615,6 @@
     .codex-info .ci-codex { font-size: 12px; padding: 6px 10px; margin-bottom: 10px; }
     .codex-stat { font-size: 11px; padding: 2px 8px; }
 
-    /* 20元组队模式 */
-    .budget-board { grid-template-columns: 1fr; gap: 8px; }
-    .budget-shop-grid { grid-template-columns: repeat(4, 1fr); gap: 5px; max-height: 160px; overflow-y: auto; padding: 3px; }
-    .budget-card { padding: 6px 4px 4px; }
-    .budget-card .bc-icon { font-size: 20px; }
-    .budget-card .bc-name { font-size: 10px; }
-    .budget-card .bc-cost { font-size: 10px; padding: 1px 4px; }
-    .budget-shop-title { font-size: 12px; margin-bottom: 6px; }
-    .budget-roster { padding: 8px 10px; }
-    .budget-roster-title { font-size: 12px; }
-    .budget-remaining { font-size: 11px; padding: 1px 7px; }
-    .budget-roster-list { max-height: 180px; }
-    .budget-roster-item { padding: 4px 6px; font-size: 11px; }
-    .budget-clear-btn { padding: 5px; font-size: 10px; }
-    .budget-intro { font-size: 11px; padding: 6px 10px; }
 
     /* 开始按钮 */
     .start-btn { font-size: 16px; padding: 12px 40px; }
@@ -663,7 +643,6 @@
     .codex-entry-sub { display: none; }
     .global-controls { flex-direction: column; align-items: stretch; }
     .btn { width: 100%; text-align: center; }
-    .mode-tabs.carousel .mode-tab { font-size: 13px; padding: 8px 12px; flex-basis: 68%; }
   }
 
   /* ===== 开始界面 ===== */
@@ -871,50 +850,6 @@
     background: linear-gradient(to bottom, #ff7a3d, #5fd4ff);
     border-radius: 2px;
   }
-  .preset-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .preset-card {
-    background: rgba(0,0,0,0.3);
-    border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 14px 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-  }
-  .preset-card:hover {
-    border-color: rgba(180,140,255,0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(120,80,255,0.3);
-  }
-  .preset-card.selected {
-    border-color: #b484ff;
-    background: rgba(180,140,255,0.15);
-    box-shadow: 0 0 20px rgba(180,140,255,0.4);
-  }
-  .preset-name {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .preset-desc {
-    font-size: 11px;
-    color: #8b7bb8;
-  }
-  .preset-card.custom {
-    border-style: dashed;
-    border-color: rgba(180,140,255,0.5);
-  }
-  .preset-card.custom .preset-name {
-    background: linear-gradient(90deg, #b86bff, #5fd4ff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
   /* 单挑选择器 */
   .duel-selector {
     display: none;
@@ -1032,25 +967,6 @@
   .mode-tabs::-webkit-scrollbar { height: 4px; }
   .mode-tabs::-webkit-scrollbar-track { background: transparent; }
   .mode-tabs::-webkit-scrollbar-thumb { background: rgba(180,140,255,0.3); border-radius: 2px; }
-  /* 轮播模式：标签溢出时自动启用 */
-  .mode-tabs.carousel {
-    scroll-snap-type: x mandatory;
-    gap: 6px;
-    padding: 6px 4px;
-    scroll-behavior: smooth;
-  }
-  .mode-tabs.carousel .mode-tab {
-    flex: 0 0 62%;
-    scroll-snap-align: center;
-    scroll-snap-stop: always;
-    font-size: 14px;
-    padding: 10px 16px;
-  }
-  /* 窗口足够宽时：模式全部平铺换行显示，不滚动 */
-  @media (min-width: 760px){
-    .mode-tabs { overflow-x: visible; flex-wrap: wrap; }
-    .mode-tabs.carousel .mode-tab { flex: 1 1 auto; scroll-snap-align: none; font-size: 13px; padding: 8px 12px; }
-  }
   .mode-tab {
     flex: 1 0 auto;
     white-space: nowrap;
@@ -1071,39 +987,6 @@
     border-color: rgba(180,140,255,0.4);
     box-shadow: 0 2px 10px rgba(120,80,255,0.3);
   }
-  .class-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .class-item {
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 10px;
-    text-align: center;
-    transition: all 0.2s;
-  }
-  .class-item:hover {
-    border-color: rgba(255,255,255,0.2);
-    transform: translateY(-1px);
-  }
-  .class-icon {
-    font-size: 24px;
-    margin-bottom: 4px;
-    display: block;
-  }
-  .class-name {
-    font-size: 12px;
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  .class-desc {
-    font-size: 10px;
-    color: #8b7bb8;
-    line-height: 1.3;
-  }
-
   /* ===== 图鉴入口按钮 ===== */
   .start-shortcuts {
     width: 100%;
@@ -1154,9 +1037,6 @@
   }
 
   /* ===== 图鉴 ===== */
-  .codex-section {
-    display: block;
-  }
   .codex-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -1343,339 +1223,8 @@
     margin-right: 3px;
   }
 
-  /* ===== 20元组队模式 ===== */
-  .budget-intro {
-    font-size: 12px;
-    color: #c9b8ff;
-    background: rgba(180,140,255,0.10);
-    border: 1px solid rgba(180,140,255,0.25);
-    border-radius: 8px;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    line-height: 1.6;
-  }
-  .budget-intro b {
-    color: #ffd86b;
-    font-weight: 700;
-  }
-  .budget-board {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 12px;
-  }
-  .budget-shop {
-    background: rgba(0,0,0,0.28);
-    border: 1px solid rgba(180,140,255,0.18);
-    border-radius: 12px;
-    padding: 10px 12px;
-  }
-  .budget-shop-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #e9e1ff;
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .budget-shop-sub {
-    font-size: 10px;
-    color: #8b7bb8;
-    font-weight: 400;
-  }
-  .budget-shop-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    max-height: 200px;
-    overflow-y: auto;
-    padding: 4px;
-  }
-  .budget-card {
-    background: rgba(255,255,255,0.04);
-    border: 1.5px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 8px 6px 6px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    position: relative;
-  }
-  .budget-card:hover:not(.disabled) {
-    border-color: rgba(180,140,255,0.6);
-    transform: translateY(-2px);
-    background: rgba(180,140,255,0.10);
-  }
-  .budget-card.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .budget-card .bc-icon {
-    font-size: 24px;
-    display: block;
-    margin-bottom: 2px;
-  }
-  .budget-card .bc-name {
-    font-size: 11px;
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .budget-card .bc-cost {
-    font-size: 12px;
-    font-weight: 800;
-    color: #ffd86b;
-    background: rgba(255,216,107,0.14);
-    border: 1px solid rgba(255,216,107,0.3);
-    border-radius: 6px;
-    padding: 1px 6px;
-    display: inline-block;
-  }
-  .budget-roster {
-    background: rgba(0,0,0,0.28);
-    border: 1.5px solid rgba(255,122,61,0.35);
-    border-radius: 12px;
-    padding: 10px 12px;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(180deg, rgba(255,122,61,0.12) 0%, rgba(0,0,0,0.28) 70%);
-  }
-  .budget-roster-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .budget-roster-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffd4b8;
-    text-shadow: 0 0 8px rgba(255,122,61,0.4);
-  }
-  .budget-remaining {
-    font-size: 13px;
-    font-weight: 800;
-    color: #ffd86b;
-    background: rgba(255,216,107,0.14);
-    border: 1px solid rgba(255,216,107,0.35);
-    border-radius: 8px;
-    padding: 2px 10px;
-  }
-  .budget-remaining.empty {
-    color: #ff8585;
-    background: rgba(255,80,80,0.14);
-    border-color: rgba(255,80,80,0.35);
-  }
-  .budget-roster-list {
-    flex: 1;
-    min-height: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin-bottom: 8px;
-    max-height: 220px;
-    overflow-y: auto;
-  }
-  .budget-roster-empty {
-    font-size: 11px;
-    color: #6b5d8a;
-    text-align: center;
-    padding: 22px 0;
-    border: 1px dashed rgba(255,255,255,0.08);
-    border-radius: 8px;
-  }
-  .budget-roster-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 8px;
-    background: rgba(255,122,61,0.10);
-    border-left: 3px solid #ff7a3d;
-    border-radius: 6px;
-    font-size: 12px;
-  }
-  .budget-roster-item .ri-icon {
-    font-size: 16px;
-  }
-  .budget-roster-item .ri-name {
-    flex: 1;
-    font-weight: 600;
-  }
-  .budget-roster-item .ri-cost {
-    color: #ffd86b;
-    font-weight: 700;
-    font-size: 11px;
-  }
-  .budget-roster-item .ri-remove {
-    background: rgba(255,80,80,0.18);
-    color: #ff8585;
-    border: 1px solid rgba(255,80,80,0.3);
-    width: 20px; height: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-  }
-  .budget-roster-item .ri-remove:hover {
-    background: rgba(255,80,80,0.4);
-  }
-  .budget-clear-btn {
-    background: rgba(255,255,255,0.05);
-    color: #b6a5e8;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 6px;
-    border-radius: 7px;
-    font-size: 11px;
-    cursor: pointer;
-    width: 100%;
-    transition: all 0.2s;
-  }
-  .budget-clear-btn:hover {
-    background: rgba(255,80,80,0.18);
-    color: #ff8585;
-    border-color: rgba(255,80,80,0.35);
-  }
 
-  /* 无尽生存模式 */
-  .survival-shop-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 7px;
-    padding: 6px 4px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .survival-shop-card:hover {
-    background: rgba(120,80,255,0.18);
-    border-color: rgba(180,140,255,0.4);
-    transform: translateY(-1px);
-  }
-  .survival-shop-card .icon { font-size: 18px; }
-  .survival-shop-card .name { font-size: 10px; color: #d0c4f0; margin-top: 2px; }
-  .survival-shop-card .cost { font-size: 9px; color: #ffd700; margin-top: 1px; }
-  .survival-shop-card.disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    filter: grayscale(0.6);
-  }
-  /* 波次间商店卡片 */
-  .sv-shop-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    max-height: 180px;
-    overflow-y: auto;
-    padding: 4px;
-  }
-  .sv-shop-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 8px 4px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .15s;
-  }
-  .sv-shop-card:hover:not(.disabled) {
-    background: rgba(255,215,0,0.12);
-    border-color: rgba(255,215,0,0.5);
-    transform: translateY(-1px);
-  }
-  .sv-shop-card.disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    filter: grayscale(0.6);
-  }
-  .sv-shop-card .ssc-icon { font-size: 20px; }
-  .sv-shop-card .ssc-name { font-size: 10px; color: #d0c4f0; margin-top: 2px; }
-  .sv-shop-card .ssc-price { font-size: 10px; color: #ffd700; margin-top: 2px; font-weight: 600; }
-  .survival-roster-item {
-    background: rgba(120,80,255,0.15);
-    border: 1px solid rgba(180,140,255,0.3);
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 11px;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .survival-roster-item:hover { background: rgba(255,80,80,0.2); border-color: rgba(255,80,80,0.4); }
 
-  /* 强化选择弹窗 */
-  .upgrade-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 200;
-    backdrop-filter: blur(4px);
-  }
-  .upgrade-panel {
-    background: linear-gradient(160deg, #2a1f4a, #1a1230);
-    border: 1px solid rgba(180,140,255,0.3);
-    border-radius: 14px;
-    padding: 24px;
-    max-width: 520px;
-    width: 90%;
-    text-align: center;
-  }
-  .upgrade-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #ffd700;
-    margin-bottom: 6px;
-  }
-  .upgrade-subtitle {
-    font-size: 13px;
-    color: #b6a5e8;
-    margin-bottom: 18px;
-  }
-  .upgrade-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .upgrade-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 14px 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .upgrade-card:hover {
-    background: rgba(120,80,255,0.25);
-    border-color: rgba(180,140,255,0.5);
-    transform: translateY(-2px);
-  }
-  .upgrade-card .up-icon { font-size: 28px; margin-bottom: 6px; }
-  .upgrade-card .up-name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 3px; }
-  .upgrade-card .up-desc { font-size: 11px; color: #b6a5e8; line-height: 1.4; }
-  .upgrade-card .up-level { font-size: 10px; color: #ffd700; margin-top: 4px; }
-
-  /* 生存模式HUD */
-  .survival-hud {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 8px;
-    padding: 6px 16px;
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    font-size: 13px;
-    z-index: 50;
-  }
-  .survival-hud .wave { color: #ff9148; font-weight: 700; }
-  .survival-hud .enemies { color: #ff6b6b; }
-  .survival-hud .upgrade-pts { color: #44ff88; }
 
   .start-btn {
     background: linear-gradient(135deg, #7a3dff, #4a7dff);
@@ -1704,7 +1253,7 @@
   }
   .start-footer b { color: #b6a5e8; }
 
-  /* ===== 随机抽选模式 ===== */
+  /* ===== 手操模式面板 ===== */
   .random-mode-intro {
     font-size: 12px; color: #8b7bb8; margin-bottom: 12px; line-height: 1.6;
   }
@@ -1715,25 +1264,6 @@
     border-radius: 10px; padding: 12px 16px;
   }
   .random-size-label { font-size: 13px; color: #fff; font-weight: 600; white-space: nowrap; }
-  .random-size-slider { flex: 1; }
-  .random-size-val {
-    font-size: 22px; font-weight: 900; min-width: 60px; text-align: center;
-    background: linear-gradient(135deg, #ffd700, #ff6b6b);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .random-preview {
-    display: flex; gap: 10px; margin-bottom: 12px;
-  }
-  .random-preview-team {
-    flex: 1; border-radius: 10px; padding: 10px; text-align: center;
-    min-height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  }
-  .random-preview-team.a { background: rgba(255,122,61,0.08); border: 1px solid rgba(255,122,61,0.3); }
-  .random-preview-team.b { background: rgba(95,212,255,0.08); border: 1px solid rgba(95,212,255,0.3); }
-  .random-preview-team .rpt-name { font-size: 12px; font-weight: 700; }
-  .random-preview-team .rpt-slots { font-size: 20px; letter-spacing: 2px; }
-  .random-preview-team.a .rpt-name { color: #ff7a3d; }
-  .random-preview-team.b .rpt-name { color: #5fd4ff; }
 
   /* ===== 结算页战斗数据 ===== */
   .result-mvp {
@@ -1807,7 +1337,7 @@
   .stats-table .st-taken { color: #aaa; }
   .stats-table .st-score { color: #fff; font-weight: 700; }
 
-  /* 抽选动画覆盖层 - CSGO风格 */
+  /* 覆盖层（选秀/手操共用） */
   .draw-overlay {
     position: fixed; inset: 0; z-index: 1000;
     background: rgba(5,5,15,0.95);
@@ -1821,83 +1351,6 @@
   }
   .draw-subtitle {
     font-size: 13px; color: #8b7bb8; margin-bottom: 16px;
-  }
-  .draw-arena {
-    display: flex; gap: 24px; align-items: flex-start;
-  }
-  .draw-team-col {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-  }
-  .draw-team-label {
-    font-size: 15px; font-weight: 800; margin-bottom: 2px;
-  }
-  .draw-slots {
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  /* CSGO风格横向转盘 */
-  .csgo-reel-wrap {
-    position: relative;
-    width: 280px; height: 68px;
-    overflow: hidden;
-    border-radius: 10px;
-    border: 2px solid rgba(255,255,255,0.08);
-    background: linear-gradient(180deg, rgba(0,0,0,0.4), rgba(20,15,40,0.4));
-  }
-  .csgo-reel-wrap.team-a { border-color: rgba(255,122,61,0.15); }
-  .csgo-reel-wrap.team-b { border-color: rgba(95,212,255,0.15); }
-  .csgo-reel-wrap.stopped.team-a { border-color: rgba(255,122,61,0.6); box-shadow: 0 0 20px rgba(255,122,61,0.2); }
-  .csgo-reel-wrap.stopped.team-b { border-color: rgba(95,212,255,0.6); box-shadow: 0 0 20px rgba(95,212,255,0.2); }
-  /* 中心指示线 */
-  .csgo-reel-marker {
-    position: absolute; left: 50%; top: 0; bottom: 0;
-    width: 3px; z-index: 10;
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, transparent 0%, #ffd700 20%, #ffd700 80%, transparent 100%);
-    box-shadow: 0 0 12px rgba(255,215,0,0.8), 0 0 4px rgba(255,255,255,0.5);
-    pointer-events: none;
-  }
-  .csgo-reel-marker::before, .csgo-reel-marker::after {
-    content: ''; position: absolute; left: 50%; transform: translateX(-50%);
-    width: 0; height: 0;
-  }
-  .csgo-reel-marker::before {
-    top: -1px; border: 5px solid transparent; border-top-color: #ffd700;
-  }
-  .csgo-reel-marker::after {
-    bottom: -1px; border: 5px solid transparent; border-bottom-color: #ffd700;
-  }
-  /* 左右渐变遮罩 */
-  .csgo-reel-wrap::before, .csgo-reel-wrap::after {
-    content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 5;
-    pointer-events: none;
-  }
-  .csgo-reel-wrap::before {
-    left: 0; background: linear-gradient(90deg, rgba(5,5,15,0.9), transparent);
-  }
-  .csgo-reel-wrap::after {
-    right: 0; background: linear-gradient(270deg, rgba(5,5,15,0.9), transparent);
-  }
-  /* 滚动条 */
-  .csgo-reel-strip {
-    display: flex; height: 100%; align-items: center;
-    will-change: transform;
-  }
-  .csgo-reel-item {
-    flex-shrink: 0; width: 70px; height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1px; border-right: 1px solid rgba(255,255,255,0.04);
-    transition: background 0.3s;
-  }
-  .csgo-reel-item .ri-icon { font-size: 26px; line-height: 1; }
-  .csgo-reel-item .ri-name { font-size: 9px; font-weight: 600; white-space: nowrap; }
-  .csgo-reel-item.winner {
-    background: radial-gradient(ellipse at center, rgba(255,215,0,0.18) 0%, transparent 70%);
-  }
-  .draw-vs {
-    font-size: 28px; font-weight: 900; align-self: center;
-    background: linear-gradient(135deg, #ff7a3d, #5fd4ff);
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    margin-top: 24px;
   }
   .draw-action-btn {
     margin-top: 20px;
@@ -1936,7 +1389,6 @@
   .draft-opt .n { font-size:12px; font-weight:700; color:#fff; margin-top:6px; }
   .draft-opt .t { font-size:10px; color:#8ca4c0; margin-top:3px; }
   .draft-opt.actor-ban { border-color:#ff6b6b; }
-  .draft-opt.actor-pick { border-color:#ffd700; }
   .draft-opt.disabled { opacity:.35; cursor:default; transform:none !important; }
   .draft-ban-pool { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:14px; min-height:24px; }
   .draft-ban-chip { font-size:12px; background:rgba(120,90,60,0.25); color:#ffb27a; border-radius:12px; padding:3px 10px; }
@@ -1951,7 +1403,6 @@
   .draft-ban-pool { max-height:96px; overflow-y:auto; }
   .draft-opt.actor-ban { width:78px; min-width:78px; padding:8px 4px; }
   .draft-opt.actor-ban .t { display:none; }
-  .draft-opt.actor-pick { width:120px; padding:11px 8px; }
   /* 三选一：无畏契约商店式翻牌揭示 */
   .flip-card { perspective:820px; width:128px; height:168px; cursor:pointer; }
   .flip-inner { position:relative; width:100%; height:100%; transform-style:preserve-3d;
@@ -1981,35 +1432,6 @@
   .draft-coin .face.a { background:radial-gradient(circle at 32% 28%,#ffb27a,#ff7a3d 58%,#d6541f); color:#fff; border:3px solid #ffd9b0; }
   .draft-coin .face.b { background:radial-gradient(circle at 32% 28%,#8fd0ff,#3a9bff 58%,#1366c9); color:#fff; border:3px solid #bfe4ff; transform:rotateY(180deg); }
 
-  /* ===== 选秀站位布置 ===== */
-  #placeOverlay { overflow-y:auto; justify-content:flex-start; padding:14px 12px 22px; gap:8px; }
-  .place-stage { display:flex; align-items:stretch; gap:14px; width:100%; max-width:960px; }
-  .place-canvas { border-radius:12px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 8px 30px rgba(0,0,0,0.45);
-    background:#0c0f1e; flex:1 1 auto; min-width:0; cursor:pointer; }
-  .place-sidebox { width:92px; flex:0 0 92px; display:flex; flex-direction:column; gap:8px; background:rgba(255,255,255,0.03);
-    border-radius:12px; border:1px solid rgba(255,255,255,0.06); padding:10px; }
-  .place-sidebox.guard-a { border-color:rgba(255,122,61,0.3); }
-  .place-sidebox.guard-b { border-color:rgba(95,212,255,0.3); }
-  .place-side-title { font-size:13px; font-weight:800; }
-  .place-roster { display:flex; flex-direction:column; gap:6px; }
-  .place-hero { display:flex; align-items:center; gap:7px; padding:6px 8px; border-radius:10px; cursor:pointer;
-    background:rgba(255,255,255,0.05); border:2px solid rgba(255,255,255,0.12); transition:transform .12s, border-color .12s, box-shadow .12s; }
-  .place-hero:hover { transform:translateY(-2px); border-color:rgba(255,215,0,0.6); }
-  .place-hero.sel { border-color:#ffd700; box-shadow:0 0 14px rgba(255,215,0,0.35); }
-  .place-hero .ph-i { font-size:22px; line-height:1; }
-  .place-hero .ph-n { font-size:10px; line-height:1.1; color:#e8ecff; font-weight:700; }
-  .place-hero .ph-st { font-size:9px; color:#98b19a; }
-  .place-hero.placed { opacity:.5; cursor:default; border-style:dashed; border-color:rgba(255,255,255,0.08); }
-  .place-tip { font-size:10px; color:#5a6480; margin-top:auto; text-align:center; }
-  .place-hint { font-size:14px; color:#cbd5ff; margin-top:6px; }
-  .place-hint b { color:#ffd700; }
-  .place-buttons { display:flex; gap:12px; justify-content:center; margin-top:10px; flex-wrap:wrap; }
-  .place-btn { padding:10px 22px; border-radius:12px; cursor:pointer; font-size:14px; font-weight:800; border:none; color:#fff;
-    background:linear-gradient(135deg,#4a4a5e,#2c2c3e); box-shadow:0 6px 18px rgba(0,0,0,0.35); transition:transform .12s,opacity .12s; }
-  .place-btn:hover { transform:translateY(-2px); }
-  .place-btn.primary { background:linear-gradient(135deg,#ffc36b,#ff7a3d); box-shadow:0 6px 20px rgba(255,122,61,0.4); }
-  .place-btn.primary:disabled { opacity:.45; cursor:default; transform:none; box-shadow:none; }
-  .place-btn:disabled { opacity:.4; cursor:default; }
 </style>
 </head>
 <body>
@@ -2017,159 +1439,16 @@
   <!-- ===== 开始界面 ===== -->
   <div class="start-screen" id="startScreen">
     <div class="start-title">多职业小球对决</div>
-    <div class="start-subtitle">全 自 动 AI 对 战 · 无 需 操 控</div>
+    <div class="start-subtitle">玩 家 手 操 · 1v1 对 决</div>
 
     <div class="start-section">
       <div class="start-section-title">对战模式</div>
       <div class="mode-tabs">
-        <div class="mode-tab active" data-mode="duel">单挑对决</div>
-        <div class="mode-tab" data-mode="custom">自定义阵容</div>
-        <div class="mode-tab" data-mode="budget">20元组队</div>
-        <div class="mode-tab" data-mode="survival">无尽生存</div>
-        <div class="mode-tab" data-mode="battleroyale">大逃杀</div>
-        <div class="mode-tab" data-mode="random">随机抽选</div>
-<div class="mode-tab" data-mode="draft">选秀对战</div>
-        <div class="mode-tab" data-mode="manual">玩家手操</div>
+        <div class="mode-tab active" data-mode="manual">玩家手操</div>
       </div>
 
-      <!-- 单挑模式 -->
-      <div id="duelMode" style="display:none;">
-        <div class="duel-selector active" id="duelSelector">
-          <div class="duel-side">
-            <div class="duel-side-title collapsed" id="duelTitleA">队伍 A <span class="arrow">▼</span></div>
-            <div class="duel-class-picker collapsed" id="duelPickerA">
-              <!-- JS 动态生成 -->
-            </div>
-          </div>
-          <div class="duel-vs">VS</div>
-          <div class="duel-side">
-            <div class="duel-side-title collapsed" id="duelTitleB">队伍 B <span class="arrow">▼</span></div>
-            <div class="duel-class-picker collapsed" id="duelPickerB">
-              <!-- JS 动态生成 -->
-            </div>
-          </div>
-        </div>
-        <div class="duel-hint">点击两侧职业图标选择各自出战角色</div>
-      </div>
-
-      <!-- 自定义模式 -->
-      <div id="customMode" style="display:none;">
-        <div style="font-size:12px;color:#8b7bb8;margin-bottom:10px;line-height:1.6;">
-          从零搭建阵容：进入游戏后，在下方配置面板中<span style="color:#fff;font-weight:600;">添加/删除角色</span>，自由组合 6 种职业。
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;">
-          <div style="flex:1;background:rgba(255,122,61,0.08);border:1px solid rgba(255,122,61,0.3);border-radius:8px;padding:10px;">
-            <div style="font-size:12px;font-weight:700;color:#ff7a3d;margin-bottom:4px;">队伍 A</div>
-            <div style="font-size:11px;color:#b6a5e8;">空阵容 · 请进入后添加角色</div>
-          </div>
-          <div style="font-size:18px;font-weight:900;background:linear-gradient(90deg,#ff7a3d,#5fd4ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">VS</div>
-          <div style="flex:1;background:rgba(95,212,255,0.08);border:1px solid rgba(95,212,255,0.3);border-radius:8px;padding:10px;">
-            <div style="font-size:12px;font-weight:700;color:#5fd4ff;margin-bottom:4px;">队伍 B</div>
-            <div style="font-size:11px;color:#b6a5e8;">空阵容 · 请进入后添加角色</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 20元组队模式 -->
-      <div id="budgetMode" style="display:none;">
-        <div class="budget-intro">
-          预算 <b>¥20</b> 组建你的最强队伍，对手将由系统<b>随机生成等价阵容</b>与你对战
-        </div>
-        <div class="budget-board">
-          <div class="budget-shop">
-            <div class="budget-shop-title">🛒 职业商店 <span class="budget-shop-sub">点击购买</span></div>
-            <div class="budget-shop-grid" id="budgetShopGrid"></div>
-          </div>
-          <div class="budget-roster">
-            <div class="budget-roster-head">
-              <span class="budget-roster-title">⚔️ 我的阵容</span>
-              <span class="budget-remaining" id="budgetRemaining">剩余 ¥20</span>
-            </div>
-            <div class="budget-roster-list" id="budgetRosterList"></div>
-            <button class="budget-clear-btn" id="budgetClearBtn">清空阵容</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 无尽生存模式 -->
-      <div id="survivalMode" style="display:none;">
-        <div style="font-size:12px;color:#8b7bb8;margin-bottom:10px;line-height:1.6;">
-          单支队伍持续闯关，共<b style="color:#ff9148;">50波</b>敌人，每波强度递增。每波结束可<b style="color:#44ff88;">永久强化全队</b>，每10波出现<b style="color:#ff4444;">精英BOSS</b>。团灭则结束，记录最高波次。
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
-          <span style="font-size:13px;color:#fff;">选择你的战队（最多5人，不可重复）</span>
-          <span id="survivalCost" style="font-size:12px;color:#c9b8ff;">造价 <b style="color:#ffd700;">0</b> / 20 · 剩余 <b style="color:#44ff88;">20</b></span>
-          <span style="font-size:12px;color:#ffd700;">🏆 最高记录：<span id="survivalBest">0</span> 波</span>
-        </div>
-        <div id="survivalShopGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;max-height:180px;overflow-y:auto;padding:2px;"></div>
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px;min-height:50px;margin-bottom:10px;">
-          <div style="font-size:11px;color:#8b7bb8;margin-bottom:6px;">当前阵容</div>
-          <div id="survivalRosterList" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
-        </div>
-        <button class="start-btn" id="survivalStartBtn" style="width:100%;">开始闯关</button>
-      </div>
-
-      <div id="battleroyaleMode" style="display:none;">
-        <div style="font-size:12px;color:#8b7bb8;margin-bottom:10px;line-height:1.6;">
-          <b style="color:#ff6b6b;">大逃杀·缩圈生存战</b>：最多16名AI小球随机职业，全部互相敌对。安全圈不断收缩，圈外持续扣血。地图随机刷新<b style="color:#44ff88;">增益道具</b>（攻击/护盾/移速/回血），最后存活者获胜！
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <span style="font-size:13px;color:#fff;">参赛人数：</span>
-          <input type="range" id="brPlayerCount" min="4" max="16" value="12" style="flex:1;">
-          <span id="brPlayerCountLabel" style="font-size:14px;color:#ff9148;font-weight:700;min-width:30px;text-align:center;">12</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
-          <div style="background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:6px;padding:8px;font-size:11px;color:#ff9999;">
-            ⚔️ 全部敌对 · 无队友
-          </div>
-          <div style="background:rgba(255,145,72,0.1);border:1px solid rgba(255,145,72,0.3);border-radius:6px;padding:8px;font-size:11px;color:#ffb380;">
-            🔴 安全圈持续收缩
-          </div>
-          <div style="background:rgba(68,255,136,0.1);border:1px solid rgba(68,255,136,0.3);border-radius:6px;padding:8px;font-size:11px;color:#88ffaa;">
-            🎁 随机增益道具
-          </div>
-          <div style="background:rgba(95,212,255,0.1);border:1px solid rgba(95,212,255,0.3);border-radius:6px;padding:8px;font-size:11px;color:#99ddff;">
-            🏆 最后存活者胜
-          </div>
-        </div>
-        <button class="start-btn" id="brStartBtn" style="width:100%;">开始大逃杀</button>
-      </div>
-
-      <!-- 随机抽选模式 -->
-      <div id="randomMode" style="display:none;">
-        <div class="random-mode-intro">
-          随机抽取职业角色！两边队伍各自抽取 <b>等量</b> 角色，全凭运气决定阵容。选择队伍人数后点击下方按钮开始<b>抽选仪式</b>。
-        </div>
-        <div class="random-size-row">
-          <span class="random-size-label">每队人数</span>
-          <input type="range" id="randomTeamSize" min="1" max="6" value="3" class="random-size-slider">
-          <span class="random-size-val" id="randomTeamSizeLabel">3v3</span>
-        </div>
-        <div class="random-preview">
-          <div class="random-preview-team a">
-            <div class="rpt-name">队伍 A</div>
-            <div class="rpt-slots" id="randomPreviewA">❓ ❓ ❓</div>
-          </div>
-          <div class="random-preview-team b">
-            <div class="rpt-name">队伍 B</div>
-            <div class="rpt-slots" id="randomPreviewB">❓ ❓ ❓</div>
-          </div>
-        </div>
-        <button class="start-btn" id="randomStartBtn" style="width:100%;background:linear-gradient(135deg,#ffd700,#ff6b6b);box-shadow:0 8px 24px rgba(255,107,107,0.4);">🎲 开始抽选</button>
-      </div>
     </div>
 
-    <!-- ===== 选秀对战模式面板 ===== -->
-    <div id="draftMode" style="display:none;">
-      <div class="random-mode-intro">
-        选秀对战：双方轮流<b>禁用</b>与<b>抽取</b>角色，各得 3 名后展开 <b>3v3</b> 对战。流程：双方轮流禁用 → A 首抽(3选1) → B 双抽(3选1×2) → 再次双方轮流禁用 → A 双抽(3选1×2) → B 尾抽(3选1)。
-      </div>
-      <div class="random-size-row">
-        <span class="random-size-label">对手</span>
-        <label class="draft-ai-toggle"><input type="checkbox" id="draftVsAI" checked=""> 与电脑对战（单人，电脑操控队伍 B）</label>
-      </div>
-      <button class="start-btn" id="draftStartBtn" style="width:100%;background:linear-gradient(135deg,#7a5cff,#3ec4ff);box-shadow:0 8px 24px rgba(58,140,255,0.4);">⚔️ 开始选秀</button>
-    </div>
 
     <!-- ===== 玩家手操模式面板 ===== -->
     <div id="manualMode" style="display:none;">
@@ -2243,23 +1522,6 @@
     </div>
   </div>
 
-  <!-- ===== 随机抽选动画覆盖层 (CSGO风格) ===== -->
-  <div class="draw-overlay hidden" id="drawOverlay">
-    <div class="draw-title" id="drawTitle">🎲 抽选仪式</div>
-    <div class="draw-subtitle" id="drawSubtitle">正在抽选...</div>
-    <div class="draw-arena">
-      <div class="draw-team-col">
-        <div class="draw-team-label" style="color:#ff7a3d;">队伍 A</div>
-        <div class="draw-slots" id="drawSlotsA"></div>
-      </div>
-      <div class="draw-vs">VS</div>
-      <div class="draw-team-col">
-        <div class="draw-team-label" style="color:#5fd4ff;">队伍 B</div>
-        <div class="draw-slots" id="drawSlotsB"></div>
-      </div>
-    </div>
-    <button class="draw-action-btn hidden" id="drawStartBtn">开始对战</button>
-  </div>
 
   <!-- ===== 选秀对战覆盖层 ===== -->
   <div class="draw-overlay hidden" id="draftOverlay">
@@ -2282,30 +1544,6 @@
     <button class="draw-action-btn" id="draftCancelBtn" style="background:linear-gradient(135deg,#6b6b6b,#3a3a4a);box-shadow:0 6px 20px rgba(0,0,0,0.3);">取 消 选 秀</button>
   </div>
 
-  <!-- ===== 选秀站位布置覆盖层 ===== -->
-  <div class="draw-overlay hidden" id="placeOverlay">
-    <div class="draw-title">🗺️ 布置站位 · 选秀对战</div>
-    <div class="draw-subtitle">先点一侧的<b>角色</b>，再点场地上对应半场的<b>前排 / 后排站位格</b>放下；前排靠中线、后排贴己方边缘，可随时点已占用的格子搬移</div>
-    <div class="place-stage">
-      <div class="place-sidebox guard-a">
-        <div class="place-side-title">队伍 <b style="color:#ff7a3d;">A</b> 站位</div>
-        <div class="place-roster" id="placeRosterA"></div>
-        <div class="place-tip">左半场 · 前排 2 · 后排 1</div>
-      </div>
-      <canvas id="placeCanvas" class="place-canvas" width="760" height="440"></canvas>
-      <div class="place-sidebox guard-b">
-        <div class="place-side-title">队伍 <b style="color:#5fd4ff;">B</b> 站位</div>
-        <div class="place-roster" id="placeRosterB"></div>
-        <div class="place-tip">右半场 · 前排 2 · 后排 1</div>
-      </div>
-    </div>
-    <div class="place-hint" id="placeHint">请先布置队伍（右侧自动随机也可以）</div>
-    <div class="place-buttons">
-      <button class="place-btn" id="placeAutoBtn">✨ 自动布置全部</button>
-      <button class="place-btn primary" id="placeStartBtn" disabled>⚔️ 开始对战</button>
-      <button class="place-btn" id="placeBackBtn" style="background:linear-gradient(135deg,#6b6b6b,#3a3a4a);">↩ 返回选秀</button>
-    </div>
-  </div>
 
   <!-- ===== 图鉴总览弹窗 ===== -->
   <div class="codex-overview-mask hidden" id="codexOverviewMask" role="dialog" aria-modal="true" aria-label="职业图鉴">
@@ -2639,9 +1877,7 @@
         { key: 'chargeBuff', label: '魂潮增益%', min: 10, max: 60, step: 5, def: 30, int: true },
         { key: 'chargeDur', label: '魂潮持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
         { key: 'chargeCD', label: '魂潮冷却秒', min: 4, max: 14, step: 1, def: 8, int: true },
-        { key: 'funeralDmg', label: '万灵自爆伤害%', min: 5, max: 60, step: 5, def: 25, int: true },
-        { key: 'funeralHeal', label: '万灵回复%', min: 5, max: 60, step: 5, def: 30, int: true },
-        { key: 'funeralLock', label: '万灵禁召秒', min: 1, max: 8, step: 1, def: 4, int: true },
+        { key: 'rallyCD', label: '整备冷却秒', min: 3, max: 16, step: 1, def: 8, int: true },
         { key: 'enrageMul', label: '亡魂狂暴攻击%', min: 20, max: 120, step: 10, def: 50, int: true },
         { key: 'enrageSpd', label: '亡魂狂暴移速%', min: 10, max: 80, step: 10, def: 40, int: true },
         { key: 'enrageDur', label: '亡魂狂暴秒', min: 2, max: 8, step: 1, def: 4, int: true }
@@ -2697,7 +1933,7 @@
       label: '狂战士', icon: '🪓', maxHp: 200, color: '#c0262d', textColor: '#ffd7d7', cost: 5,
       desc: '狂血越战越勇·死战不休',
       stats: { atk: 9, def: 3, spd: 5, rng: 2, sup: 2, ctrl: 4 },
-      codex: '赤斧染血，越战越狂。以自身鲜血为代价换取出手的力量，血量越是濒临枯竭，斧刃越是狂暴锋利。战吼响彻战场，哪怕身死阵前，也要挥出最后一斧，死战不休。',
+      codex: '赤斧染血，越战越狂。以自身鲜血为代价换取出手的力量，血量越是濒临枯竭，斧刃越是狂暴锋利。战吼狂化时以血为薪，燃烧自身叠起灼血之势，血刃横扫随层数愈发凶狠，一斩倾泻后清零重来。哪怕身死阵前，也要挥出最后一斧，死战不休。',
       params: [
         { key: 'dmg', label: '战斧基础伤害', min: 3, max: 20, step: 1, def: 10, int: true },
         { key: 'atkRate', label: '攻速/秒', min: 0.6, max: 2.5, step: 0.1, def: 1.67, int: false },
@@ -2713,6 +1949,10 @@
         { key: 'howlCD', label: '狂化冷却秒', min: 8, max: 20, step: 1, def: 12, int: true },
         { key: 'howlAtkUp', label: '狂化增伤%', min: 10, max: 80, step: 5, def: 30, int: true },
         { key: 'howlTakeExtra', label: '狂化承伤%', min: 10, max: 60, step: 5, def: 25, int: true },
+        { key: 'howlSpdUp', label: '狂化移速%', min: 0, max: 200, step: 10, def: 70, int: true },
+        { key: 'howlBurnPct', label: '狂化灼血%', min: 0.5, max: 8, step: 0.5, def: 2, int: false },
+        { key: 'howlBurnInterval', label: '灼血间隔秒', min: 0.2, max: 2, step: 0.1, def: 0.5, int: false },
+        { key: 'howlBurnDmgPer', label: '每层血刃增伤%', min: 2, max: 20, step: 1, def: 10, int: true },
         { key: 'harvestHeal', label: '收割回复%', min: 5, max: 30, step: 1, def: 12, int: true },
         { key: 'harvestSpd', label: '收割移速%', min: 10, max: 60, step: 5, def: 30, int: true },
         { key: 'harvestDur', label: '收割加速秒', min: 1, max: 4, step: 0.5, def: 2, int: false },
@@ -2809,7 +2049,7 @@
         { key: 'atkRate', label: '攻速/秒', min: 0.5, max: 2.0, step: 0.1, def: 1, int: false },
         { key: 'markDuration', label: '雷印持续秒', min: 3, max: 10, step: 0.5, def: 5, int: false },
         { key: 'chainDecay', label: '连锁衰减%', min: 10, max: 50, step: 5, def: 55, int: true },
-        { key: 'maxCharge', label: '蓄雷满层', min: 6, max: 15, step: 1, def: 8, int: true },
+        { key: 'maxCharge', label: '蓄雷满层', min: 3, max: 15, step: 1, def: 5, int: true },
         { key: 'stormDmg', label: '雷暴伤害', min: 15, max: 60, step: 1, def: 18, int: true },
         { key: 'paralyzeTime', label: '麻痹秒', min: 0.2, max: 1.5, step: 0.1, def: 0.3, int: false },
         { key: 'slowPerStack', label: '减速%/层', min: 3, max: 15, step: 1, def: 6, int: true },
@@ -2850,7 +2090,9 @@
         { key: 'torR', label: '火龙卷范围', min: 80, max: 220, step: 10, def: 140, int: true },
         { key: 'torDur', label: '火龙卷持续秒', min: 2, max: 6, step: 0.5, def: 4, int: false },
         { key: 'torSlow', label: '火龙卷减速%', min: 10, max: 60, step: 5, def: 30, int: true },
-        { key: 'torCD', label: '火龙卷冷却秒', min: 1, max: 10, step: 1, def: 4, int: true }
+        { key: 'torCD', label: '火龙卷冷却秒', min: 1, max: 10, step: 1, def: 4, int: true },
+        { key: 'torStacks', label: '火龙卷所需层数', min: 1, max: 10, step: 1, def: 5, int: true },
+        { key: 'torWindup', label: '火龙卷前摇秒', min: 0.2, max: 2, step: 0.1, def: 0.8, int: false }
       ]
     },
     whiteEmber: {
@@ -2951,6 +2193,7 @@
         { key: 'shinraDmg', label: '神罗天征伤害', min: 10, max: 50, step: 1, def: 23, int: true },
         { key: 'chibakuR', label: '地爆天星范围', min: 100, max: 300, step: 10, def: 180, int: true },
         { key: 'chibakuDur', label: '地爆天星禁锢/秒', min: 1, max: 4, step: 0.5, def: 1.5, int: false },
+        { key: 'chibakuCD', label: '地爆天星冷却/秒', min: 4, max: 25, step: 0.5, def: 10, int: false },
         { key: 'beastCD', label: '通灵兽释放冷却/秒', min: 2, max: 8, step: 0.5, def: 2.5, int: false },
         { key: 'hellHeal', label: '地狱道回血比例%', min: 10, max: 50, step: 5, def: 25, int: true },
         { key: 'absorbRate', label: '饿鬼道吸收转化率%', min: 10, max: 50, step: 5, def: 25, int: true },
@@ -3039,6 +2282,7 @@
         { key: 'snipeDmg', label: '狙击伤害百分比', min: 5, max: 50, step: 1, def: 25, int: true },
         { key: 'snipeCharge', label: '蓄力时间秒', min: 1, max: 5, step: 0.1, def: 2.75, int: false },
         { key: 'snipeRange', label: '狙击触发距离', min: 200, max: 500, step: 20, def: 280, int: true },
+        { key: 'snipeSpeed', label: '狙击弹速度', min: 600, max: 1600, step: 50, def: 1000, int: true },
         { key: 'headshotMul', label: '爆头伤害倍率', min: 1.2, max: 3.5, step: 0.1, def: 1.5, int: false },
         { key: 'headshotRange', label: '爆头触发距离', min: 150, max: 400, step: 10, def: 260, int: true },
         { key: 'markDur', label: '标记持续秒', min: 2, max: 10, step: 0.5, def: 5, int: false },
@@ -3146,8 +2390,7 @@
   };
 
   // ============== 模式状态 ==============
-  let currentMode = 'duel';
-  let duelPick = { A: 'fireBow', B: 'trap' };
+  let currentMode = 'manual';
   // ===== 玩家手操模式状态 =====
   let manualPick = { A: 'berserker', B: 'mage' };
   let manualTwoPlayer = false;
@@ -3169,824 +2412,7 @@
     if (!manualTwoPlayer) delete b.roles[0].manualPlayer;
     return { A: a, B: b };
   };
-  const CUSTOM_EMPTY = {
-    A: { name: '自定义A', color: '#ff7a3d', roles: [] },
-    B: { name: '自定义B', color: '#5fd4ff', roles: [] }
-  };
-  const DUEL_TEAMS = () => {
-    const mk = (clsKey, team) => {
-      const c = CLASSES[clsKey];
-      const def = {};
-      c.params.forEach(p => { def[p.key] = p.def; });
-      return {
-        A: { name: '单挑·' + c.label, color: c.color, roles: [{ cls: clsKey, name: c.label, color: c.color, count: 1, size: 18, speed: 120, params: def }] }
-      };
-    };
-    const a = mk(duelPick.A, 'A').A;
-    const b = mk(duelPick.B, 'A').A; // same structure, override below
-    b.name = '单挑·' + CLASSES[duelPick.B].label;
-    b.color = CLASSES[duelPick.B].color;
-    b.roles[0] = { cls: duelPick.B, name: CLASSES[duelPick.B].label, color: CLASSES[duelPick.B].color, count: 1, size: 18, speed: 120, params: {} };
-    CLASSES[duelPick.B].params.forEach(p => { b.roles[0].params[p.key] = p.def; });
-    return { A: a, B: b };
-  };
-  teams = DUEL_TEAMS();
-
-  // ============== 20元组队状态 ==============
-  const BUDGET_TOTAL = 20;
-  let budgetRoster = []; // 玩家所选职业键数组
-  function budgetUsed(){
-    return budgetRoster.reduce((s, k) => s + (CLASSES[k].cost || 0), 0);
-  }
-  function budgetRemaining(){
-    return BUDGET_TOTAL - budgetUsed();
-  }
-  // 由职业键数组生成队伍结构
-  function budgetBuildTeam(teamName, teamColor, clsKeys){
-    const roles = clsKeys.map(k => {
-      const c = CLASSES[k];
-      const params = {};
-      c.params.forEach(p => { params[p.key] = p.def; });
-      return {
-        cls: k,
-        name: c.label,
-        color: c.color,
-        count: 1,
-        size: 18,
-        speed: 120,
-        params: params
-      };
-    });
-    return { name: teamName, color: teamColor, roles: roles };
-  }
-  // 随机生成等价预算对手阵容
-  function budgetRandomOpponent(){
-    const keys = Object.keys(CLASSES);
-    const picked = [];
-    let used = 0;
-    // 贪心随机：尽量花满20元预算，不重复选角色，确保兵足够多
-    let attempts = 0;
-    while (used < BUDGET_TOTAL && attempts < 200){
-      attempts++;
-      const affordable = keys.filter(k =>
-        !picked.includes(k) && (CLASSES[k].cost || 0) <= BUDGET_TOTAL - used
-      );
-      if (affordable.length === 0) break;
-      const k = affordable[Math.floor(Math.random() * affordable.length)];
-      picked.push(k);
-      used += CLASSES[k].cost || 0;
-    }
-    // 保底：如果总造价低于15或角色少于3个，重新生成
-    if (used < 15 || picked.length < 3){
-      return budgetRandomOpponent();
-    }
-    return picked;
-  }
-  function BUDGET_TEAMS(){
-    const a = budgetBuildTeam('我的战队', '#ff7a3d', budgetRoster.slice());
-    const oppKeys = budgetRandomOpponent();
-    const b = budgetBuildTeam('随机挑战者', '#5fd4ff', oppKeys);
-    return { A: a, B: b };
-  }
-
-  // ===== 随机抽选模式 =====
-  let randomTeamSize = 3;
-  let randomPicks = { A: [], B: [] }; // 抽选结果
-  let drawAnimating = false;
-
-  function RANDOM_TEAMS(){
-    const buildSide = (keys, name, color) => {
-      const roles = keys.map(k => {
-        const c = CLASSES[k];
-        const params = {};
-        c.params.forEach(p => { params[p.key] = p.def; });
-        return { cls: k, name: c.label, color: c.color, count: 1, size: 18, speed: 120, params };
-      });
-      return { name, color, roles };
-    };
-    return {
-      A: buildSide(randomPicks.A, '随机队A', '#ff7a3d'),
-      B: buildSide(randomPicks.B, '随机队B', '#5fd4ff')
-    };
-  }
-
-  // 随机抽N个职业（允许重复）
-  function randomPickClasses(n){
-    const keys = Object.keys(CLASSES);
-    const picked = [];
-    for (let i = 0; i < n; i++){
-      picked.push(keys[Math.floor(Math.random() * keys.length)]);
-    }
-    return picked;
-  }
-
-  // 更新预览
-  function updateRandomPreview(){
-    const n = randomTeamSize;
-    const slots = '❓ '.repeat(n).trim();
-    $('randomPreviewA').textContent = slots;
-    $('randomPreviewB').textContent = slots;
-    $('randomTeamSizeLabel').textContent = n + 'v' + n;
-  }
-
-  // CSGO风格转盘：创建单个转盘容器
-  function createReelSlot(teamIdx, slotIdx){
-    const wrap = document.createElement('div');
-    const teamClass = teamIdx === 'A' ? 'team-a' : 'team-b';
-    wrap.className = `csgo-reel-wrap ${teamClass}`;
-    wrap.id = `reelWrap-${teamIdx}-${slotIdx}`;
-    wrap.innerHTML = `
-      <div class="csgo-reel-marker"></div>
-      <div class="csgo-reel-strip" id="reel-${teamIdx}-${slotIdx}"></div>
-    `;
-    return wrap;
-  }
-
-  // 抽选动画主流程 - CSGO风格：所有转盘同时启动，依次停止
-  async function startRandomDraw(){
-    if (drawAnimating) return;
-    drawAnimating = true;
-
-    const n = randomTeamSize;
-    // 预先生成结果
-    randomPicks.A = randomPickClasses(n);
-    randomPicks.B = randomPickClasses(n);
-
-    // 构建转盘UI
-    const slotsA = $('drawSlotsA');
-    const slotsB = $('drawSlotsB');
-    slotsA.innerHTML = '';
-    slotsB.innerHTML = '';
-    for (let i = 0; i < n; i++){
-      slotsA.appendChild(createReelSlot('A', i));
-      slotsB.appendChild(createReelSlot('B', i));
-    }
-
-    // 显示覆盖层
-    $('drawOverlay').classList.remove('hidden');
-    $('drawStartBtn').classList.add('hidden');
-    $('drawTitle').textContent = '🎲 抽选仪式';
-    $('drawSubtitle').textContent = '滚动中...';
-
-    await sleep(300);
-
-    // 所有转盘同时启动，错开停止时间
-    const promises = [];
-    for (let i = 0; i < n; i++){
-      // A队转盘：停止时间递增
-      const durA = 3500 + i * 1200;
-      promises.push(animateCsgoReel('A', i, randomPicks.A[i], durA));
-      // B队转盘：停止时间递增（比A队稍晚）
-      const durB = 4100 + i * 1200;
-      promises.push(animateCsgoReel('B', i, randomPicks.B[i], durB));
-    }
-
-    // 等待所有转盘停止
-    await Promise.all(promises);
-
-    // 全部完成
-    $('drawSubtitle').textContent = '抽选完成！阵容已确认';
-    $('drawTitle').textContent = '✅ 阵容确认';
-    $('drawStartBtn').classList.remove('hidden');
-    drawAnimating = false;
-  }
-
-  // CSGO风格单转盘动画：匀速滚动→末段减速→停止
-  async function animateCsgoReel(teamIdx, slotIdx, finalKey, duration){
-    const strip = $(`reel-${teamIdx}-${slotIdx}`);
-    const wrap = $(`reelWrap-${teamIdx}-${slotIdx}`);
-    if (!strip || !wrap) return;
-
-    const keys = Object.keys(CLASSES);
-    const itemWidth = 70; // 必须与CSS一致
-    const containerWidth = wrap.offsetWidth || 280;
-    const centerOffset = containerWidth / 2 - itemWidth / 2;
-
-    // 生成滚动条：大量随机项，目标项在末尾附近
-    const totalItems = 40 + Math.floor(Math.random() * 8);
-    const targetIndex = totalItems - 4; // 目标在倒数第4个位置
-    let html = '';
-    for (let i = 0; i < totalItems; i++){
-      const key = (i === targetIndex) ? finalKey : keys[Math.floor(Math.random() * keys.length)];
-      const c = CLASSES[key];
-      const isWinner = (i === targetIndex) ? ' winner' : '';
-      html += `<div class="csgo-reel-item${isWinner}">
-        <div class="ri-icon">${c.icon}</div>
-        <div class="ri-name" style="color:${c.color};">${c.label}</div>
-      </div>`;
-    }
-    strip.innerHTML = html;
-
-    // 计算最终位置：目标项居中
-    const finalX = -(targetIndex * itemWidth - centerOffset);
-
-    // 自定义动画曲线：前65%匀速快速滚动，后35%减速
-    const speedPhase = 0.65;
-    const easeOutCubic = x => 1 - Math.pow(1 - x, 3);
-    const easeFunc = t => {
-      if (t < speedPhase) {
-        return (t / speedPhase) * 0.72; // 匀速到72%
-      }
-      return 0.72 + 0.28 * easeOutCubic((t - speedPhase) / (1 - speedPhase));
-    };
-
-    // 使用requestAnimationFrame驱动动画
-    const startTime = performance.now();
-    return new Promise(resolve => {
-      function tick(){
-        const elapsed = performance.now() - startTime;
-        const t = Math.min(1, elapsed / duration);
-        const progress = easeFunc(t);
-        const currentX = finalX * progress;
-        strip.style.transform = `translateX(${currentX.toFixed(2)}px)`;
-        if (t < 1){
-          requestAnimationFrame(tick);
-        } else {
-          strip.style.transform = `translateX(${finalX}px)`;
-          wrap.classList.add('stopped');
-          const winnerItem = strip.children[targetIndex];
-          if (winnerItem){
-            winnerItem.style.boxShadow = 'inset 0 0 15px rgba(255,215,0,0.3)';
-          }
-          resolve();
-        }
-      }
-      requestAnimationFrame(tick);
-    });
-  }
-
-  function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
-
-  // ===== 无尽生存模式 =====
-  let survivalRoster = []; // 玩家所选职业
-  let survivalOriginalTeam = null; // 玩家原始队伍（用于强化计算）
-  let survivalWave = 0; // 当前波次
-  let survivalMaxWave = 50; // 总波数
-  let survivalUpgrades = { hp: 0, dmg: 0, spd: 0, cd: 0 }; // 强化等级
-  let survivalBetweenWaves = false; // 是否在波次间隔
-  let survivalWaveTimer = 0; // 波次间隔计时
-  let survivalEnemiesSpawned = false; // 当前波敌人是否已生成
-  let survivalGameOver = false; // 游戏是否结束
-  let survivalGold = 0; // 生存模式金币
-  const SURVIVAL_BEST_KEY = 'ballgame_survival_best';
-  const SURVIVAL_BUDGET_TOTAL = 20; // 生存模式总造价上限
-  const SURVIVAL_MAX_ROSTER = 5; // 生存模式最大人数
-
-  function survivalUsed(){
-    return survivalRoster.reduce((s, k) => s + (CLASSES[k].cost || 0), 0);
-  }
-  function survivalRemaining(){
-    return SURVIVAL_BUDGET_TOTAL - survivalUsed();
-  }
-
-  // ===== 大逃杀模式 =====
-  let brPlayerCount = 12; // 参赛人数
-  let brSafeZone = null; // 安全圈 {x, y, radius, targetRadius, shrinkTimer, phase}
-  let brItems = []; // 道具列表
-  let brItemSpawnTimer = 0; // 道具刷新计时
-  let brGameTime = 0; // 游戏时间
-  let brGameOver = false; // 游戏是否结束
-  let brKills = {}; // 击杀数记录 {ballId: count}
-  const BR_ITEM_TYPES = ['atk', 'shield', 'speed', 'heal'];
-
-  function getBrBest(){
-    try { return parseInt(localStorage.getItem('ballgame_br_best') || '0') || 0; }
-    catch(e){ return 0; }
-  }
-  function setBrBest(place){
-    try {
-      const cur = getBrBest();
-      if (place > cur) localStorage.setItem('ballgame_br_best', String(place));
-    } catch(e){}
-  }
-
-  function getSurvivalBest(){
-    try { return parseInt(localStorage.getItem(SURVIVAL_BEST_KEY) || '0') || 0; }
-    catch(e){ return 0; }
-  }
-  function setSurvivalBest(wave){
-    try {
-      const cur = getSurvivalBest();
-      if (wave > cur) localStorage.setItem(SURVIVAL_BEST_KEY, String(wave));
-    } catch(e){}
-  }
-
-  function renderSurvivalShop(){
-    const grid = $('survivalShopGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    const remaining = survivalRemaining();
-    Object.entries(CLASSES).forEach(([k, c]) => {
-      const card = document.createElement('div');
-      const alreadyPicked = survivalRoster.includes(k);
-      const affordable = (c.cost || 0) <= remaining;
-      const canPick = !alreadyPicked && affordable && survivalRoster.length < SURVIVAL_MAX_ROSTER;
-      card.className = 'survival-shop-card' + (canPick ? '' : ' disabled');
-      card.innerHTML = `<div class="icon">${c.icon}</div><div class="name">${c.label}</div><div class="cost">造价${c.cost}</div>`;
-      if (canPick){
-        card.addEventListener('click', () => {
-          if (survivalRoster.length >= SURVIVAL_MAX_ROSTER){ alert('最多' + SURVIVAL_MAX_ROSTER + '人！'); return; }
-          if (survivalRoster.includes(k)){ alert('该角色已在阵容中，不能重复选择！'); return; }
-          if ((c.cost || 0) > survivalRemaining()){ alert('造价不足！'); return; }
-          survivalRoster.push(k);
-          renderSurvivalShop();
-          renderSurvivalRoster();
-        });
-      }
-      grid.appendChild(card);
-    });
-  }
-
-  function renderSurvivalRoster(){
-    const list = $('survivalRosterList');
-    if (!list) return;
-    list.innerHTML = '';
-    // 更新造价显示
-    const costEl = $('survivalCost');
-    if (costEl){
-      const used = survivalUsed();
-      const rem = survivalRemaining();
-      costEl.innerHTML = `造价 <b style="color:#ffd700;">${used}</b> / ${SURVIVAL_BUDGET_TOTAL} · 剩余 <b style="color:${rem >= 0 ? '#44ff88' : '#ff6b6b'};">${rem}</b>`;
-    }
-    if (survivalRoster.length === 0){
-      list.innerHTML = '<div style="font-size:11px;color:#8b7bb8;">点击上方职业加入战队</div>';
-      return;
-    }
-    survivalRoster.forEach((k, idx) => {
-      const c = CLASSES[k];
-      const item = document.createElement('div');
-      item.className = 'survival-roster-item';
-      item.innerHTML = `${c.icon} ${c.label} <span style="color:#ffd700;font-size:10px;">¥${c.cost}</span> <span style="color:#ff8585;margin-left:2px;">✕</span>`;
-      item.addEventListener('click', () => {
-        survivalRoster.splice(idx, 1);
-        renderSurvivalShop();
-        renderSurvivalRoster();
-      });
-      list.appendChild(item);
-    });
-  }
-
-  // 生成生存模式敌人队伍
-  function survivalSpawnEnemies(wave){
-    const isBoss = wave % 10 === 0;
-    const enemyKeys = [];
-    const allKeys = Object.keys(CLASSES);
-
-    if (isBoss){
-      // BOSS波：1个超大BOSS + 2-3个小怪
-      const bossKey = allKeys[Math.floor(Math.random()*allKeys.length)];
-      enemyKeys.push({ key: bossKey, isBoss: true });
-      const minionCount = 2 + Math.floor(wave/20);
-      for (let i=0;i<minionCount;i++){
-        enemyKeys.push({ key: allKeys[Math.floor(Math.random()*allKeys.length)], isBoss: false });
-      }
-    } else {
-      // 普通波：敌人数量随波次增加
-      const count = Math.min(8, 1 + Math.floor(wave/3) + (wave > 20 ? 1 : 0));
-      for (let i=0;i<count;i++){
-        enemyKeys.push({ key: allKeys[Math.floor(Math.random()*allKeys.length)], isBoss: false });
-      }
-    }
-
-    // 强度系数：随波次递增
-    const hpMul = 1 + wave * 0.08;
-    const dmgMul = 1 + wave * 0.05;
-    const bossHpMul = isBoss ? 8 + wave * 0.5 : 1;
-    const bossDmgMul = isBoss ? 2 + wave * 0.08 : 1;
-
-    const roles = enemyKeys.map(e => {
-      const c = CLASSES[e.key];
-      const params = {};
-      c.params.forEach(p => { params[p.key] = p.def; });
-      // 强化敌人属性
-      if (params.dmg) params.dmg = Math.ceil(params.dmg * dmgMul * (e.isBoss ? bossDmgMul : 1));
-      return {
-        cls: e.key,
-        name: e.isBoss ? '👑BOSS·' + c.label : c.label,
-        color: e.isBoss ? '#ff1744' : c.color,
-        size: e.isBoss ? 28 : 16,
-        speed: e.isBoss ? 90 : 120,
-        hpMul: e.isBoss ? bossHpMul : hpMul,
-        params: params,
-        count: 1
-      };
-    });
-
-    return { name: isBoss ? `第${wave}波·BOSS` : `第${wave}波`, color: '#5fd4ff', roles: roles };
-  }
-
-  // 应用玩家强化到队伍（基于原始队伍重新计算，避免累积）
-  function applySurvivalUpgrades(){
-    if (!survivalOriginalTeam) return;
-    const hpMul = 1 + survivalUpgrades.hp * 0.0015;
-    const dmgMul = 1 + survivalUpgrades.dmg * 0.0012;
-    const spdMul = 1 + survivalUpgrades.spd * 0.0008;
-    const cdMul = 1 - survivalUpgrades.cd * 0.0006; // 冷却减少
-    // 深拷贝原始队伍
-    const team = JSON.parse(JSON.stringify(survivalOriginalTeam));
-    team.roles.forEach(r => {
-      r.hpMul = (r.hpMul || 1) * hpMul;
-      if (r.params){
-        if (r.params.dmg) r.params.dmg = Math.ceil(r.params.dmg * dmgMul);
-        if (r.params.rate) r.params.rate = r.params.rate / cdMul;
-        if (r.params.speed) r.params.speed = r.params.speed * spdMul;
-      }
-      r.speedMul = (r.speedMul || 1) * spdMul;
-    });
-    teams.A = team;
-  }
-
-  // 显示强化选择
-  function showUpgradeSelection(){
-    survivalBetweenWaves = true;
-    paused = true;
-    // 通关奖励金币
-    const bonusGold = 3;
-    survivalGold += bonusGold;
-
-    let upgradePicked = false;
-    const overlay = document.createElement('div');
-    overlay.className = 'upgrade-overlay';
-    overlay.id = 'upgradeOverlay';
-
-    const upgradeOptions = [
-      { key: 'hp', icon: '❤️', name: '生命强化', desc: '全队最大生命值+0.15%', level: survivalUpgrades.hp },
-      { key: 'dmg', icon: '⚔️', name: '攻击强化', desc: '全队伤害+0.12%', level: survivalUpgrades.dmg },
-      { key: 'spd', icon: '💨', name: '速度强化', desc: '全队移速+0.8%', level: survivalUpgrades.spd },
-      { key: 'cd', icon: '⏱️', name: '冷却强化', desc: '全队攻速/技能冷却-0.6%', level: survivalUpgrades.cd }
-    ];
-
-    function renderShopHTML(){
-      const ownedKeys = survivalOriginalTeam.roles.map(r => r.cls);
-      return Object.entries(CLASSES).map(([k, c]) => {
-        const price = (c.cost || 3) * 2;
-        const owned = ownedKeys.includes(k);
-        const affordable = survivalGold >= price;
-        const canBuy = !owned && affordable;
-        return `
-          <div class="sv-shop-card ${canBuy ? '' : 'disabled'}" data-cls="${k}" data-price="${price}">
-            <div class="ssc-icon">${c.icon}</div>
-            <div class="ssc-name">${c.label}</div>
-            <div class="ssc-price">${owned ? '已拥有' : '💰' + price}</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function refreshOverlay(){
-      const goldEl = overlay.querySelector('.sv-gold-display');
-      if (goldEl) goldEl.innerHTML = `💰 ${survivalGold}`;
-      const shopGrid = overlay.querySelector('.sv-shop-grid');
-      if (shopGrid) shopGrid.innerHTML = renderShopHTML();
-      bindShopCards();
-      const continueBtn = overlay.querySelector('.sv-continue-btn');
-      if (continueBtn) continueBtn.disabled = !upgradePicked;
-      if (continueBtn) continueBtn.style.opacity = upgradePicked ? '1' : '0.5';
-    }
-
-    function bindShopCards(){
-      overlay.querySelectorAll('.sv-shop-card').forEach(card => {
-        card.addEventListener('click', () => {
-          if (card.classList.contains('disabled')) return;
-          const cls = card.dataset.cls;
-          const price = parseInt(card.dataset.price);
-          if (survivalGold < price) return;
-          const ownedKeys = survivalOriginalTeam.roles.map(r => r.cls);
-          if (ownedKeys.includes(cls)) return;
-          // 扣除金币，添加角色
-          survivalGold -= price;
-          const c = CLASSES[cls];
-          const params = {};
-          c.params.forEach(p => { params[p.key] = p.def; });
-          survivalOriginalTeam.roles.push({
-            cls: cls, name: c.label, color: c.color,
-            params: params, count: 1, size: 18, speed: 120
-          });
-          // 重新应用强化
-          applySurvivalUpgrades();
-          floatTexts.push(new FloatText(VIEW.w/2, VIEW.h/2, '招募 ' + c.label + '!', '#ffd700', {life: 1.2, size: 16}));
-          refreshOverlay();
-        });
-      });
-    }
-
-    overlay.innerHTML = `
-      <div class="upgrade-panel" style="max-width:560px;">
-        <div class="upgrade-title">🎉 第 ${survivalWave} 波通关！</div>
-        <div class="upgrade-subtitle">
-          通关奖励 +${bonusGold}💰 · 当前金币 <span class="sv-gold-display" style="color:#ffd700;font-weight:700;">💰 ${survivalGold}</span>
-        </div>
-        <div style="font-size:12px;color:#c9b8ff;margin:8px 0 4px;">⬇️ 选择一项永久强化（必选）</div>
-        <div class="upgrade-options" id="svUpgradeOptions">
-          ${upgradeOptions.map(o => `
-            <div class="upgrade-card" data-key="${o.key}">
-              <div class="up-icon">${o.icon}</div>
-              <div class="up-name">${o.name}</div>
-              <div class="up-desc">${o.desc}</div>
-              <div class="up-level">当前等级：Lv.${o.level}</div>
-            </div>
-          `).join('')}
-        </div>
-        <div style="font-size:12px;color:#c9b8ff;margin:12px 0 4px;">🛒 波次间商店（用金币招募新角色，不可重复）</div>
-        <div class="sv-shop-grid">
-          ${renderShopHTML()}
-        </div>
-        <button class="sv-continue-btn" disabled style="margin-top:14px;width:100%;padding:12px;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#b484ff);color:#fff;box-shadow:0 4px 16px rgba(124,58,237,0.4);opacity:0.5;transition:opacity .2s;">
-          选择强化后继续下一波 →
-        </button>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    // 绑定强化卡片点击
-    overlay.querySelectorAll('.upgrade-card').forEach(card => {
-      card.addEventListener('click', () => {
-        if (upgradePicked) return;
-        const key = card.dataset.key;
-        survivalUpgrades[key]++;
-        upgradePicked = true;
-        // 高亮已选
-        overlay.querySelectorAll('.upgrade-card').forEach(c => {
-          c.style.opacity = c === card ? '1' : '0.4';
-          c.style.outline = c === card ? '2px solid #ffd700' : 'none';
-        });
-        applySurvivalUpgrades();
-        refreshOverlay();
-      });
-    });
-
-    bindShopCards();
-
-    // 继续按钮
-    overlay.querySelector('.sv-continue-btn').addEventListener('click', () => {
-      if (!upgradePicked) return;
-      document.body.removeChild(overlay);
-      survivalBetweenWaves = false;
-      paused = false;
-      survivalWave++;
-      teams.B = survivalSpawnEnemies(survivalWave);
-      applySurvivalUpgrades();
-      resetTimer = 0;
-      startMatch();
-    });
-  }
-
-  // 生存模式结算
-  function showSurvivalResult(){
-    survivalGameOver = true;
-    setSurvivalBest(survivalWave);
-    const isWin = survivalWave >= survivalMaxWave;
-    $('resultTitle').textContent = isWin ? '🏆 通关成功！' : '💀 闯关结束';
-    $('resultTitle').style.color = isWin ? '#ffd700' : '#ff6b6b';
-    $('resultSubtitle').textContent = isWin
-      ? `恭喜通关全部 ${survivalMaxWave} 波！`
-      : `坚持到第 ${survivalWave} 波`;
-    $('resultRound').textContent = `最高记录：${getSurvivalBest()} 波 · 强化 ❤️${survivalUpgrades.hp} ⚔️${survivalUpgrades.dmg} 💨${survivalUpgrades.spd} ⏱️${survivalUpgrades.cd}`;
-    // 隐藏队伍详情，只显示生存模式信息
-    $('resultTeamA').style.display = 'none';
-    $('resultTeamB').style.display = 'none';
-    $('resultScreen').classList.remove('hidden');
-    paused = true;
-  }
-
-  // ===== 大逃杀模式核心 =====
-  function brInit(){
-    brGameTime = 0;
-    brGameOver = false;
-    brItems = [];
-    brItemSpawnTimer = 3;
-    brKills = {};
-    // 初始化安全圈：覆盖整个地图，然后逐渐收缩
-    brSafeZone = {
-      x: VIEW.w / 2,
-      y: VIEW.h / 2,
-      radius: Math.max(VIEW.w, VIEW.h) * 0.7,
-      targetRadius: Math.max(VIEW.w, VIEW.h) * 0.7,
-      shrinkTimer: 12, // 12秒后开始第一次缩圈
-      phase: 0,
-      nextCenterX: VIEW.w / 2,
-      nextCenterY: VIEW.h / 2
-    };
-  }
-
-  function brSpawnPlayers(){
-    const classKeys = Object.keys(CLASSES);
-    const colors = ['#ff6b6b', '#ff9148', '#ffd700', '#44ff88', '#5fd4ff', '#a78bfa', '#ff88aa', '#00d4ff', '#ffaa00', '#62e068', '#ff3838', '#73e0ff', '#fff370', '#4b7bec', '#ff7a3d', '#c084fc'];
-    for (let i = 0; i < brPlayerCount; i++){
-      const clsKey = classKeys[Math.floor(Math.random() * classKeys.length)];
-      const cls = CLASSES[clsKey];
-      const teamId = 'P' + (i + 1);
-      // 随机位置（在安全圈内，避免太靠近中心）
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 50 + Math.random() * (brSafeZone.radius * 0.7);
-      const x = brSafeZone.x + Math.cos(angle) * dist;
-      const y = brSafeZone.y + Math.sin(angle) * dist;
-      // 创建参数
-      const params = {};
-      cls.params.forEach(p => { params[p.key] = p.def; });
-      const roleCfg = {
-        cls: clsKey,
-        name: cls.label,
-        color: colors[i % colors.length],
-        maxHp: cls.maxHp,
-        size: 18,
-        speed: 120,
-        params: params
-      };
-      const ball = new Ball(teamId, clsKey, x, y, roleCfg);
-      ball.brColor = colors[i % colors.length];
-      balls.push(ball);
-      brKills[teamId] = 0;
-    }
-  }
-
-  function brUpdateSafeZone(dt){
-    if (!brSafeZone) return;
-    brSafeZone.shrinkTimer -= dt;
-    if (brSafeZone.shrinkTimer <= 0){
-      brSafeZone.phase++;
-      // 每次缩圈半径减少35%，最小半径80
-      brSafeZone.targetRadius = Math.max(80, brSafeZone.radius * 0.65);
-      // 随机下一个安全圈中心（在当前圈内）
-      const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * brSafeZone.radius * 0.3;
-      brSafeZone.nextCenterX = brSafeZone.x + Math.cos(angle) * dist;
-      brSafeZone.nextCenterY = brSafeZone.y + Math.sin(angle) * dist;
-      // 缩圈间隔：前期12秒，后期8秒
-      brSafeZone.shrinkTimer = brSafeZone.phase > 3 ? 8 : 12;
-    }
-    // 平滑收缩
-    if (brSafeZone.radius > brSafeZone.targetRadius){
-      brSafeZone.radius -= dt * 30;
-      if (brSafeZone.radius < brSafeZone.targetRadius) brSafeZone.radius = brSafeZone.targetRadius;
-    }
-    // 平滑移动中心
-    brSafeZone.x += (brSafeZone.nextCenterX - brSafeZone.x) * dt * 0.8;
-    brSafeZone.y += (brSafeZone.nextCenterY - brSafeZone.y) * dt * 0.8;
-  }
-
-  function brCheckZoneDamage(ball, dt, particles){
-    if (!brSafeZone || !ball.alive) return;
-    const dist = Math.hypot(ball.x - brSafeZone.x, ball.y - brSafeZone.y);
-    if (dist > brSafeZone.radius){
-      // 圈外伤害：距离越远伤害越高
-      const outsideDist = dist - brSafeZone.radius;
-      const dmg = (5 + outsideDist * 0.05) * dt; // 基础5点/秒，每远1px加0.05
-      ball.hp -= dmg;
-      ball.hitFlash = 0.1;
-      // 偶尔显示伤害数字
-      if (Math.random() < 0.02){
-        floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 10, '-' + Math.round(dmg * 10), '#ff4444', {life: 0.6, size: 11}));
-      }
-      if (ball.hp <= 0 && ball.alive && !(ball.cls === 'pain' && !ball.isPainBeast && !ball.painTenduoActive)){
-        ball.die(particles);
-      }
-    }
-  }
-
-  function brSpawnItem(){
-    if (!brSafeZone) return;
-    // 在安全圈内随机位置生成道具
-    const angle = Math.random() * Math.PI * 2;
-    const dist = Math.random() * brSafeZone.radius * 0.8;
-    const x = brSafeZone.x + Math.cos(angle) * dist;
-    const y = brSafeZone.y + Math.sin(angle) * dist;
-    const type = BR_ITEM_TYPES[Math.floor(Math.random() * BR_ITEM_TYPES.length)];
-    brItems.push({ x, y, type, life: 30, bobPhase: Math.random() * Math.PI * 2 });
-  }
-
-  function brUpdateItems(dt, balls, particles){
-    brItemSpawnTimer -= dt;
-    if (brItemSpawnTimer <= 0 && brItems.length < 8){
-      brSpawnItem();
-      brItemSpawnTimer = 5 + Math.random() * 5; // 5-10秒刷新一个
-    }
-    // 更新道具
-    for (const item of brItems){
-      item.life -= dt;
-      item.bobPhase += dt * 3;
-      // 检测拾取
-      for (const ball of balls){
-        if (!ball.alive) continue;
-        const d = Math.hypot(ball.x - item.x, ball.y - item.y);
-        if (d < ball.size + 15){
-          brApplyItem(ball, item, particles);
-          item.life = 0;
-          break;
-        }
-      }
-    }
-    brItems = brItems.filter(i => i.life > 0);
-  }
-
-  function brApplyItem(ball, item, particles){
-    switch(item.type){
-      case 'atk':
-        ball.brAtkBoost = 8; // 持续8秒
-        floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 15, '⚔️ 攻击+30%', '#ff6b6b', {life: 1.2, size: 13}));
-        break;
-      case 'shield':
-        ball.brShield = 50; // 50点护盾
-        floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 15, '🛡️ 护盾+50', '#5fd4ff', {life: 1.2, size: 13}));
-        break;
-      case 'speed':
-        ball.brSpeedBoost = 8; // 持续8秒
-        floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 15, '💨 移速+30%', '#44ff88', {life: 1.2, size: 13}));
-        break;
-      case 'heal':
-        const healAmt = ball.maxHp * 0.5;
-        ball.hp = Math.min(ball.maxHp, ball.hp + healAmt);
-        floatTexts.push(new FloatText(ball.x, ball.y - ball.size - 15, '❤️ +' + Math.round(healAmt), '#ff88aa', {life: 1.2, size: 13}));
-        break;
-    }
-    // 拾取特效
-    for (let i = 0; i < 12; i++){
-      const a = Math.random() * Math.PI * 2;
-      particles.push(new Particle(item.x, item.y, '#ffd700', {ang: a, speed: 80 + Math.random()*60, life: 0.4, size: 3}));
-    }
-  }
-
-  function brDrawSafeZone(ctx){
-    if (!brSafeZone) return;
-    // 圈外变暗
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 50, 50, 0.08)';
-    ctx.fillRect(0, 0, VIEW.w, VIEW.h);
-    // 挖空安全圈
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(brSafeZone.x, brSafeZone.y, brSafeZone.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-    // 安全圈边界
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255, 100, 100, 0.8)';
-    ctx.lineWidth = 3;
-    ctx.shadowColor = '#ff4444';
-    ctx.shadowBlur = 15;
-    ctx.beginPath();
-    ctx.arc(brSafeZone.x, brSafeZone.y, brSafeZone.radius, 0, Math.PI * 2);
-    ctx.stroke();
-    // 下一个安全圈预览（虚线）
-    if (brSafeZone.targetRadius < brSafeZone.radius - 5){
-      ctx.strokeStyle = 'rgba(255, 200, 100, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 8]);
-      ctx.beginPath();
-      ctx.arc(brSafeZone.nextCenterX, brSafeZone.nextCenterY, brSafeZone.targetRadius, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
-    ctx.restore();
-  }
-
-  function brDrawItems(ctx){
-    for (const item of brItems){
-      const bob = Math.sin(item.bobPhase) * 3;
-      const y = item.y + bob;
-      // 光晕
-      const colors = { atk: '#ff6b6b', shield: '#5fd4ff', speed: '#44ff88', heal: '#ff88aa' };
-      const icons = { atk: '⚔️', shield: '🛡️', speed: '💨', heal: '❤️' };
-      const color = colors[item.type] || '#ffd700';
-      ctx.save();
-      const g = ctx.createRadialGradient(item.x, y, 0, item.x, y, 25);
-      g.addColorStop(0, color + '88');
-      g.addColorStop(1, color + '00');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(item.x, y, 25, 0, Math.PI * 2);
-      ctx.fill();
-      // 背景圆
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.beginPath();
-      ctx.arc(item.x, y, 14, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      // 图标
-      ctx.font = '16px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(icons[item.type] || '?', item.x, y);
-      ctx.restore();
-    }
-  }
-
-  function brGameOverFn(winner){
-    brGameOver = true;
-    const aliveBalls = balls.filter(b => b.alive);
-    const place = brPlayerCount - aliveBalls.length + 1;
-    setBrBest(place);
-    $('resultTitle').textContent = '🏆 大逃杀结束';
-    $('resultTitle').style.color = '#ffd700';
-    $('resultSubtitle').textContent = winner ? `${CLASSES[winner.cls].label} 获得胜利！` : '平局';
-    $('resultRound').textContent = `存活时间：${Math.floor(brGameTime)}秒 · 最佳名次：第${getBrBest()}名`;
-    $('resultTeamA').style.display = 'none';
-    $('resultTeamB').style.display = 'none';
-    $('resultScreen').classList.remove('hidden');
-    paused = true;
-  }
+  teams = MANUAL_TEAMS();
 
   // ============== Canvas ==============
   const canvas = document.getElementById('game');
@@ -4181,8 +2607,9 @@
     summoner: {
       atk: { name: '灵魂箭', cds: ['soulAtkCD'], max: 0.65 },
       slots: [
+        { name: '召唤魂体', cds: ['soulCastT'], max: 1.8, readyWhen: (b, balls) => (b.soulEn || 0) >= 1 && balls.filter(x => x.alive && x.isSoul && x.owner === b).length < 3 },
         { name: '魂潮号令', cds: ['chargeCD'], max: 8 },
-        { name: '万灵归葬', field: 'funeralUsed', readyWhen: (b, balls) => (b.soulEn || 0) >= 1 && balls.filter(x => x.alive && x.isSoul && x.owner === b).length > 3 && b.hp / b.maxHp < 0.45 },
+        { name: '重新整备', cds: ['rallyCD'], max: 8, readyWhen: (b, balls) => balls.filter(x => x.alive && x.isSoul && x.owner === b).length > 0 },
       ]
     },
     plague: {
@@ -4196,7 +2623,7 @@
       atk: { name: '熔岩弹', cds: ['moltenBodyAtkCD'], max: 1.6 },
       slots: [
         { name: '契约召唤', cds: ['moltenSummonCD'], max: 0.5 },
-        { name: '火龙卷', cds: ['moltenTorCD'], max: 2 },
+        { name: '火龙卷', cds: ['moltenTorCD'], max: 4, readyWhen: (b) => (b.moltenShellStacks || 0) >= (b.params.torStacks != null ? b.params.torStacks : 5) },
       ]
     },
     whiteEmber: {
@@ -4249,7 +2676,7 @@
       atk: { name: '时空刃', cds: ['chronoAtkCD'], max: 0.55 },
       slots: [
         { name: '时空穿梭', cds: ['chronoDashCD'], max: 6 },
-        { name: '时空回溯', cds: ['chronoRecallCD'], max: 20 },
+        { name: '时空回溯', cds: ['chronoRecallCD'], max: 20, readyWhen: b => (b.chronoAnchor || 0) > 0 && !!b.chronoRecallHas && b.hp < b.maxHp * 0.4 },
       ]
     },
     timeMage: {
@@ -4288,6 +2715,7 @@
       atk: { name: '黑棒穿刺', cds: ['painAtkCD'], max: 1.5 },
       slots: [
         { name: '神罗天征', cds: ['painShinraCD'], max: 9, custom: 'shinra', readyWhen: b => !!b.painTenduoActive },
+        { name: '地爆天星', cds: ['painChibakuCD'], max: 10, readyWhen: b => !!b.painTenduoActive },
         { name: '修罗道导弹', cds: ['painSkillCD'], max: 3 },
         { name: '畜生道通灵', cds: ['painBeastCD'], max: 4 },
       ]
@@ -4354,6 +2782,44 @@
     },
   };
   const MANUAL_LOCK_SENTINEL = 9999;         // 未按键时的封锁值（远大于任何真实冷却）
+  const MANUAL_DASH_MUL = 1.5;               // 手操位移距离倍率（冲刺/跳跃距离 +50%）
+  const MANUAL_CHRONO_DASH_MUL = 1.2;        // 超时空战士·时空穿梭（手操冲刺）距离倍率 +20%
+  // 手操位移落点「提前预览」规格：技能冷却就绪(且 ok 条件满足)时即逐帧预测落点，不必等按键触发
+  // cds：该技能对应的手操冷却影子字段；ok(b,balls)：额外可释放条件；dist(b)：手操实际位移距离(含倍率)
+  // dir(b,enemy)：无 WASD 输入时的默认方向（默认朝敌）；color/r：落点标记样式
+  const MANUAL_DASH_SPEC = {
+    chrono: [
+      { cds: ['chronoDashCD'], ok: b => (b.chronoAnchor || 0) >= 2,
+        dist: b => (b.params.dashRange != null ? b.params.dashRange : 420) * MANUAL_CHRONO_DASH_MUL,
+        color: '#5fd4ff', r: 42 },
+    ],
+    thunderLord: [
+      { cds: ['thunderJumpCD'], ok: b => !!b.thunderStormReady,
+        dist: b => (b.params.jumpRange != null ? b.params.jumpRange : 300) * MANUAL_DASH_MUL,
+        color: '#5aa8ff', r: 40 },
+    ],
+    liangyi: [
+      { cds: ['lySurvCD'], ok: b => b.lyForm !== 'yang',
+        hideWhen: b => (b._mShadow.lyBlinkCD || 0) <= 0,   // 坤阴·瞬身可用时优先显示其落点，避免两个落点误判
+        dist: b => (b.params.dodgeDist != null ? b.params.dodgeDist : 150) * MANUAL_DASH_MUL,
+        color: '#c77dff', r: 38 },
+      { cds: ['lyBlinkCD'], ok: b => b.lyForm !== 'yang',
+        dist: b => (b.params.kunBlinkRange != null ? b.params.kunBlinkRange : 300) * MANUAL_DASH_MUL,
+        dir: (b, enemy) => enemy ? { x: b.x - enemy.x, y: b.y - enemy.y } : { x: Math.cos(b.facing), y: Math.sin(b.facing) },
+        color: '#c77dff', r: 40 },
+    ],
+    sniper: [
+      { cds: ['sniperDodgeCD'],
+        dist: b => 450 * MANUAL_DASH_MUL * 0.25,
+        dir: (b, enemy) => enemy ? { x: b.x - enemy.x, y: b.y - enemy.y } : { x: -Math.cos(b.facing), y: -Math.sin(b.facing) },
+        color: b => b.color, r: 34 },
+    ],
+    lingShuo: [
+      { cds: ['linSkill1CD'], ok: b => b.linUltT > 0 || (b.linEnergy || 0) >= 30,
+        dist: b => (b.params.flashDist != null ? b.params.flashDist : 120) * MANUAL_DASH_MUL,
+        color: '#bfeaff', r: 36 },
+    ],
+  };
 
   // 手操状态显示：各角色叠层 / 资源 / 一次性被动（HUD 徽章，帮助判断何时放技能）
   // 条目形式：{label,color,max,get(b,balls)} 叠层；{label,color,flag(b)} 一次性被动(可用/已用)；{label,color,text(b)} 文本状态
@@ -4361,12 +2827,12 @@
   const MANUAL_STATUS = {
     berserker: [
       { label: '怒层', color: '#ff6b6b', max: 9, get: b => b.rageLayers || 0 },
+      { label: '灼血', color: '#ff8c42', get: b => b.howlBurn || 0 },
       { label: '死战', color: '#ffd76b', flag: b => b.persistUsed },
     ],
     summoner: [
       { label: '魂能', color: '#7fd6ff', max: 5, get: b => b.soulEn || 0 },
-      { label: '召唤', color: '#9fe8ff', max: 4, get: (b, balls) => balls.filter(x => x.alive && x.isSoul && x.owner === b).length },
-      { label: '归葬', color: '#c77dff', flag: b => b.funeralUsed },
+      { label: '召唤', color: '#9fe8ff', max: 3, get: (b, balls) => balls.filter(x => x.alive && x.isSoul && x.owner === b).length },
     ],
     obito: [
       { label: '瞳力', color: '#c77dff', max: 5, get: b => b.obitoChakra || 0 },
@@ -5723,6 +4189,50 @@
     }
   }
 
+  // 手操位移落点提示：地面标记（旋转虚线环 + 十字准心 + 下落箭标）
+  function drawLandingMarker(ctx, x, y, color, alpha, R){
+    const t = Date.now();
+    R = R || 34;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    // 地面光晕
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 1.25);
+    g.addColorStop(0, rgba(color, 0.32));
+    g.addColorStop(0.6, rgba(color, 0.12));
+    g.addColorStop(1, rgba(color, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, R * 1.25, 0, Math.PI * 2); ctx.fill();
+    // 旋转外环（虚线）
+    ctx.strokeStyle = rgba(color, 0.9);
+    ctx.lineWidth = 2;
+    ctx.setLineDash([7, 5]);
+    ctx.lineDashOffset = -t * 0.02;
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    // 内环
+    const pulse = R * (0.5 + 0.06 * Math.sin(t * 0.008));
+    ctx.strokeStyle = rgba(color, 0.75);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(0, 0, pulse, 0, Math.PI * 2); ctx.stroke();
+    // 十字准心
+    ctx.strokeStyle = rgba('#ffffff', 0.85);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-R * 0.45, 0); ctx.lineTo(R * 0.45, 0);
+    ctx.moveTo(0, -R * 0.45); ctx.lineTo(0, R * 0.45);
+    ctx.stroke();
+    // 下落箭标（提示这是落点）
+    const bob = 4 * Math.sin(t * 0.01);
+    ctx.strokeStyle = rgba(color, 0.95);
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(0, -R - 14 + bob); ctx.lineTo(0, -R - 3 + bob);
+    ctx.moveTo(-5, -R - 8 + bob); ctx.lineTo(0, -R - 3 + bob); ctx.lineTo(5, -R - 8 + bob);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   // 幻瞳师·幻术瞳（区别于带土的鲜红三勾玉写轮眼，走紫色“幻梦境”瞳纹：紫红虹膜+旋转幻羽波纹+裂瞳中心）
   function drawIllusionSharingan(ctx, x, y, R, opts){
     opts = opts || {};
@@ -6104,13 +4614,25 @@
   // 幻瞳师·黑炎区域（幻鸦自爆遗留，持续燃烧立场附带写轮眼微光）
   // 熔火契约师·大招【火龙卷】：范围内敌人持续火焰伤害并减速
   class MoltenTornado {
-    constructor(x, y, team, radius, duration, dps, slowRatio, source){
+    constructor(x, y, team, radius, duration, dps, slowRatio, source, windup){
       this.x = x; this.y = y; this.team = team; this.radius = radius;
       this.life = duration; this.maxLife = duration;
       this.dps = dps; this.slowRatio = slowRatio; this.source = source;
+      this.windup = windup || 0; this.windupMax = windup || 0;
       this.tickTimer = 0; this.pulsePhase = Math.random()*6.28; this.seed = Math.random()*6.28;
     }
     update(dt, balls, particles){
+      // 前摇：地面预警，龙卷尚未成型、不结算伤害
+      if (this.windup > 0){
+        this.windup -= dt;
+        if (Math.random() < dt*26){
+          const a = Math.random()*Math.PI*2;
+          const rr = this.radius * (0.4 + 0.6*Math.random());
+          particles.push(new Particle(this.x + Math.cos(a)*rr, this.y + Math.sin(a)*rr,
+            Math.random()<0.5 ? '#ffb300' : '#ff6a22', {ang: -Math.PI/2 + (Math.random()-0.5)*0.6, speed: 30 + Math.random()*50, life: 0.35+Math.random()*0.3, size: 2.5+Math.random()*2}));
+        }
+        return;
+      }
       this.life -= dt;
       this.pulsePhase += dt*4;
       this.tickTimer -= dt;
@@ -6136,6 +4658,28 @@
       }
     }
     draw(ctx){
+      // 前摇预警：地面红色警示环 + 随时间扩大的蓄力圈
+      if (this.windup > 0){
+        const prog = 1 - Math.max(0, this.windup / (this.windupMax || 1));
+        const tw = Date.now();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.strokeStyle = rgba('#ff6a22', 0.35 + 0.35*prog);
+        ctx.lineWidth = 3;
+        ctx.setLineDash([12, 10]);
+        ctx.lineDashOffset = -tw*0.05;
+        ctx.beginPath(); ctx.arc(0, 0, this.radius, 0, Math.PI*2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = rgba('#ffb300', 0.75);
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#ff8c42'; ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.arc(0, 0, this.radius * prog, 0, Math.PI*2); ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = rgba('#ffe27a', 0.5 + 0.4*prog);
+        ctx.beginPath(); ctx.arc(0, 0, 6 + 8*prog, 0, Math.PI*2); ctx.fill();
+        ctx.restore();
+        return;
+      }
       const a = Math.max(0, Math.min(1, this.life / this.maxLife));
       const t = Date.now();
       const r = this.radius * (1 + Math.sin(this.pulsePhase)*0.05);
@@ -6463,6 +5007,9 @@
       this._mAim = 0;              // 手操瞄准方向
       this._mShadow = {};          // 手操：各技能/普攻冷却的影子计时（记录真实剩余冷却）
       this._mUlt = {};             // 手操：一局一次技能的已用状态
+      this._mInp = null;           // 手操：本帧输入缓存（走位/位移指向复用）
+      this._dashLand = null;       // 手操：位移落点提示（技能触发后）{x,y,until,color,r}
+      this._dashPreview = [];      // 手操：位移落点「提前预览」（技能可释放时逐帧重建）[{x,y,color,r}]
       this._mShieldHP = 0;         // 遗留字段（旧通用护盾，保留以兼容吸收分支）
       this._mShieldT = 0;
       this.isClone = false; // 是否为分身
@@ -6523,6 +5070,11 @@
       this.chronoAtkCD = 0;             // 时空刃普攻冷却
       this.chronoDashCD = 1.5;          // 时空穿梭冷却（开局给1.5s初始冷却后即可首次瞬身）
       this.chronoDashIFrame = 0;        // 穿梭无敌帧剩余时间（落地后结束）
+      this.chronoDashing = 0;           // 手操：时空穿梭「冲刺」剩余时间
+      this.chronoDashDirX = 0; this.chronoDashDirY = 0; // 手操冲刺方向
+      this.chronoDashSpeed = 0;         // 手操冲刺速度
+      this.chronoDashDmg = 0;           // 手操冲刺命中伤害
+      this.chronoDashHitSet = undefined; // 手操冲刺已命中集合（每敌一次）
       this.chronoRecallCD = 0;          // 时空回溯冷却
       this.chronoRecallBuffer = [];     // 回溯快照环形缓冲 {t,x,y,hp}
       this.chronoRecallT = 0;           // 快照采样计时
@@ -6552,16 +5104,16 @@
       this.soulEn = 0;               // 灵魂能量
       this.soulAtkCD = 0;            // 本体灵魂箭攻速计时
       this.soulCastT = 0;            // 召唤/技能施法硬直
-      this.summonLockT = 0;          // 万灵归葬后禁召真空期
       this.chargeCD = 0;             // 魂潮号令冷却
       this.chargeBuffT = 0;          // 当前魂潮增益剩余时间
-      this.funeralUsed = false;      // 万灵归葬是否已用（一局一次）
+      this.rallyCD = 0;              // 重新整备冷却
       this.enrageUsed = false;       // 亡魂反噬是否已用
       this.isSoul = false;           // 是否为召唤师召唤物
       this.soulType = '';            // 召唤物类型 guard/archer/moth
       this.soulLife = 0;             // 召唤物剩余存活时间
       this.soulBorn = 0;             // 召唤物出生时间戳（用于超限销毁最老）
       this._soulEnrage = 0;          // 召唤物狂暴剩余时间
+      this._rallyT = 0;              // 召唤物整备列阵剩余时间
       this._soulCorrStacks = 0;      // 魂蚀叠层（敌方目标）
       this._soulCorrT = 0;           // 魂蚀剩余
       this._soulSlowStacks = 0;      // 噬灵蜉蝣减速叠层（敌方目标）
@@ -6586,6 +5138,8 @@
       this.cleaveCD = 0; // 血刃横扫冷却
       this.howlT = 0; // 狂化剩余时间
       this.howlCD = 0; // 狂化冷却
+      this.howlBurn = 0; // 狂化灼血层数（狂化期间燃烧生命叠层，强化血刃横扫，用后清零）
+      this.howlBurnT = 0; // 灼血计时
       this.harvestSpdT = 0; // 收割加速剩余
       this.persistT = 0; // 死战剩余时间
       this.persistUsed = false; // 死战是否已用（一局一次）
@@ -6698,10 +5252,6 @@
       this.painPandaShieldTime = 0; // 熊猫减伤领域时间
       this.isPainBeast = false; // 是否为通灵兽（召唤物）
       this.painBeastAtkCD = 0; // 通灵兽攻击冷却
-      // 大逃杀模式状态
-      this.brAtkBoost = 0; // 攻击增益剩余时间
-      this.brShield = 0; // 护盾值
-      this.brSpeedBoost = 0; // 移速增益剩余时间
       // 熔火契约师相关状态
       this.moltenShellStacks = 0; // 熔火壳层数（0-10）
       this.moltenShieldHP = 0; // 火焰护盾血量
@@ -7127,6 +5677,23 @@
         if (this.cleaveCD > 0) this.cleaveCD -= dt;
         if (this.howlT > 0) this.howlT -= dt;
         if (this.howlCD > 0) this.howlCD -= dt;
+        // 狂化灼血：狂化期间持续燃烧生命，每灼烧一次叠1层「灼血」，层数越高血刃横扫越痛（用后清零）
+        if (this.howlT > 0 && !this.deathPersist){
+          this.howlBurnT -= dt;
+          if (this.howlBurnT <= 0){
+            this.howlBurnT = this.params.howlBurnInterval != null ? this.params.howlBurnInterval : 0.5;
+            const burnPct = (this.params.howlBurnPct != null ? this.params.howlBurnPct : 2) / 100;
+            this.hp = Math.max(1, this.hp - this.maxHp * burnPct);
+            this.howlBurn = (this.howlBurn || 0) + 1;
+            for (let i=0;i<6;i++){
+              const a = Math.random()*Math.PI*2;
+              particles.push(new Particle(this.x, this.y, i%2 ? '#ffb300' : '#ff5f5f', {ang:a, speed:50+Math.random()*80, life:0.35, size:2.5}));
+            }
+            if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 8, '灼血 +' + this.howlBurn, '#ff8c42', {life:0.5, size:11}));
+          }
+        } else {
+          this.howlBurnT = 0;
+        }
         if (this.extraRageT > 0){ this.extraRageT -= dt; if (this.extraRageT <= 0) this.extraRage = 0; }
         if (this.harvestSpdT > 0) this.harvestSpdT -= dt;
         // 狂血层数实时由当前血量推得（血量回升对应层数立即消失）
@@ -7511,6 +6078,60 @@
       // 超时空战士跃迁状态计时与控制
       if (this.cls === 'chrono' && !this.isDoll && !this.isClone){
         this.chronoAge += dt;
+        // 手操：时空穿梭「冲刺」推进 + 路径斩击（每个敌人一次），冲刺结束结算
+        if (this.chronoDashing > 0){
+          const prevX = this.x, prevY = this.y;
+          this.chronoDashing -= dt;
+          this.vx = 0; this.vy = 0;
+          this.x += this.chronoDashDirX * this.chronoDashSpeed * dt;
+          this.y += this.chronoDashDirY * this.chronoDashSpeed * dt;
+          const cb = getFieldBounds();
+          if (this.x < cb.left + this.size) this.x = cb.left + this.size;
+          if (this.y < cb.top + this.size) this.y = cb.top + this.size;
+          if (this.x > cb.right - this.size) this.x = cb.right - this.size;
+          if (this.y > cb.bottom - this.size) this.y = cb.bottom - this.size;
+          // 冲刺残影 + 时空拖尾
+          this.afterimages.push({ x: this.x, y: this.y, life: 0.3, maxLife: 0.3, color: '#86f0ff' });
+          for (let i=0;i<2;i++){
+            const a = Math.random()*Math.PI*2;
+            particles.push(new Particle(this.x, this.y, i ? '#5fd4ff' : '#86f0ff', {ang:a, speed:40+Math.random()*90, life:0.35, size:2.5}));
+          }
+          // 路径命中：点到线段距离判定，每个敌人只结算一次
+          const segLen = Math.hypot(this.chronoDashDirX, this.chronoDashDirY) || 1;
+          for (const b of balls){
+            if (!b.alive || b.team === this.team || b.invisible) continue;
+            const t = ((b.x - prevX) * this.chronoDashDirX + (b.y - prevY) * this.chronoDashDirY) / (segLen * segLen);
+            const t2 = Math.max(0, Math.min(1, t));
+            const px = prevX + this.chronoDashDirX * this.chronoDashSpeed * t2 * dt;
+            const py = prevY + this.chronoDashDirY * this.chronoDashSpeed * t2 * dt;
+            if (Math.hypot(b.x - px, b.y - py) < b.size + this.size + 12){
+              if (!this.chronoDashHitSet) this.chronoDashHitSet = new Set();
+              if (!this.chronoDashHitSet.has(b)){
+                this.chronoDashHitSet.add(b);
+                b.takeDamage(this.chronoDashDmg, this.color, particles, this);
+                for (let i=0;i<22;i++){
+                  const a = Math.random()*Math.PI*2;
+                  particles.push(new Particle(b.x, b.y, '#5fd4ff', {ang:a, speed:80+Math.random()*140, life:0.45, size:3 + Math.random()*2}));
+                }
+                floatTexts.push(new FloatText(b.x, b.y - b.size - 14, '时空穿梭!', '#5fd4ff', {life:0.9, size:14}));
+                shake = Math.max(shake, 6);
+              }
+            }
+          }
+          // 冲刺结束：落点冲击环 + 收尾
+          if (this.chronoDashing <= 0){
+            this.chronoDashing = 0;
+            this.chronoDashHitSet = undefined;
+            for (let i=0;i<12;i++){
+              const a = (i/12)*Math.PI*2;
+              particles.push(new Particle(this.x + Math.cos(a)*(this.size+6), this.y + Math.sin(a)*(this.size+6), '#ffffff', {speed:0, life:0.5, size:2}));
+            }
+            for (let i=0;i<14;i++){
+              const a = -Math.PI/2 + (Math.random()-0.5)*1.8;
+              particles.push(new Particle(this.x + (Math.random()-0.5)*this.size, this.y, '#7fd8ff', {ang:a, speed:60+Math.random()*95, life:0.55, size:2.5}));
+            }
+          }
+        }
         // 穿梭无敌帧递减
         if (this.chronoDashIFrame > 0) this.chronoDashIFrame -= dt;
         // 冷却递减
@@ -7815,7 +6436,24 @@
             }
             let killedByKamui = false;
             const target = this.nearestEnemy(balls);
-            if (target && target.alive){
+            // 手操：虚化结束的跳跃抓取 → 跟随 WASD 的指向性位移（带落点提示）；AI：瞬移到敌人脸上
+            if (this.obitoKamuiManual){
+              const defX = target ? (target.x - this.x) : Math.cos(this.facing);
+              const defY = target ? (target.y - this.y) : Math.sin(this.facing);
+              const md = this._mDashDir(defX, defY);
+              const leapR = (this.params.kamuiLeapRange != null ? this.params.kamuiLeapRange : 260) * MANUAL_DASH_MUL;
+              const fb = getFieldBounds();
+              const lx = Math.max(this.size, Math.min(fb.right - this.size, this.x + md.x * leapR));
+              const ly = Math.max(this.size, Math.min(fb.bottom - this.size, this.y + md.y * leapR));
+              this._mDashLanding(lx, ly, 0.6, '#b484ff', 44);
+              this.afterimages.push({ x: this.x, y: this.y, life: 0.4, maxLife: 0.4, color: '#b484ff' });
+              for (let i=0;i<16;i++){
+                const a = Math.random()*Math.PI*2;
+                particles.push(new Particle(this.x, this.y, '#6b2473', {ang:a, speed:80+Math.random()*130, life:0.45, size:3}));
+              }
+              this.x = lx; this.y = ly;
+              this.afterimages.push({ x: this.x, y: this.y, life: 0.5, maxLife: 0.5, color: '#b484ff' });
+            } else if (target && target.alive){
               const tdx = target.x - this.x, tdy = target.y - this.y;
               const td = Math.max(1, Math.hypot(tdx, tdy));
               const blinkDist = td - target.size - this.size - 2;
@@ -7823,25 +6461,38 @@
                 this.x += (tdx/td) * blinkDist;
                 this.y += (tdy/td) * blinkDist;
               }
+            }
+            // 神威抓取目标：手操=落点附近敌人；AI=最近敌人
+            let grabTarget = target;
+            if (this.obitoKamuiManual){
+              grabTarget = null;
+              let gbd = Infinity;
+              for (const b of balls){
+                if (!b.alive || b.team === this.team) continue;
+                const dd = Math.hypot(b.x - this.x, b.y - this.y);
+                if (dd <= this.size + 48 + b.size && dd < gbd){ gbd = dd; grabTarget = b; }
+              }
+            }
+            if (grabTarget && grabTarget.alive){
               // 神威抓取：造成伤害+眩晕
               const kamuiDmg = Math.max(1, Math.round((this.params.kamuiDmg || 25) * kamuiEffMul));
-              target.takeDamage(kamuiDmg, '#6b2473', particles, this);
+              grabTarget.takeDamage(kamuiDmg, '#6b2473', particles, this);
               // 神威附加伤害（空间撕裂）
               const kamuiBonusDmg = Math.max(1, Math.round((this.params.kamuiBonusDmg || 15) * kamuiEffMul));
-              target.takeDamage(kamuiBonusDmg, '#b484ff', particles, this);
-              target.stun = Math.max(target.stun, 1.5);
+              grabTarget.takeDamage(kamuiBonusDmg, '#b484ff', particles, this);
+              grabTarget.stun = Math.max(grabTarget.stun, 1.5);
               // 神威抓取特效
               for (let i=0;i<30;i++){
                 const ang = Math.random()*Math.PI*2;
-                particles.push(new Particle(target.x, target.y, '#6b2473', {ang, speed:60+Math.random()*150, life:0.5+Math.random()*0.4, size:3+Math.random()*3}));
+                particles.push(new Particle(grabTarget.x, grabTarget.y, '#6b2473', {ang, speed:60+Math.random()*150, life:0.5+Math.random()*0.4, size:3+Math.random()*3}));
               }
               for (let i=0;i<10;i++){
                 particles.push(new Particle(this.x, this.y, '#ffffff', {speed:100, life:0.3, size:2}));
               }
               shake = Math.max(shake, 6);
-              floatTexts.push(new FloatText(target.x, target.y - target.size - 10, '神威!', '#b484ff', {life: 1.0, size: 14}));
+              floatTexts.push(new FloatText(grabTarget.x, grabTarget.y - grabTarget.size - 10, '神威!', '#b484ff', {life: 1.0, size: 14}));
               // 判断是否被神威抓取击杀
-              if (!target.alive) killedByKamui = true;
+              if (!grabTarget.alive) killedByKamui = true;
             }
             // 清空瞳力
             this.obitoChakra = 0;
@@ -7968,64 +6619,13 @@
 
       // 冻结时无法行动，仅更新位置
       if (this.frozenTime > 0){
+        this._dashPreview = [];
         this._integrate(dt);
         if (this.hitFlash>0) this.hitFlash -= dt;
         for (const a of this.afterimages) a.life -= dt;
         this.afterimages = this.afterimages.filter(a => a.life > 0);
         if (this.hp <= 0 && this.alive && !(this.cls === 'pain' && !this.isPainBeast && !this.painTenduoActive)) this.die(particles);
         return;
-      }
-
-      // 大逃杀模式：特殊AI行为
-      if (currentMode === 'battleroyale' && brSafeZone){
-        // 应用移速增益
-        if (this.brSpeedBoost > 0){
-          spdMul *= 1.3;
-          this.brSpeedBoost -= dt;
-        }
-        // 应用攻击增益计时
-        if (this.brAtkBoost > 0){
-          this.brAtkBoost -= dt;
-        }
-        // 1. 向安全圈移动（如果在圈外或接近圈边）
-        const distToZone = Math.hypot(this.x - brSafeZone.x, this.y - brSafeZone.y);
-        if (distToZone > brSafeZone.radius - 30){
-          const zoneDx = brSafeZone.x - this.x;
-          const zoneDy = brSafeZone.y - this.y;
-          const zoneD = Math.max(1, Math.hypot(zoneDx, zoneDy));
-          this.vx += (zoneDx / zoneD) * this.baseSpeed * spdMul * dt * 5;
-          this.vy += (zoneDy / zoneD) * this.baseSpeed * spdMul * dt * 5;
-        }
-        // 2. 残血优先捡道具（血量低于40%时寻找附近道具）
-        if (this.hp / this.maxHp < 0.4 && brItems.length > 0){
-          let nearestItem = null;
-          let nearestItemDist = Infinity;
-          for (const item of brItems){
-            const id = Math.hypot(this.x - item.x, this.y - item.y);
-            if (id < nearestItemDist && id < 250){
-              nearestItemDist = id;
-              nearestItem = item;
-            }
-          }
-          if (nearestItem){
-            const itemDx = nearestItem.x - this.x;
-            const itemDy = nearestItem.y - this.y;
-            const itemD = Math.max(1, Math.hypot(itemDx, itemDy));
-            this.vx += (itemDx / itemD) * this.baseSpeed * spdMul * dt * 4;
-            this.vy += (itemDy / itemD) * this.baseSpeed * spdMul * dt * 4;
-          }
-        }
-        // 3. 混战拉扯：如果附近有多个敌人，稍微远离
-        let nearbyEnemies = 0;
-        for (const b of balls){
-          if (!b.alive || b === this) continue;
-          if (Math.hypot(b.x - this.x, b.y - this.y) < 120) nearbyEnemies++;
-        }
-        if (nearbyEnemies >= 3 && enemy){
-          // 被包围时，向远离敌人的方向移动
-          this.vx -= dirX * this.baseSpeed * spdMul * dt * 2;
-          this.vy -= dirY * this.baseSpeed * spdMul * dt * 2;
-        }
       }
 
       // 被EMP沉默时仅基本走位，无法释放技能
@@ -8167,15 +6767,16 @@
         // 捕足夹原地震禁 / 陷阱师布设硬直：锁移动但可普攻与施法
         this.vx *= 0.7; this.vy *= 0.7;
       } else {
-        // 居合斩冲刺/撞击后撤/盾击冲锋/风舞冲刺/伍六七极速冲锋中不限速度
-        if (this.dashing <= 0 && this.retreatTime <= 0 && this.shieldBashTime <= 0 && this.windDashing <= 0 && this.wlqDashing <= 0 && this.wlqSlashing <= 0){
+        // 居合斩冲刺/撞击后撤/盾击冲锋/风舞冲刺/伍六七极速冲锋/狙击后撤闪避中不限速度
+        if (this.dashing <= 0 && this.retreatTime <= 0 && this.shieldBashTime <= 0 && this.windDashing <= 0 && this.wlqDashing <= 0 && this.wlqSlashing <= 0 && this.sniperDodging <= 0){
           const sp = len(this.vx, this.vy);
           // 寒霜减速（≥2层生效）+ 霜冻领域减速 + 极寒爆发冻后减速
           const frostSlow = (this.frostTimer > 0 && this.frostStacks >= 2) ? (this._frostSlow || 0.25) : 0;
           const coldSlow = this._coldZoneT > 0 ? (this._coldZoneSlow || 0.3) : 0;
           const trailSlow = this._frostTrailT > 0 ? (this._frostTrailSlow || 0.3) : 0;
           const shieldBoost = this.shieldSpeedTime > 0 ? 1.3 : 1; // 护盾守卫碎盾加速
-          const maxSp = this.baseSpeed * shieldBoost * (1 - this.slow * 0.6) * (1 - frostSlow) * (1 - coldSlow) * (1 - trailSlow) * (1 - (this._soulSlow||0));
+          const berserkBoost = (this.cls === 'berserker' && this.howlT > 0) ? 1 + ((this.params.howlSpdUp != null ? this.params.howlSpdUp : 70) / 100) : 1; // 狂化战吼移速加成
+          const maxSp = this.baseSpeed * shieldBoost * berserkBoost * (1 - this.slow * 0.6) * (1 - frostSlow) * (1 - coldSlow) * (1 - trailSlow) * (1 - (this._soulSlow||0));
           if (sp > maxSp){
             this.vx = this.vx/sp * maxSp;
             this.vy = this.vy/sp * maxSp;
@@ -8275,6 +6876,7 @@
     _manualUpdate(dt, enemy, d, dirX, dirY, spdMul, silenced){
       const p1 = this.manualPlayer === 1;
       const inp = this._readManualInput(p1);
+      this._mInp = inp;             // 缓存本帧输入：位移技能指向复用
       this.facing = inp.aim;
       this._mAim = inp.aim;
 
@@ -8286,17 +6888,21 @@
           : dt;
         this._dispatchAI(adt, enemy, d, dirX, dirY, spdMul);
         if (kit) this._manualSyncGate(inp);
+        this._manualDashPreview(balls);   // 技能可释放即提前预测位移落点（虚化期间持续预知）
+      } else {
+        this._dashPreview = [];
       }
 
       // 走位：手操下角色只受玩家输入驱动，AI 不再自动位移；仅保留冲刺/击退/后跳等外力
       const dashActive = (this.dashing > 0 || this.retreatTime > 0 || this.shieldBashTime > 0
         || this.windDashing > 0 || this.wlqDashing > 0 || this.wlqSlashing > 0
-        || this.gyDashTime > 0 || this.sniperDodging > 0);
+        || this.gyDashTime > 0 || this.sniperDodging > 0 || this.chronoDashing > 0);
       const sp = Math.hypot(this.vx, this.vy);
-      if (!dashActive && sp < this.baseSpeed * 1.6){
+      const mSpdMul = (this.cls === 'berserker' && this.howlT > 0) ? 1 + ((this.params.howlSpdUp != null ? this.params.howlSpdUp : 70) / 100) : 1; // 狂化战吼移速加成
+      if (!dashActive && sp < this.baseSpeed * 1.6 * mSpdMul){
         if (inp.ilen > 0){
-          this.vx = inp.ix * this.baseSpeed * 1.08;
-          this.vy = inp.iy * this.baseSpeed * 1.08;
+          this.vx = inp.ix * this.baseSpeed * 1.08 * mSpdMul;
+          this.vy = inp.iy * this.baseSpeed * 1.08 * mSpdMul;
         } else {
           this.vx = 0; this.vy = 0;
         }
@@ -8414,7 +7020,7 @@
       this._mPrevDodgeKey = on;
       this._mShadow.sniperDodgeCD = Math.max(0, this.sniperDodgeCD);   // HUD 冷却镜像真实值
       if (!edge || this.sniperDodgeCD > 0 || this.sniperDodging > 0) return;
-      // 后跳方向：远离最近敌人；无敌人则朝瞄准反方向
+      // 后跳方向：手操优先跟随 WASD 指向；无输入则远离最近敌人（无敌人则朝瞄准反方向）
       let best = null, bd = Infinity;
       for (const b of balls){
         if (!b.alive || b.team === this.team) continue;
@@ -8422,7 +7028,9 @@
         if (dd < bd){ bd = dd; best = b; }
       }
       let dx, dy;
-      if (best){
+      if (this._mInp && this._mInp.ilen > 0){
+        dx = this._mInp.ix; dy = this._mInp.iy;
+      } else if (best){
         dx = this.x - best.x; dy = this.y - best.y;
         const l = Math.hypot(dx, dy) || 1; dx /= l; dy /= l;
       } else {
@@ -8432,6 +7040,12 @@
       this.sniperDodging = 0.25;
       this.sniperDodgeDirX = dx;
       this.sniperDodgeDirY = dy;
+      // 手操：后撤落点提示（速度 450×1.5，持续 0.25s）
+      const dodgeSpd = 450 * MANUAL_DASH_MUL;
+      const fb = getFieldBounds();
+      const lx = Math.max(this.size, Math.min(fb.right - this.size, this.x + dx * dodgeSpd * 0.25));
+      const ly = Math.max(this.size, Math.min(fb.bottom - this.size, this.y + dy * dodgeSpd * 0.25));
+      this._mDashLanding(lx, ly, 0.45, this.color, 34);
       if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '后撤!', this.color, {life:0.6, size:11}));
       for (let i=0;i<8;i++){
         particles.push(new Particle(this.x, this.y, this.color, {speed:100, life:0.25, size:2.5}));
@@ -8466,6 +7080,67 @@
       if (this.painShinraCD > 0) return;
       this._painShinraTensei(balls, particles, this.params);
       this.painChakra = Math.min((this.params.chakraMax || 9), (this.painChakra || 0) + 1);   // 与 AI 版一致：每次释放叠1层查克拉
+    }
+
+    // 手操位移方向：有 WASD 输入则用输入方向（指向性位移），否则回退到默认方向（朝敌）
+    _mDashDir(defX, defY){
+      if (this._mInp && this._mInp.ilen > 0) return { x: this._mInp.ix, y: this._mInp.iy };
+      const l = Math.hypot(defX, defY) || 1;
+      return { x: defX / l, y: defY / l };
+    }
+
+    // 手操位移落点提示：在 (x,y) 打标记（边界内钳制），返回钳制后的落点
+    _mDashLanding(x, y, life, color, r){
+      const b = getFieldBounds();
+      x = Math.max(this.size, Math.min(b.right - this.size, x));
+      y = Math.max(this.size, Math.min(b.bottom - this.size, y));
+      const lf = life || 0.8;
+      this._dashLand = { x, y, until: Date.now() + lf * 1000, maxLife: lf, color: color || this.color, r: r || 34 };
+      return { x, y };
+    }
+
+    // 手操位移落点「提前预览」：技能可释放（冷却就绪/条件满足）时即预测落点，无需等按键触发
+    // 带土神威抓取则在虚化开启期间持续预知。逐帧重建 _dashPreview，渲染层以半透明样式绘制。
+    _manualDashPreview(balls){
+      if (!this._mShadow) this._mShadow = {};
+      const p = this.params || {};
+      let enemy = null, ed = Infinity;
+      for (const b of balls){
+        if (!b.alive || b.team === this.team) continue;
+        const dd = Math.hypot(b.x - this.x, b.y - this.y);
+        if (dd < ed){ ed = dd; enemy = b; }
+      }
+      const list = [];
+      const push = (s, defX, defY) => {
+        const md = this._mDashDir(defX, defY);
+        const dist = typeof s.dist === 'function' ? s.dist(this) : s.dist;
+        const col = typeof s.color === 'function' ? s.color(this) : s.color;
+        const fb = getFieldBounds();
+        list.push({
+          x: Math.max(this.size, Math.min(fb.right - this.size, this.x + md.x * dist)),
+          y: Math.max(this.size, Math.min(fb.bottom - this.size, this.y + md.y * dist)),
+          color: col || this.color, r: s.r || 34
+        });
+      };
+      const spec = MANUAL_DASH_SPEC[this.cls];
+      if (spec){
+        for (const s of spec){
+          if (!(s.cds || []).every(f => (this._mShadow[f] || 0) <= 0)) continue;
+          if (s.ok && !s.ok(this, balls)) continue;
+          if (s.hideWhen && s.hideWhen(this, balls)) continue;   // 优先级压制：避免同时显示两个落点造成误判
+          let defX, defY;
+          if (s.dir){ const dd = s.dir(this, enemy); defX = dd.x; defY = dd.y; }
+          else { defX = enemy ? (enemy.x - this.x) : Math.cos(this.facing); defY = enemy ? (enemy.y - this.y) : Math.sin(this.facing); }
+          push(s, defX, defY);
+        }
+      }
+      // 带土：虚化开启期间持续预知神威抓取落点
+      if (this.cls === 'obito' && this.obitoKamuiTime > 0){
+        const defX = enemy ? (enemy.x - this.x) : Math.cos(this.facing);
+        const defY = enemy ? (enemy.y - this.y) : Math.sin(this.facing);
+        push({ dist: (p.kamuiLeapRange != null ? p.kamuiLeapRange : 260) * MANUAL_DASH_MUL, color: '#b484ff', r: 44 }, defX, defY);
+      }
+      this._dashPreview = list;
     }
 
     // 宇智波带土·神威虚化（AI 主动开启）：满瞳力且判断到威胁时开虚化（AI 不计完美/失败）
@@ -8851,7 +7526,10 @@
           this.enterStealth();
         }
       }
-      if (!enemy || !enemy.alive){ this.vx *= 0.92; this.vy *= 0.92; return; }
+      // 无目标时：手操正在冲刺/后撤则继续推进，否则减速停下
+      if ((!enemy || !enemy.alive) && !(this.isManual && (this.dashing > 0 || this.retreatTime > 0))){
+        this.vx *= 0.92; this.vy *= 0.92; return;
+      }
 
       // 受击分身冷却计时：战斗中每帧回落，冷却好后再受击即可继续召唤（支持重复召唤）
       if (this.cloneCD > 0) this.cloneCD -= dt;
@@ -8859,8 +7537,9 @@
       // ===== 居合斩冲刺撞击中：极高速冲向目标，命中即结算（伤害+后撤） =====
       if (this.dashing > 0){
         this.dashing -= dt;
-        this.vx = this.dashDirX * 660;
-        this.vy = this.dashDirY * 660;
+        const dspd = this.isManual ? 660 * MANUAL_DASH_MUL : 660;   // 手操：冲刺速度+50%（距离随之提升）
+        this.vx = this.dashDirX * dspd;
+        this.vy = this.dashDirY * dspd;
         // 残影 + 拖尾粒子
         this._afterimageTimer -= dt;
         if (this._afterimageTimer <= 0){
@@ -8907,13 +7586,16 @@
         this.vy += (wdy / wdist) * this.baseSpeed * spdMul * dt * 5 * speedMul;
       }
 
-      // ===== 触发居合斩冲刺：距离适中时朝目标疾冲 =====
+      // ===== 触发居合斩冲刺：距离适中时朝目标疾冲（手操：跟随 WASD 指向，无距离限制） =====
       this.dashCD -= dt;
-      if (this.dashCD <= 0 && d > 42 && d < 560){
+      if (this.dashCD <= 0 && (this.isManual || (d > 42 && d < 560))){
         this.dashCD = 0.9; // 冲刺就绪冷却
         this.dashing = 0.4;
-        this.dashDirX = d > 0 ? (enemy.x - this.x) / d : dirX;
-        this.dashDirY = d > 0 ? (enemy.y - this.y) / d : dirY;
+        const defX = enemy ? (enemy.x - this.x) / d : dirX;
+        const defY = enemy ? (enemy.y - this.y) / d : dirY;
+        const md = this._mDashDir(defX, defY);
+        this.dashDirX = md.x;
+        this.dashDirY = md.y;
         // 拔刀起冲粒子
         for (let i = 0; i < 12; i++){
           particles.push(new Particle(this.x, this.y, '#b06bff', {speed: 220, life: 0.45, size: 3}));
@@ -9532,8 +8214,8 @@
       // 极速冲锋状态（普通状态：横向躲避，无伤害）
       if (this.wlqDashing > 0){
         this.wlqDashing -= dt;
-        this.vx = this.wlqDashDirX * 480;
-        this.vy = this.wlqDashDirY * 480;
+        this.vx = this.wlqDashDirX * (this.isManual ? 480 * MANUAL_DASH_MUL : 480);
+        this.vy = this.wlqDashDirY * (this.isManual ? 480 * MANUAL_DASH_MUL : 480);
         // 躲避拖尾
         if (Math.random() < 0.8){
           particles.push(new Particle(this.x, this.y, this.color, {speed:60, life:0.3, size:3}));
@@ -9549,8 +8231,8 @@
         this.wlqSlashing -= dt;
         this.wlqSlashHitCD -= dt;
         // 斩击期间向前突刺
-        this.vx = this.wlqSlashDirX * 320;
-        this.vy = this.wlqSlashDirY * 320;
+        this.vx = this.wlqSlashDirX * (this.isManual ? 320 * MANUAL_DASH_MUL : 320);
+        this.vy = this.wlqSlashDirY * (this.isManual ? 320 * MANUAL_DASH_MUL : 320);
         // 突刺拖尾
         if (Math.random() < 0.7){
           particles.push(new Particle(this.x, this.y, '#ff3366', {speed:50, life:0.25, size:3}));
@@ -9614,14 +8296,15 @@
       }
 
       // 极速冲锋/魔刀斩击：中距离时发起
-      if (this.wlqDashCD <= 0 && d < 350 && d > 50 && !this.wlqScissorOut){
+      if (this.wlqDashCD <= 0 && (this.isManual || (d < 350 && d > 50)) && !this.wlqScissorOut){
         this.wlqDashCD = this.params.dashCd || 4;
+        const md = this._mDashDir(dirX, dirY);   // 手操：跟随 WASD 指向
         if (awaken){
           // 柒状态：魔刀千刃四连斩
           this.wlqSlashing = 0.6;
           this.wlqSlashHitCD = 0;
           this.wlqSlashCount = 0;
-          this.wlqSlashDirX = dirX; this.wlqSlashDirY = dirY;
+          this.wlqSlashDirX = md.x; this.wlqSlashDirY = md.y;
           floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '魔刀·千刃斩!', '#ff3366', {life:1.0, size:14}));
           // 起手特效
           for (let i=0;i<12;i++){
@@ -9630,10 +8313,12 @@
         } else {
           // 普通状态：极速小飞（横向躲避，无伤害，短暂无敌）
           this.wlqDashing = 0.25;
-          // 横向闪避方向（垂直于敌人方向，随机左右）
+          // 默认横向闪避（垂直于敌人方向，随机左右）；手操改为跟随 WASD 指向
           const side = Math.random() < 0.5 ? 1 : -1;
-          this.wlqDashDirX = -dirY * side;
-          this.wlqDashDirY = dirX * side;
+          const sdx = -dirY * side, sdy = dirX * side;
+          const mdn = this._mDashDir(sdx, sdy);
+          this.wlqDashDirX = mdn.x;
+          this.wlqDashDirY = mdn.y;
           floatTexts.push(new FloatText(this.x, this.y - this.size - 12, '极速小飞!', '#6b8eff', {life:0.8, size:12}));
           for (let i=0;i<10;i++){
             particles.push(new Particle(this.x, this.y, this.color, {speed:160, life:0.35, size:3}));
@@ -9702,8 +8387,9 @@
       // 闪避状态
       if (this.sniperDodging > 0){
         this.sniperDodging -= dt;
-        this.vx = this.sniperDodgeDirX * 450;
-        this.vy = this.sniperDodgeDirY * 450;
+        const dodgeSpd = this.isManual ? 450 * MANUAL_DASH_MUL : 450;   // 手操：后撤距离+50%
+        this.vx = this.sniperDodgeDirX * dodgeSpd;
+        this.vy = this.sniperDodgeDirY * dodgeSpd;
         this.invisible = true;
         this.invisibleTime = Math.max(this.invisibleTime, 0.05);
         if (Math.random() < 0.7){
@@ -9773,7 +8459,7 @@
           this.sniperChargeTime = 0;
           // 专注瞄准增伤
           const focusBonus = 1 + Math.min(1, this.sniperFocusTime / 3) * (this.params.focusMaxBonus || 0.25);
-          const ss = 800;
+          const ss = (this.params.snipeSpeed != null ? this.params.snipeSpeed : 1000);
           const snipe = new Bullet(
             muzzleX, muzzleY,
             dirX*ss, dirY*ss,
@@ -10681,7 +9367,7 @@
           }
           if (bestB) dashTarget = bestB;
         }
-        this.useChronoDash(dashTarget, particles, this.params.dashDmg || 16, overloadB);
+        this.useChronoDash(dashTarget, balls, particles, this.params.dashDmg || 16, overloadB);
       }
 
       // ----- 普攻：时空刃近战 -----
@@ -10714,14 +9400,50 @@
     }
 
     // ===== 超时空战士：时空穿梭（消耗2层锚点，瞬移贴脸+强化斩击+短无敌帧） =====
-    useChronoDash(target, particles, dashDmg, overloadB){
+    useChronoDash(target, balls, particles, dashDmg, overloadB){
       // 消耗2层锚点
       this.chronoAnchor = Math.max(0, this.chronoAnchor - 2);
       this.chronoAnchorT = 0; this.chronoAnchorDecT = 0;
-      const td = Math.max(1, Math.hypot(target.x - this.x, target.y - this.y));
-      const tX = (target.x - this.x)/td, tY = (target.y - this.y)/td;
-      // 瞬移距离无限：直接越过敌人落于其身后背侧贴脸
-      const dist = td + target.size + this.size + 2;
+      // 手操：改为「冲刺」——沿 WASD 指向高速突进（距离 +20%），冲刺结束时结算斩击
+      if (this.isManual){
+        const defX = target ? (target.x - this.x) : Math.cos(this.facing);
+        const defY = target ? (target.y - this.y) : Math.sin(this.facing);
+        const md = this._mDashDir(defX, defY);
+        const dist = (this.params.dashRange != null ? this.params.dashRange : 420) * MANUAL_CHRONO_DASH_MUL;
+        const dur = 0.3;
+        this.chronoDashing = dur;
+        this.chronoDashDirX = md.x; this.chronoDashDirY = md.y;
+        this.chronoDashSpeed = dist / dur;
+        this.chronoDashDmg = dashDmg;
+        this.chronoDashHitSet = new Set();
+        this.chronoDashIFrame = Math.max(this.chronoDashIFrame, dur + 0.06);   // 冲刺全程无敌帧
+        this.vx = 0; this.vy = 0;
+        // 落点提示（提前预览已覆盖；此处给出施放确认标记）
+        const fb = getFieldBounds();
+        const lx = Math.max(this.size, Math.min(fb.right - this.size, this.x + md.x * dist));
+        const ly = Math.max(this.size, Math.min(fb.bottom - this.size, this.y + md.y * dist));
+        this._mDashLanding(lx, ly, 0.5, '#5fd4ff', 42);
+        // 起手残影 + 空间裂隙展开
+        this.afterimages.push({ x: this.x, y: this.y, life: 0.4, maxLife: 0.4 });
+        for (let i=0;i<10;i++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(this.x, this.y, '#86f0ff', {ang:a, speed:150+Math.random()*130, life:0.5, size:3+Math.random()*2}));
+        }
+        for (let i=0;i<14;i++){
+          const a = (i/14)*Math.PI*2;
+          particles.push(new Particle(this.x + Math.cos(a)*(this.size+10), this.y + Math.sin(a)*(this.size+10), '#86f0ff', {speed:0, life:0.45, size:2.5}));
+        }
+        this.chronoDashCD = this.params.dashCD || 6;
+        this.chronoOverload = 1; this.chronoOverloadT = 2;
+        return;
+      }
+      let tX, tY, dist;
+      {
+        const td = Math.max(1, Math.hypot(target.x - this.x, target.y - this.y));
+        tX = (target.x - this.x)/td; tY = (target.y - this.y)/td;
+        // 瞬移距离无限：直接越过敌人落于其身后背侧贴脸
+        dist = td + target.size + this.size + 2;
+      }
       // 起点残影
       this.afterimages.push({ x: this.x, y: this.y, life: 0.4, maxLife: 0.4 });
       // 远距离瞬移：原点空间裂隙展开反馈（青蓝迸发 + 旋转裂隙环）
@@ -10763,24 +9485,34 @@
       // 穿梭无敌帧（短暂，可规避弹道与爆发伤害，落地后结束）
       this.chronoDashIFrame = 0.35;
       // 强化斩击：增加粒子 + 更大震动 + 时空撕裂斩光特效
-      if (target.alive){
-        target.takeDamage(dashDmg, this.color, particles, this);
+      // 命中列表：手操=落点附近敌人；AI=原锁定目标
+      const hitList = [];
+      if (this.isManual){
+        for (const b of balls){
+          if (!b.alive || b.team === this.team) continue;
+          if (Math.hypot(b.x - this.x, b.y - this.y) <= this.size + 70 + b.size) hitList.push(b);
+        }
+      } else if (target && target.alive){
+        hitList.push(target);
+      }
+      for (const ht of hitList){
+        ht.takeDamage(dashDmg, this.color, particles, this);
         for (let i=0;i<22;i++){
           const a = Math.random()*Math.PI*2;
-          particles.push(new Particle(target.x, target.y, '#5fd4ff', {ang:a, speed:80+Math.random()*140, life:0.45, size:3 + Math.random()*2}));
+          particles.push(new Particle(ht.x, ht.y, '#5fd4ff', {ang:a, speed:80+Math.random()*140, life:0.45, size:3 + Math.random()*2}));
         }
         // 时空撕裂斩光月牙特效
         const startAng = -Math.PI/2 + (Math.random() * Math.PI/4);
         for (let blade = 0; blade < 3; blade++){
-          const bladeLen = target.size + 8;
+          const bladeLen = ht.size + 8;
           for (let t = 0; t < 12; t++){
             const tt = t / 12;
             const a = startAng + tt * Math.PI;
-            particles.push(new Particle(target.x + Math.cos(a) * tt * bladeLen/3, target.y + Math.sin(a) * tt * bladeLen/3, '#86f0ff', {speed: 0, life: 0.4, size: 3}));
-            particles.push(new Particle(target.x + Math.cos(a) * tt * bladeLen/3, target.y + Math.sin(a) * tt * bladeLen/3, '#ffffff', {speed: 0, life: 0.25, size: 1.8}));
+            particles.push(new Particle(ht.x + Math.cos(a) * tt * bladeLen/3, ht.y + Math.sin(a) * tt * bladeLen/3, '#86f0ff', {speed: 0, life: 0.4, size: 3}));
+            particles.push(new Particle(ht.x + Math.cos(a) * tt * bladeLen/3, ht.y + Math.sin(a) * tt * bladeLen/3, '#ffffff', {speed: 0, life: 0.25, size: 1.8}));
           }
         }
-        floatTexts.push(new FloatText(target.x, target.y - target.size - 14, '时空穿梭!', '#5fd4ff', {life:0.9, size:14}));
+        floatTexts.push(new FloatText(ht.x, ht.y - ht.size - 14, '时空穿梭!', '#5fd4ff', {life:0.9, size:14}));
       }
       if (typeof shake !== 'undefined') shake = Math.max(shake, 6);
       // 冷却 + 时空过载（位移成功后下次普攻增伤）
@@ -11031,7 +9763,7 @@
       for(const b of balls){ if(b.alive && b.isSoul && b.owner===this) arr.push(b); }
       return arr;
     }
-    // 消耗灵魂能量召唤选定的魂体（支持总量4/单类2上限）
+    // 消耗灵魂能量召唤选定的魂体（支持总量3/单类2上限）
     summonSoul(balls, particles, type){
       const p=this.params;
       const defs={
@@ -11040,13 +9772,13 @@
         moth:{cost:1,hp:p.mothHp!=null?p.mothHp:18,atk:p.mothAtk!=null?p.mothAtk:2,life:p.mothLife!=null?p.mothLife:6,spd:165,size:this.size*0.72,color:'#2ecfc9',label:'噬灵蜉蝣'}
       };
       const d=defs[type]; if(!d) return;
-      if(this.soulEn < d.cost || this.summonLockT > 0) return;
+      if(this.soulEn < d.cost) return;
       if(this._countSouls(balls, type) >= 2) return;   // 单类上限2
       this.soulEn -= d.cost;
       this.soulCastT = 1.8;   // 召唤间隔1.8秒，放缓铺场节奏
-      // 总量上限4：超出销毁最早召唤的单位
+      // 总量上限3：超出销毁最早召唤的单位
       const active=this._activeSouls(balls);
-      if(active.length >= 4){
+      if(active.length >= 3){
         let oldest=active[0]; for(const s of active) if(s.soulBorn<oldest.soulBorn) oldest=s;
         oldest.alive=false; oldest.hp=0;
         for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2; particles.push(new Particle(oldest.x,oldest.y,'#88aaff',{ang:a,speed:100,life:0.4,size:2.5}));}
@@ -11069,34 +9801,36 @@
       }
       if(typeof floatTexts!=='undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 12, d.label+'!', d.color, {life:0.8, size:12}));
     }
-    // 终极【万灵归葬】：引爆所有召唤物，AOE伤害并回复总血上限30%生命
-    _funeral(balls, particles, p){
-      const healPct=(p.funeralHeal!=null?p.funeralHeal:30)/100;
-      const dmgPct=(p.funeralDmg!=null?p.funeralDmg:25)/100;
-      const boomR=90; let totalHp=0;
-      for(const b of balls){
-        if(!b.alive || b.team!==this.team || !b.isSoul || b.owner!==this) continue;
-        totalHp += b.maxHp;
-        const dmg=Math.max(3, Math.ceil(b.maxHp*dmgPct));
-        for(const e of balls){
-          if(!e.alive || e.team===this.team) continue;
-          if(Math.hypot(e.x-b.x,e.y-b.y) < boomR + e.size) e.takeDamage(dmg, '#2e8cff', particles, this);
+    // 主动【重新整备】：把场上己方召唤物拉回本体身边围成一圈
+    _rallySouls(balls, particles){
+      const actives = this._activeSouls(balls);
+      if (actives.length === 0) return;
+      const n = actives.length;
+      const rr = this.size + 34;
+      for (let i = 0; i < n; i++){
+        const s = actives[i];
+        const ang = -Math.PI/2 + (i / n) * Math.PI * 2;
+        s.afterimages.push({ x: s.x, y: s.y, life: 0.35, maxLife: 0.35, color: '#8ab4ff' });
+        s.x = Math.max(14, Math.min(VIEW.w - 14, this.x + Math.cos(ang) * rr));
+        s.y = Math.max(14, Math.min(VIEW.h - 14, this.y + Math.sin(ang) * rr));
+        s.vx = 0; s.vy = 0;
+        s._rallyT = 0.6;   // 整备列阵：短暂原地待命
+        for (let k = 0; k < 8; k++){
+          const a = Math.random()*Math.PI*2;
+          particles.push(new Particle(s.x, s.y, '#8ab4ff', {ang:a, speed:90, life:0.4, size:2.5}));
         }
-        for(let i=0;i<14;i++){ const a=Math.random()*Math.PI*2; particles.push(new Particle(b.x,b.y,i%2?'#7fb8ff':'#ffffff',{ang:a,speed:120+Math.random()*140,life:0.5,size:3})); }
-        if(typeof floatTexts!=='undefined') floatTexts.push(new FloatText(b.x, b.y - b.size - 8, '万灵·爆!', '#2e8cff', {life:0.7,size:12}));
-        b.alive=false; b.hp=0;
       }
-      if(totalHp>0){
-        const heal=Math.ceil(totalHp*healPct);
-        this.hp=Math.min(this.maxHp, this.hp+heal);
-        if(typeof floatTexts!=='undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 14, '+'+heal+' 愈合', '#7fd7ff', {life:1.0,size:14}));
+      for (let i = 0; i < 16; i++){
+        const a = (i/16)*Math.PI*2;
+        particles.push(new Particle(this.x + Math.cos(a)*rr, this.y + Math.sin(a)*rr, '#7fd7ff', {speed:0, life:0.5, size:2.5}));
       }
+      if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 18, '重新整备!', '#7fb8ff', {life:1.0, size:14}));
     }
     aiSummoner(dt, enemy, d, dirX, dirY, spdMul, balls, bullets, particles){
       const p=this.params;
       const soulEnMax=p.soulEnMax!=null?p.soulEnMax:5;
-      if(this.summonLockT>0) this.summonLockT-=dt;
       if(this.chargeCD>0) this.chargeCD-=dt;
+      if(this.rallyCD>0) this.rallyCD-=dt;
       if(this.chargeBuffT>0) this.chargeBuffT-=dt;
       if(this.soulCastT>0) this.soulCastT-=dt;
       // 灵魂能量：脱离战斗每秒流失1点，无法囤积
@@ -11136,14 +9870,6 @@
           if(typeof floatTexts!=='undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '魂能+1', '#7fd7ff', {life:0.6,size:10}));
         }
       }
-      // 终极【万灵归葬】：一局一次，需场上召唤物>3(即满编4个) 且 自身血量低于45% 才可引爆
-      if (!this.funeralUsed && this.soulEn >= 1 && resonates > 3 && this.hp / this.maxHp < 0.45){
-        this.funeralUsed=true;
-        this._funeral(balls, particles, p);
-        this.soulEn=0;
-        this.summonLockT=p.funeralLock!=null?p.funeralLock:4;
-        return;
-      }
       // 主动【魂潮号令】：消耗1能量，全场召唤物提速+冲锋
       if(this.chargeCD<=0 && this.soulEn>=1 && resonates>0){
         this.chargeCD=p.chargeCD!=null?p.chargeCD:8;
@@ -11154,8 +9880,13 @@
           if(b.isSoul && b.owner===this){ b._chargeT=p.chargeDur!=null?p.chargeDur:3; b._chargeTarget=enemy; }
         }
       }
-      // 自动召唤：优先保证三类都至少出一个，再补数量（确保射手/蜉蝣必定上场）
-      if(this.summonLockT<=0 && this.soulCastT<=0 && this._countSouls(balls) < 4){
+      // 主动【重新整备】：把场上己方召唤物拉回本体身边围成一圈
+      if(this.rallyCD<=0 && resonates>0){
+        this.rallyCD=p.rallyCD!=null?p.rallyCD:8;
+        this._rallySouls(balls, particles);
+      }
+      // 召唤魂体（单独按键触发）：优先保证三类都至少出一个（确保射手/蜉蝣必定上场）
+      if(this.soulCastT<=0 && this._countSouls(balls) < 3){
         const gc=this._countSouls(balls,'guard'), ac=this._countSouls(balls,'archer'), mc=this._countSouls(balls,'moth');
         if(gc<1 && this.soulEn>=2) this.summonSoul(balls,particles,'guard');
         else if(ac<1 && this.soulEn>=2) this.summonSoul(balls,particles,'archer');
@@ -11190,7 +9921,10 @@
       if(this._chargeT>0){ this._chargeT-=dt; mv*=(1+(p.chargeBuff!=null?p.chargeBuff:30)/100); }
       // 位移：射手保持距离站桩远程射击，其余贴身
       const keepR=360;
-      if(this.soulType==='archer'){
+      if(this._rallyT>0){
+        // 重新整备列阵：短暂原地待命
+        this._rallyT-=dt; this.vx=0; this.vy=0;
+      } else if(this.soulType==='archer'){
         if(dist>keepR+40){
           this.vx=(dx/dist)*this.baseSpeed*mv;
           this.vy=(dy/dist)*this.baseSpeed*mv;
@@ -11274,7 +10008,7 @@
       this.alive = true;
       this.color = '#c0a050';
       this.painShinraCD = 2;
-      this.painChibakuCD = 5;
+      this.painChibakuCD = 2;   // 觉醒后地爆天星快速就绪（独立冷却制）
       this.painAtkCD = 0.5;
       // 觉醒特效：金色光柱+黑环
       for (let i=0;i<40;i++){
@@ -11339,10 +10073,10 @@
           this.painShinraCD = 5;
           this.painChakra = Math.min((p.chakraMax || 9), this.painChakra + 1);
         }
-        // 地爆天星（查克拉满9层时触发，无冷却）
-        if (this.painChakra >= (p.chakraMax || 9)){
+        // 地爆天星（独立技能·冷却制，无层数限制；手操按键释放，AI 冷却就绪即自动释放）
+        if (this.painChibakuCD <= 0){
           this._painChibakuTensei(enemy, balls, particles, aoes, p);
-          this.painChakra = 0;
+          this.painChibakuCD = p.chibakuCD || 10;
         }
         // 天道超身体表面雷电+查克拉环特效
         if (Math.random() < 0.2){
@@ -11962,7 +10696,7 @@
         this.slow = 0; this.rootT = 0; this._webSlowT = 0; this._frostSlow = 0;
         this._soulSlow = 0; this.stun = 0; this.snareT = 0;
       }
-      if (!howling && aliveE && this.howlCD <= 0 && d < 430){
+      if (!howling && this.howlCD <= 0){
         this.howlCD = p.howlCD != null ? p.howlCD : 12;
         this.howlT = p.howlDur != null ? p.howlDur : 5;
         if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 18, '狂化战吼!', '#ffb300', {life:1.2, size:15}));
@@ -11977,6 +10711,10 @@
         const cleaveDmg = p.cleaveDmg != null ? p.cleaveDmg : 34;
         const cleaveR = p.cleaveR != null ? p.cleaveR : 115;
         const halfAng = 1.9;   // 大角度横扫（约217°扇面）
+        // 狂化灼血：层数越高血刃横扫越痛
+        const burnStacks = this.howlBurn || 0;
+        const burnMul = 1 + burnStacks * ((p.howlBurnDmgPer != null ? p.howlBurnDmgPer : 10) / 100);
+        const cleaveOut = Math.ceil(cleaveDmg * dmgMul * burnMul);
         const costPct = (p.cleaveCostPct != null ? p.cleaveCostPct : 15) / 100;
         const cost = Math.round(this.hp * costPct);
         const minHp = this.maxHp * 0.10;
@@ -11992,7 +10730,7 @@
           while (diff > Math.PI) diff -= Math.PI*2;
           while (diff < -Math.PI) diff += Math.PI*2;
           if (Math.abs(diff) > halfAng) continue;
-          b.takeDamage(Math.ceil(cleaveDmg * dmgMul), '#ff2b2b', particles, this);
+          b.takeDamage(cleaveOut, '#ff2b2b', particles, this);
           hitN++;
         }
         if (hitN > 0){
@@ -12010,21 +10748,23 @@
           particles.push(new Particle(this.x, this.y, '#ff5f5f', {ang:a, speed:60+Math.random()*100, life:0.4, size:2+Math.random()*2}));
         }
         if (typeof shake !== 'undefined') shake = Math.min(18, (shake||0)+6);
-        if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '血刃横扫! ' + Math.round(cleaveDmg*dmgMul) + (hitN>0 ? ' (+狂血)' : ''), '#ff2b2b', {life:1.0, size:13}));
+        if (typeof floatTexts !== 'undefined') floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '血刃横扫! ' + cleaveOut + (burnStacks > 0 ? ' (灼血×' + burnStacks + ')' : (hitN>0 ? ' (+狂血)' : '')), '#ff2b2b', {life:1.0, size:13}));
+        this.howlBurn = 0; // 灼血层使用后清零
       }
       if (!aliveE){ this.vx *= 0.8; this.vy *= 0.8; return; }
       const harvestSpd = this.harvestSpdT > 0 ? (p.harvestSpd != null ? p.harvestSpd : 30) / 100 : 0;
       const ideal = this.size + enemy.size + 6;
+      const howlSpdMul = howling ? 1 + (p.howlSpdUp != null ? p.howlSpdUp : 70) / 100 : 1;   // 狂化战吼移速加成
       if (d > ideal){
-        // 攻击范围内没有敌人时追击提速2.5倍
+        // 攻击范围内没有敌人时追击提速2.5倍；狂化战吼期间额外提速（默认+70%）
         const chaseBoost = howling ? 2.5 : spdMul * 2.5 * (1 + harvestSpd);
-        const mv = howling ? (2.5 + harvestSpd) : chaseBoost;
+        const mv = howling ? (2.5 + harvestSpd) * howlSpdMul : chaseBoost;
         this.vx += dirX * this.baseSpeed * mv * dt * 5;
         this.vy += dirY * this.baseSpeed * mv * dt * 5;
       } else {
         const side = Math.sin(Date.now()*0.005 + this.bobPhase) > 0 ? 1 : -1;
-        this.vx += -dirY*side * this.baseSpeed * spdMul * dt * 2.5;
-        this.vy += dirX*side * this.baseSpeed * spdMul * dt * 2.5;
+        this.vx += -dirY*side * this.baseSpeed * spdMul * howlSpdMul * dt * 2.5;
+        this.vy += dirX*side * this.baseSpeed * spdMul * howlSpdMul * dt * 2.5;
       }
       this.berserkAtkCD -= dt;
       const atkR = this.size + enemy.size + 6;
@@ -12173,17 +10913,19 @@
       }
 
       // ---- 主动【疾步斩击】：短距离突进（形态加速靠近），路径伤害+减速 ----
-      if (this.gyDashCD <= 0 && this.gyDashTime <= 0 && d > (this.gyMode === 'melee' ? 60 : 200)){
+      if (this.gyDashCD <= 0 && this.gyDashTime <= 0 && (this.isManual || d > (this.gyMode === 'melee' ? 60 : 200))){
         this.gyDashCD = p.dashCD != null ? p.dashCD : 7;
-        const dist = p.dashDist != null ? p.dashDist : 70;
+        const baseDist = p.dashDist != null ? p.dashDist : 70;
+        const dist = this.isManual ? baseDist * MANUAL_DASH_MUL : baseDist;   // 手操：冲刺距离+50%
         const spd = dist / 0.28; // 0.28秒内冲完
         this.gyDashTime = 0.28;
         this.gyDashSpeed = spd;
-        this.gyDashDirX = dirX; this.gyDashDirY = dirY;
+        const md = this._mDashDir(dirX, dirY);   // 手操：跟随 WASD 指向
+        this.gyDashDirX = md.x; this.gyDashDirY = md.y;
         const dashDmg = p.dashDmg != null ? p.dashDmg : 8;
         const slowV = (p.dashSlow != null ? p.dashSlow : 25) / 100;
         const slowDur = p.dashSlowDur != null ? p.dashSlowDur : 1.5;
-        this.lastDashPath = {x0: this.x, y0: this.y, x1: this.x + dirX * dist, y1: this.y + dirY * dist, dmg: dashDmg, slowV, slowDur, owner: this, life: 0.2};
+        this.lastDashPath = {x0: this.x, y0: this.y, x1: this.x + md.x * dist, y1: this.y + md.y * dist, dmg: dashDmg, slowV, slowDur, owner: this, life: 0.2};
         // 疾步残影
         for (let i=0;i<14;i++){
           const a = Math.random()*Math.PI*2;
@@ -12386,8 +11128,8 @@
       // 冲锋中：沿锁定方向高速推进，以盾面撞击路径上的敌人
       if (this.shieldBashTime > 0){
         this.shieldBashTime -= dt;
-        this.vx = this.bashDirX * 540;
-        this.vy = this.bashDirY * 540;
+        this.vx = this.bashDirX * (this.isManual ? 540 * MANUAL_DASH_MUL : 540);
+        this.vy = this.bashDirY * (this.isManual ? 540 * MANUAL_DASH_MUL : 540);
         // 冲锋拖尾粒子
         if (Math.random() < 0.85){
           particles.push(new Particle(this.x - this.bashDirX * this.size, this.y - this.bashDirY * this.size, '#9ecbff', {speed: 30, life: 0.35, size: 2.5}));
@@ -12428,14 +11170,15 @@
         this.vx *= 0.9; this.vy *= 0.9;
         return;
       }
-      // 盾击触发：冷却完毕且敌人处于触发距离内（贴脸时不冲锋，直接重压）
-      if (this.bashCD <= 0 && d < (this.params.bashRange || 240) && d > this.size + enemy.size + 16){
+      // 盾击触发：冷却完毕且敌人处于触发距离内（贴脸时不冲锋，直接重压）；手操：跟随 WASD 指向，无距离限制
+      if (this.bashCD <= 0 && (this.isManual || (d < (this.params.bashRange || 240) && d > this.size + (enemy ? enemy.size : 18) + 16))){
         this.bashCD = this.params.bashCd || 6;
         this.shieldBashTime = 0.45;
-        this.bashDirX = dirX; this.bashDirY = dirY;
+        const md = this._mDashDir(dirX, dirY);
+        this.bashDirX = md.x; this.bashDirY = md.y;
         floatTexts.push(new FloatText(this.x, this.y - this.size - 26, '\u2694\uFE0F盾击冲锋', '#9ecbff'));
         for (let i = 0; i < 10; i++){
-          const a = Math.atan2(dirY, dirX) + Math.PI + (Math.random() - 0.5) * 1.2;
+          const a = Math.atan2(md.y, md.x) + Math.PI + (Math.random() - 0.5) * 1.2;
           particles.push(new Particle(this.x, this.y, '#9ecbff', {ang: a, speed: 90 + Math.random() * 80, life: 0.4, size: 2.5}));
         }
         return;
@@ -12493,8 +11236,8 @@
       // ===== 冲刺位移中：高速移动+残影+风拖尾 =====
       if (this.windDashing > 0){
         this.windDashing -= dt;
-        this.vx = this.windDashDirX * 520;
-        this.vy = this.windDashDirY * 520;
+        this.vx = this.windDashDirX * (this.isManual ? 520 * MANUAL_DASH_MUL : 520);
+        this.vy = this.windDashDirY * (this.isManual ? 520 * MANUAL_DASH_MUL : 520);
         // 残影
         this._afterimageTimer -= dt;
         if (this._afterimageTimer <= 0){
@@ -12535,12 +11278,14 @@
       if (this.windDashCD <= 0){
         this.windDashCD = maxedStack ? 0.22 : (this.params.dashCd || 2);
         this.windDashing = 0.2;
-        // 侧前方冲刺（与敌人方向垂直偏移，随机左右）
+        // 默认侧前方冲刺（与敌人方向垂直偏移，随机左右）；手操改为跟随 WASD 指向
         const side = Math.random() > 0.5 ? 1 : -1;
-        this.windDashDirX = -dirY * side + dirX * 0.3;
-        this.windDashDirY = dirX * side + dirY * 0.3;
-        const dl = Math.max(0.1, Math.hypot(this.windDashDirX, this.windDashDirY));
-        this.windDashDirX /= dl; this.windDashDirY /= dl;
+        let sdx = -dirY * side + dirX * 0.3;
+        let sdy = dirX * side + dirY * 0.3;
+        const dl = Math.max(0.1, Math.hypot(sdx, sdy));
+        sdx /= dl; sdy /= dl;
+        const md = this._mDashDir(sdx, sdy);
+        this.windDashDirX = md.x; this.windDashDirY = md.y;
         // 起冲风涡粒子
         for (let i=0;i<12;i++){
           const a = Math.random()*Math.PI*2;
@@ -12714,6 +11459,16 @@
       // 蓄雷满层检查（蓄雷值由每次施加雷印累积，见_addThunderCharge）
       if (this.thunderCharge >= (p.maxCharge || 10)) this.thunderStormReady = true;
 
+      // 大招【全域雷暴】：蓄雷满层且跳跃就绪时立即引爆（不再等待下一次电弧出手，前摇≈0）
+      if (this.thunderStormReady && this.thunderJumpCD <= 0 && enemy && enemy.alive){
+        this.thunderStormReady = false;
+        this.thunderCharge = 0;
+        this.thunderJumpCD = p.jumpCD ?? 2;
+        this._thunderJump(enemy, balls, particles, p);
+        this._thunderStorm(balls, particles, p);
+        return;
+      }
+
       // 主动【天降·数道落雷】：冷却好且有敌人在电弧射程内即释放，天空劈下多道落雷打击敌方
       if (this.thunderCallCD <= 0 && enemy && enemy.alive && d < arcRange + 80){
         this.thunderCallCD = (p.thunderCallCD != null ? p.thunderCallCD : 9);
@@ -12724,17 +11479,6 @@
       this.fireCD -= dt;
       if (this.fireCD <= 0 && enemy && d < arcRange){
         this.fireCD = 1 / (p.atkRate || 1.0);
-
-        // 蓄雷满层且跳跃冷却结束：跳到敌人脸上触发全域雷暴
-        if (this.thunderStormReady && this.thunderJumpCD <= 0){
-          this.thunderStormReady = false;
-          this.thunderCharge = 0;
-          this.thunderJumpCD = p.jumpCD ?? 2;
-          this._thunderJump(enemy, balls, particles, p);
-          this._thunderStorm(balls, particles, p);
-          return;
-        }
-
         // 远程电弧攻击：向目标发射电弧，可传导
         this._arcAttack(enemy, balls, particles, p);
       }
@@ -12750,8 +11494,26 @@
       }
     }
 
-    // 雷霆跳跃：瞬间跳到敌人脸上
+    // 雷霆跳跃：手操=沿 WASD 指向的定向跳跃（带落点提示）；AI=跳到敌人脸上
     _thunderJump(enemy, balls, particles, p){
+      // 落点：手操=跟随 WASD 的固定跳跃距离；AI=跳到敌人身旁
+      let tx, ty;
+      if (this.isManual){
+        const defX = enemy ? (enemy.x - this.x) : Math.cos(this.facing);
+        const defY = enemy ? (enemy.y - this.y) : Math.sin(this.facing);
+        const md = this._mDashDir(defX, defY);
+        const range = (p.jumpRange != null ? p.jumpRange : 300) * MANUAL_DASH_MUL;
+        const fb = getFieldBounds();
+        tx = Math.max(this.size, Math.min(fb.right - this.size, this.x + md.x * range));
+        ty = Math.max(this.size, Math.min(fb.bottom - this.size, this.y + md.y * range));
+      } else {
+        const jumpDist = this.size + enemy.size + (p.jumpDist ?? 8);
+        const jdx = enemy.x - this.x;
+        const jdy = enemy.y - this.y;
+        const jlen = Math.hypot(jdx, jdy) || 1;
+        tx = enemy.x - (jdx / jlen) * jumpDist;
+        ty = enemy.y - (jdy / jlen) * jumpDist;
+      }
       // 起跳残影
       for (let i=0;i<20;i++){
         const a = Math.random()*Math.PI*2;
@@ -12761,20 +11523,18 @@
       const segs = 12;
       for (let i=0;i<=segs;i++){
         const t = i / segs;
-        const px = this.x + (enemy.x - this.x) * t + (Math.random()-0.5)*22;
-        const py = this.y + (enemy.y - this.y) * t + (Math.random()-0.5)*22;
+        const px = this.x + (tx - this.x) * t + (Math.random()-0.5)*22;
+        const py = this.y + (ty - this.y) * t + (Math.random()-0.5)*22;
         particles.push(new Particle(px, py, '#ffffff', {speed:5, life:0.25, size:3.5}));
         if (i % 2 === 0){
           particles.push(new Particle(px, py, '#5aa8ff', {speed:3, life:0.15, size:2.5}));
         }
       }
-      // 瞬移到敌人旁边
-      const jumpDist = this.size + enemy.size + (p.jumpDist ?? 8);
-      const jdx = enemy.x - this.x;
-      const jdy = enemy.y - this.y;
-      const jlen = Math.hypot(jdx, jdy) || 1;
-      this.x = enemy.x - (jdx / jlen) * jumpDist;
-      this.y = enemy.y - (jdy / jlen) * jumpDist;
+      // 手操：落点提示
+      if (this.isManual) this._mDashLanding(tx, ty, 0.6, '#5aa8ff', 40);
+      // 瞬移到落点
+      this.x = tx;
+      this.y = ty;
       // 落地冲击
       for (let i=0;i<28;i++){
         const a = Math.random()*Math.PI*2;
@@ -12872,7 +11632,8 @@
     _addThunderCharge(balls, particles, p){
       const prev = this.thunderCharge;
       this.thunderCharge = (prev || 0) + 1;
-      if (Math.floor(prev / 8) < Math.floor(this.thunderCharge / 8)){
+      const mc = p.maxCharge || 8;   // 续航回复按「每蓄满一轮」触发，与满层数保持一致
+      if (Math.floor(prev / mc) < Math.floor(this.thunderCharge / mc)){
         this._thunderHealAllies(balls, particles, p);
       }
     }
@@ -13103,10 +11864,11 @@
         }
       }
 
-      // 大招【火龙卷】：冷却就绪且有≥3层熔火壳时，消耗3层在敌方密集处召唤持续灼烧减速的火焰龙卷
+      // 大招【火龙卷】：冷却就绪且熔火壳达到所需层数时，先蓄力前摇（地面预警），再在敌方密集处召唤持续灼烧减速的火焰龙卷
       this.moltenTorCD -= dt;
-      if (this.moltenTorCD <= 0 && this.moltenShellStacks >= 3){
-        const torCost = 3;
+      const torStacksNeed = p.torStacks != null ? p.torStacks : 5;
+      if (this.moltenTorCD <= 0 && this.moltenShellStacks >= torStacksNeed){
+        const torCost = torStacksNeed;
         let anchor = enemy, bestDens = 0;
         if (enemy && enemy.alive){
           for (const b of balls){
@@ -13121,12 +11883,13 @@
           if (moltenTornadoes) moltenTornadoes.push(new MoltenTornado(
             anchor.x, anchor.y, this.team,
             p.torR || 140, p.torDur || 4,
-            p.torDps || 16, (p.torSlow || 30) / 100, this
+            p.torDps || 16, (p.torSlow || 30) / 100, this,
+            p.torWindup != null ? p.torWindup : 0.8
           ));
         }
         this.moltenShellStacks = Math.max(0, this.moltenShellStacks - torCost);
         this.moltenTorCD = p.torCD || 4;
-        floatTexts.push(new FloatText(anchor.x, anchor.y - this.size - 20, '火龙卷·焚天', '#ff8c42', {life:1.2, size:15}));
+        floatTexts.push(new FloatText(anchor.x, anchor.y - this.size - 20, '火龙卷·蓄力', '#ffb300', {life:1.0, size:15}));
         if (typeof shake !== 'undefined') shake = Math.min(16, (shake||0) + 5);
         for (let i=0;i<26;i++){
           const a = Math.random()*Math.PI*2;
@@ -13604,11 +12367,14 @@
         if (danger >= 1 || this.hp < this.maxHp * 0.6){
           this.lySurvCD = 6.5;
           this.lyShieldHP = Math.max(this.lyShieldHP, 25); // 遁身落地短暂韧性护盾
-          const dist = (p.dodgeDist != null ? p.dodgeDist : 150);
-          // 瞬移到敌人侧后方
-          const ang = Math.atan2(dirY, dirX) + (Math.random() < 0.5 ? 1 : -1) * (Math.PI/2);
-          this.x = Math.max(30, Math.min(canvas.width - 30, this.x + Math.cos(ang)*dist));
-          this.y = Math.max(30, Math.min(canvas.height - 30, this.y + Math.sin(ang)*dist));
+          const dist = (p.dodgeDist != null ? p.dodgeDist : 150) * (this.isManual ? MANUAL_DASH_MUL : 1);
+          // 瞬移方向：手操跟随 WASD 指向；AI=敌人侧后方
+          const defAng = Math.atan2(dirY, dirX) + (Math.random() < 0.5 ? 1 : -1) * (Math.PI/2);
+          const md = this._mDashDir(Math.cos(defAng), Math.sin(defAng));
+          const nx = Math.max(30, Math.min(canvas.width - 30, this.x + md.x * dist));
+          const ny = Math.max(30, Math.min(canvas.height - 30, this.y + md.y * dist));
+          if (this.isManual) this._mDashLanding(nx, ny, 0.5, '#c77dff', 38);
+          this.x = nx; this.y = ny;
           this.lyHidden = (p.dodgeHideDur != null ? p.dodgeHideDur : 0.7);
           this.invisible = true;
           floatTexts.push(new FloatText(this.x, this.y - this.size - 16, '坤影·遁身', '#c77dff', {life:0.8, size:12}));
@@ -13664,8 +12430,18 @@
         // 敌人背后方向：背离沈玄玑那一侧延伸，落在敌人身后贴身位
         const backA = Math.atan2(-dirY, -dirX);
         const bdist = enemy.size + (p.kunBackDist != null ? p.kunBackDist : 18);
-        const tx = Math.max(30, Math.min(canvas.width - 30, enemy.x + Math.cos(backA) * bdist));
-        const ty = Math.max(30, Math.min(canvas.height - 30, enemy.y + Math.sin(backA) * bdist));
+        let tx, ty;
+        if (this.isManual){
+          // 手操：跟随 WASD 的指向性瞬身（带落点提示）
+          const md = this._mDashDir(Math.cos(backA), Math.sin(backA));
+          const blinkR = (p.kunBlinkRange != null ? p.kunBlinkRange : 300) * MANUAL_DASH_MUL;
+          tx = Math.max(30, Math.min(canvas.width - 30, this.x + md.x * blinkR));
+          ty = Math.max(30, Math.min(canvas.height - 30, this.y + md.y * blinkR));
+          this._mDashLanding(tx, ty, 0.5, '#c77dff', 40);
+        } else {
+          tx = Math.max(30, Math.min(canvas.width - 30, enemy.x + Math.cos(backA) * bdist));
+          ty = Math.max(30, Math.min(canvas.height - 30, enemy.y + Math.sin(backA) * bdist));
+        }
         // 残影起点
         for (let i=0;i<14;i++){
           const a = Math.random() * Math.PI * 2;
@@ -13857,17 +12633,29 @@
       const canFlash = () => this.linUltT > 0 || this.linEnergy >= 30;
       const place = (target) => {
         const ang = Math.atan2(target.y - this.y, target.x - this.x);
-        const base = this.size + target.size + 18;
-        const fx = target.x - Math.cos(ang) * base;
-        const fy = target.y - Math.sin(ang) * base;
-        const distRaw = Math.hypot(fx - this.x, fy - this.y);
-        const maxD = p.flashDist || 120;
-        let tx = fx, ty = fy;
-        if (distRaw > maxD && distRaw > 0.01){
-          tx = this.x + (fx - this.x) / distRaw * maxD;
-          ty = this.y + (fy - this.y) / distRaw * maxD;
+        let tx, ty;
+        if (this.isManual){
+          // 手操：跟随 WASD 的指向性瞬闪（带落点提示）
+          const md = this._mDashDir(Math.cos(ang), Math.sin(ang));
+          const maxD = (p.flashDist || 120) * MANUAL_DASH_MUL;
+          tx = Math.max(24, Math.min(canvas.width - 24, this.x + md.x * maxD));
+          ty = Math.max(24, Math.min(canvas.height - 24, this.y + md.y * maxD));
+          this._mDashLanding(tx, ty, 0.4, '#bfeaff', 36);
+        } else {
+          const base = this.size + target.size + 18;
+          const fx = target.x - Math.cos(ang) * base;
+          const fy = target.y - Math.sin(ang) * base;
+          const distRaw = Math.hypot(fx - this.x, fy - this.y);
+          const maxD = p.flashDist || 120;
+          tx = fx; ty = fy;
+          if (distRaw > maxD && distRaw > 0.01){
+            tx = this.x + (fx - this.x) / distRaw * maxD;
+            ty = this.y + (fy - this.y) / distRaw * maxD;
+          }
+          tx = Math.max(24, Math.min(canvas.width - 24, tx));
+          ty = Math.max(24, Math.min(canvas.height - 24, ty));
         }
-        return { tx: Math.max(24, Math.min(canvas.width - 24, tx)), ty: Math.max(24, Math.min(canvas.height - 24, ty)), ang };
+        return { tx, ty, ang };
       };
       const startFlash = (target) => {
         if (this.linUltT <= 0) this.linEnergy -= 30;
@@ -14881,8 +13669,6 @@
       }
       // 召唤师光环：攻击方被增幅时伤害提升
       if (attacker && attacker.dmgBuff > 0) dmg *= (1 + attacker.dmgBuff);
-      // 大逃杀攻击增益
-      if (attacker && attacker.brAtkBoost > 0) dmg *= 1.3;
       // 雷霆赋能：攻击方拥有赋能buff时伤害提升
       if (attacker && attacker.thunderEmpowerTime > 0 && attacker._empAtkBuff){
         dmg *= (1 + attacker._empAtkBuff / 100);
@@ -15015,22 +13801,6 @@
           }
         }
         return;
-      }
-      // 大逃杀护盾：优先吸收伤害
-      if (!broken && !isDot && this.brShield > 0){
-        if (dmg <= this.brShield){
-          this.brShield -= dmg;
-          floatTexts.push(new FloatText(this.x, this.y - this.size - 25, '🛡️ ' + Math.round(dmg), '#5fd4ff', {life: 0.6, size: 11}));
-          for (let i = 0; i < 6; i++){
-            const a = Math.random() * Math.PI * 2;
-            particles.push(new Particle(this.x, this.y, '#5fd4ff', {ang: a, speed: 80, life: 0.3, size: 2}));
-          }
-          return;
-        } else {
-          dmg -= this.brShield;
-          floatTexts.push(new FloatText(this.x, this.y - this.size - 25, '🛡️破碎', '#5fd4ff', {life: 0.8, size: 12}));
-          this.brShield = 0;
-        }
       }
       // 玩家手操·守护壁垒：护盾优先吸收伤害（灼烧/毒素穿透护盾）
       if (!broken && !isDot && this._mShieldHP > 0){
@@ -15771,13 +14541,6 @@
       // ===== 战斗数据追踪：记录击杀 =====
       if (this.lastAttacker && this.lastAttacker.alive && this.lastAttacker.stats){
         this.lastAttacker.stats.kills++;
-      }
-      // ===== 生存模式：击杀敌人掉落金币 =====
-      if (currentMode === 'survival' && this.team === 'B' && !this.isDoll && !this.isClone && !this.isDecoy){
-        const isBoss = this.size >= 28;
-        const gold = isBoss ? (8 + Math.floor(Math.random()*5)) : (1 + Math.floor(Math.random()*2));
-        survivalGold += gold;
-        floatTexts.push(new FloatText(this.x, this.y - this.size - 10, '+' + gold + '💰', '#ffd700', {life: 1.0, size: 14}));
       }
       // 时光修复师：友军阵亡时生成时光印记
       // 复活限制：刺客本体可正常复活；刺客分身、召唤师的召唤物（人偶）、忍者替身不享受复活
@@ -16650,6 +15413,14 @@
           ctx.fillStyle = rgba('#ff2b2b', 0.85);
           ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
           ctx.fillText('死战', x, y - this.size - 10);
+        }
+        // 灼血层提示（狂化期间燃烧生命叠层，强化血刃横扫）
+        if ((this.howlBurn || 0) > 0){
+          ctx.fillStyle = rgba('#ff8c42', 0.95);
+          ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center';
+          ctx.shadowColor = '#ff5f5f'; ctx.shadowBlur = 8;
+          ctx.fillText('灼血×' + this.howlBurn, x, y - this.size - 26);
+          ctx.shadowBlur = 0;
         }
       }
     // 时光修复师视觉：金色时光光环+沙漏粒子环绕
@@ -18768,13 +17539,8 @@
   function startMatch(){
     balls = []; bullets = []; traps = []; aoes = []; healWaves = []; particles = []; frostZones = []; plagueZones = []; hexFields = []; moltenTornadoes = []; timeMarks = []; ironWalls = []; floatTexts = []; trapField = []; phBlackFires = [];
     _thunderLinkTimer = 0;
-    if (currentMode === 'battleroyale'){
-      brInit();
-      brSpawnPlayers();
-    } else {
-      spawnTeam('A');
-      spawnTeam('B');
-    }
+    spawnTeam('A');
+    spawnTeam('B');
     syncLabels();
     resetTimer = 0;
     $('winnerText').textContent = '';
@@ -18808,19 +17574,6 @@
   }
 
   function updateHUD(){
-    if (currentMode === 'battleroyale'){
-      const aliveCount = balls.filter(b => b.alive).length;
-      $('aliveA').textContent = aliveCount;
-      $('aliveB').textContent = brPlayerCount - aliveCount;
-      // 大逃杀模式下，左侧显示存活，右侧显示缩圈倒计时
-      const shrinkIn = brSafeZone ? Math.max(0, Math.ceil(brSafeZone.shrinkTimer)) : 0;
-      $('hpFillA').style.width = (aliveCount / brPlayerCount) * 100 + '%';
-      $('hpFillB').style.width = (brSafeZone ? (brSafeZone.radius / (Math.max(VIEW.w, VIEW.h) * 0.7)) * 100 : 100) + '%';
-      $('hpTextA').textContent = `存活 ${aliveCount} / ${brPlayerCount}`;
-      $('hpTextB').textContent = `缩圈 ${shrinkIn}s · 第${brSafeZone ? brSafeZone.phase : 0}阶段`;
-      $('roundNum').textContent = Math.floor(brGameTime) + 's';
-      return;
-    }
     const a = teamHp('A');
     const b = teamHp('B');
     $('aliveA').textContent = a.alive;
@@ -18851,12 +17604,6 @@
     if (code.indexOf('Digit') === 0) return code.slice(5);
     if (code.indexOf('Numpad') === 0) return code.slice(6);
     return code;
-  }
-  function fitText(ctx, text, maxW){
-    if (ctx.measureText(text).width <= maxW) return text;
-    let t = text;
-    while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
-    return t + '…';
   }
   // 手操 HUD：渲染到画布外的 DOM 条（不遮挡对战画面）
   let _mhRefs = null;
@@ -18969,7 +17716,7 @@
           if (rem < 0) rem = 0;
           cdReady = rem <= 0;
         }
-        // 额外释放条件（永夜囚笼需幻瞳5层 / 万灵归葬需召唤物>3且残血 / 瘟疫爆发需目标叠层达标）
+        // 额外释放条件（永夜囚笼需幻瞳5层 / 召唤魂体需魂能且未满编 / 重新整备需有召唤物 / 瘟疫爆发需目标叠层达标 / 火龙卷需壳层达标）
         const condOk = !s.readyWhen || s.readyWhen(b, balls);
         const canCast = cdReady && condOk;
         s.el.classList.toggle('ready', canCast);
@@ -20201,19 +18948,6 @@
       for (const tm of timeMarks) tm.update(dt, balls, particles);
       timeMarks = timeMarks.filter(tm => tm.life > 0);
 
-      // 大逃杀模式更新
-      if (currentMode === 'battleroyale' && !brGameOver){
-        brGameTime += dt;
-        brUpdateSafeZone(dt);
-        brUpdateItems(dt, balls, particles);
-        for (const b of balls) brCheckZoneDamage(b, dt, particles);
-        // 检查胜利条件
-        const aliveBalls = balls.filter(b => b.alive);
-        if (aliveBalls.length <= 1){
-          brGameOverFn(aliveBalls[0] || null);
-        }
-      }
-
       handleCollisions();
 
       bullets = bullets.filter(b => b.life > 0);
@@ -20232,38 +18966,7 @@
 
       const aAlive = balls.some(b => b.team==='A' && b.alive);
       const bAlive = balls.some(b => b.team==='B' && b.alive);
-      // 大逃杀模式：跳过普通胜负判定（由大逃杀逻辑处理）
-      if (currentMode !== 'battleroyale'){
-      // 生存模式特殊处理
-      if (currentMode === 'survival' && !survivalGameOver && !survivalBetweenWaves){
-        if (!aAlive){
-          // 玩家团灭
-          if (resetTimer === 0){
-            resetTimer = 2;
-            setTimeout(() => showSurvivalResult(), 2000);
-          } else {
-            resetTimer -= rawDt;
-          }
-        } else if (!bAlive){
-          // 敌人全灭，进入下一波或通关
-          if (survivalWave >= survivalMaxWave){
-            // 通关
-            if (resetTimer === 0){
-              resetTimer = 2;
-              setTimeout(() => showSurvivalResult(), 2000);
-            } else {
-              resetTimer -= rawDt;
-            }
-          } else if (resetTimer === 0){
-            resetTimer = 0.5;
-            setTimeout(() => {
-              if (!survivalGameOver) showUpgradeSelection();
-            }, 500);
-          } else {
-            resetTimer -= rawDt;
-          }
-        }
-      } else if (!aAlive || !bAlive){
+      if (!aAlive || !bAlive){
         if (resetTimer === 0){
           resetTimer = 2.2;
           let winner = null;
@@ -20272,17 +18975,11 @@
           else winner = 'A';
           if (winner === 'draw') $('winnerText').textContent = '平局！';
           else $('winnerText').textContent = teams[winner].name + ' 获胜！';
-          // 自定义模式：自动重开，不显示结算页
-          if (currentMode === 'custom'){
-            setTimeout(() => { round++; startMatch(); }, 2200);
-          } else if (currentMode !== 'survival'){
-            setTimeout(() => showResult(winner), 2200);
-          }
+          setTimeout(() => showResult(winner), 2200);
         } else {
           resetTimer -= rawDt;
         }
       }
-      } // 大逃杀模式跳过结束
     }
 
     // 屏幕震动
@@ -20297,45 +18994,6 @@
     ctx.translate(shakeX, shakeY);
     ctx.clearRect(-shakeX-5, -shakeY-5, VIEW.w+10, VIEW.h+10);
     drawBackground();
-    // 生存模式HUD
-    if (currentMode === 'survival' && !survivalGameOver){
-      const enemyCount = balls.filter(b => b.team==='B' && b.alive).length;
-      ctx.fillStyle = '#ffd700';
-      ctx.font = 'bold 13px sans-serif';
-      ctx.fillText('💰 ' + survivalGold, 12, 42);
-      const playerCount = balls.filter(b => b.team==='A' && b.alive).length;
-      ctx.save();
-      ctx.font = 'bold 16px sans-serif';
-      ctx.textAlign = 'center';
-      // 波次信息
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.fillRect(VIEW.w/2 - 140, 8, 280, 32);
-      ctx.strokeStyle = 'rgba(255,255,255,0.2)';
-      ctx.strokeRect(VIEW.w/2 - 140, 8, 280, 32);
-      ctx.fillStyle = '#ff9148';
-      ctx.fillText(`第 ${survivalWave}/${survivalMaxWave} 波`, VIEW.w/2 - 70, 29);
-      ctx.fillStyle = '#ff6b6b';
-      ctx.fillText(`敌人: ${enemyCount}`, VIEW.w/2 + 20, 29);
-      ctx.fillStyle = '#44ff88';
-      ctx.fillText(`存活: ${playerCount}`, VIEW.w/2 + 95, 29);
-      // 强化等级
-      ctx.font = '11px sans-serif';
-      ctx.fillStyle = '#b6a5e8';
-      ctx.textAlign = 'left';
-      ctx.fillText(`强化 ❤️${survivalUpgrades.hp} ⚔️${survivalUpgrades.dmg} 💨${survivalUpgrades.spd} ⏱️${survivalUpgrades.cd}`, 12, 24);
-      ctx.restore();
-      // 波次间隔提示
-      if (survivalWaveTimer > 0){
-        ctx.save();
-        ctx.font = 'bold 28px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#ffd700';
-        ctx.fillText(`下一波即将开始...`, VIEW.w/2, VIEW.h/2);
-        ctx.restore();
-      }
-    }
-    // 大逃杀安全圈
-    if (currentMode === 'battleroyale') brDrawSafeZone(ctx);
     for (const tr of traps) {
       if (tr.isSniperTrap){
         // 狙击手诡雷绘制
@@ -20380,6 +19038,19 @@
       }
     }
     drawTrapField(ctx);
+    // 手操位移落点提示（画在角色下方）
+    for (const b of balls){
+      // 提前预览：技能可释放即显示（半透明），与施放后的实心落点区分
+      if (b.alive && b._dashPreview && b._dashPreview.length){
+        for (const P of b._dashPreview) drawLandingMarker(ctx, P.x, P.y, P.color, 0.55, P.r);
+      }
+      const L = b._dashLand;
+      if (!L) continue;
+      const left = (L.until - Date.now()) / 1000;
+      if (left <= 0) continue;
+      const a = Math.min(1, left / 0.45);
+      drawLandingMarker(ctx, L.x, L.y, L.color, a, L.r);
+    }
     for (const a of aoes) a.draw(ctx);
     for (const nb of ninjaBombs) nb.draw(ctx);
     for (const phf of phBlackFires) phf.draw(ctx);
@@ -20500,8 +19171,6 @@
       }
     }
     for (const b of balls) b.draw(ctx);
-    // 大逃杀道具
-    if (currentMode === 'battleroyale') brDrawItems(ctx);
     for (const bul of bullets) bul.draw(ctx);
     for (const ft of floatTexts) ft.draw(ctx);
     ctx.restore();
@@ -20540,7 +19209,7 @@
     card.className = 'role-card';
     card.style.borderLeftColor = role.color;
     card.dataset.idx = idx;
-    const locked = currentMode === 'survival' || currentMode === 'random' || currentMode === 'budget'; // 生存/随机/20元模式锁定阵容
+    const locked = false; // 仅手操模式：阵容面板恒可编辑
 
     const sel = document.createElement('select');
     sel.className = 'r-class';
@@ -20650,25 +19319,6 @@
   }
 
   function syncLabels(){
-    if (currentMode === 'battleroyale'){
-      $('teamNameA').value = '大逃杀·存活';
-      $('teamNameB').value = '缩圈倒计时';
-      $('dotA').style.color = '#ff6b6b';
-      $('dotA').style.background = '#ff6b6b';
-      $('dotB').style.color = '#ff9148';
-      $('dotB').style.background = '#ff9148';
-      $('dotCfgA').style.color = '#ff6b6b';
-      $('dotCfgA').style.background = '#ff6b6b';
-      $('dotCfgB').style.color = '#ff9148';
-      $('dotCfgB').style.background = '#ff9148';
-      $('panelA').style.borderColor = 'rgba(255,107,107,0.55)';
-      $('panelB').style.borderColor = 'rgba(255,145,72,0.55)';
-      $('panelA').style.boxShadow = '0 0 18px rgba(255,107,107,0.18), 0 4px 16px rgba(0,0,0,0.35)';
-      $('panelB').style.boxShadow = '0 0 18px rgba(255,145,72,0.18), 0 4px 16px rgba(0,0,0,0.35)';
-      $('hpFillA').style.background = 'linear-gradient(90deg, #ff6b6b, #ff9999)';
-      $('hpFillB').style.background = 'linear-gradient(90deg, #ff9148, #ffc080)';
-      return;
-    }
     $('teamNameA').value = teams.A.name;
     $('teamNameB').value = teams.B.name;
     $('dotA').style.color = teams.A.color;
@@ -20720,11 +19370,6 @@
     hideResult();
     round = 1;
     paused = false;
-    if (currentMode === 'battleroyale'){
-      brGameOver = false;
-      brSafeZone = null;
-      brItems = [];
-    }
     startMatch();
   });
   $('pauseBtn').addEventListener('click', e => {
@@ -20755,35 +19400,6 @@
       const s = document.createElement('span');
       s.innerHTML = `<span style="color:${v.textColor || v.color}">${v.icon}</span> <b>${v.label}</b> <span style="color:#8b7bb8">${v.desc}</span>`;
       el.appendChild(s);
-    });
-  }
-
-  // ============== 开始界面逻辑 ==============
-  function renderDuelPicker(side){
-    const picker = $('duelPicker' + side);
-    // 更新标题显示当前选中角色
-    const titleEl = $('duelTitle' + side);
-    if (titleEl){
-      const isCollapsed = titleEl.classList.contains('collapsed');
-      titleEl.innerHTML = '队伍 ' + side + ' · ' + CLASSES[duelPick[side]].label + ' <span class="arrow">▼</span>';
-      titleEl.style.color = CLASSES[duelPick[side]].textColor || CLASSES[duelPick[side]].color;
-      if (isCollapsed) titleEl.classList.add('collapsed');
-    }
-    picker.innerHTML = '';
-    Object.entries(CLASSES).forEach(([k,v]) => {
-      const btn = document.createElement('div');
-      btn.className = 'duel-class-btn' + (duelPick[side] === k ? ' selected' : '');
-      btn.innerHTML = `
-        <span class="icon">${v.icon}</span>
-        <div class="label" style="color:${v.textColor || v.color}">${v.label}</div>
-        ${duelPick[side] === k ? '<div class="check">✓ 已选</div>' : ''}
-      `;
-      btn.addEventListener('click', () => {
-        duelPick[side] = k;
-        renderDuelPicker('A');
-        renderDuelPicker('B');
-      });
-      picker.appendChild(btn);
     });
   }
 
@@ -21038,175 +19654,16 @@
   }
 
   function switchMode(mode){
-    currentMode = mode;
+    currentMode = 'manual';
     document.querySelectorAll('.mode-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.mode === mode);
+      t.classList.toggle('active', t.dataset.mode === 'manual');
     });
-    // 轮播模式：选中标签自动居中
-    if (modeTabsEl && modeTabsEl.classList.contains('carousel')){
-      const activeTab = document.querySelector('.mode-tab.active');
-      if (activeTab){
-        modeIsAutoScroll = true;
-        const c = activeTab.parentElement;
-        const target = activeTab.offsetLeft - (c.clientWidth - activeTab.offsetWidth) / 2;
-        c.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
-        setTimeout(() => { modeIsAutoScroll = false; }, 500);
-      }
-    }
-    $('duelMode').style.display = mode === 'duel' ? '' : 'none';
-    $('customMode').style.display = mode === 'custom' ? '' : 'none';
-    $('budgetMode').style.display = mode === 'budget' ? '' : 'none';
-    $('survivalMode').style.display = mode === 'survival' ? '' : 'none';
-    $('battleroyaleMode').style.display = mode === 'battleroyale' ? '' : 'none';
-    $('randomMode').style.display = mode === 'random' ? '' : 'none';
-    $('draftMode').style.display = mode === 'draft' ? '' : 'none';
-    $('manualMode').style.display = mode === 'manual' ? '' : 'none';
-    if (mode === 'manual'){
-      renderManualPicker('A');
-      renderManualPicker('B');
-      updateManualIntro();
-    }
-    if (mode === 'duel'){
-      $('duelTitleA').innerHTML = '队伍 A · ' + CLASSES[duelPick.A].label + ' <span class="arrow">▼</span>';
-      $('duelTitleA').style.color = CLASSES[duelPick.A].textColor || CLASSES[duelPick.A].color;
-      $('duelTitleB').innerHTML = '队伍 B · ' + CLASSES[duelPick.B].label + ' <span class="arrow">▼</span>';
-      $('duelTitleB').style.color = CLASSES[duelPick.B].textColor || CLASSES[duelPick.B].color;
-    }
-    if (mode === 'budget'){
-      renderBudgetShop();
-      renderBudgetRoster();
-    }
-    if (mode === 'survival'){
-      renderSurvivalShop();
-      renderSurvivalRoster();
-      const bestEl = $('survivalBest');
-      if (bestEl) bestEl.textContent = getSurvivalBest();
-    }
-    if (mode === 'random'){
-      updateRandomPreview();
-    }
+    $('manualMode').style.display = '';
+    renderManualPicker('A');
+    renderManualPicker('B');
+    updateManualIntro();
   }
 
-  // ===== 20元组队：商店与阵容渲染 =====
-  function renderBudgetShop(){
-    const grid = $('budgetShopGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    const remaining = budgetRemaining();
-    Object.entries(CLASSES).forEach(([k, v]) => {
-      const card = document.createElement('div');
-      const alreadyPicked = budgetRoster.includes(k);
-      const affordable = (v.cost || 0) <= remaining;
-      const canPick = !alreadyPicked && affordable;
-      card.className = 'budget-card' + (canPick ? '' : ' disabled');
-      card.innerHTML = `
-        <span class="bc-icon">${v.icon}</span>
-        <div class="bc-name" style="color:${v.textColor || v.color}">${v.label}</div>
-        <span class="bc-cost">¥${v.cost}</span>
-      `;
-      if (canPick){
-        card.addEventListener('click', () => {
-          if (budgetRoster.includes(k)) return;
-          if ((CLASSES[k].cost || 0) > budgetRemaining()) return;
-          budgetRoster.push(k);
-          renderBudgetShop();
-          renderBudgetRoster();
-        });
-      }
-      grid.appendChild(card);
-    });
-  }
-  function renderBudgetRoster(){
-    const list = $('budgetRosterList');
-    const rem = $('budgetRemaining');
-    if (!list || !rem) return;
-    list.innerHTML = '';
-    if (budgetRoster.length === 0){
-      list.innerHTML = '<div class="budget-roster-empty">阵容为空 · 点击左侧职业加入战队</div>';
-    } else {
-      budgetRoster.forEach((k, idx) => {
-        const c = CLASSES[k];
-        const item = document.createElement('div');
-        item.className = 'budget-roster-item';
-        item.innerHTML = `
-          <span class="ri-icon">${c.icon}</span>
-          <span class="ri-name" style="color:${c.color}">${c.label}</span>
-          <span class="ri-cost">¥${c.cost}</span>
-          <button class="ri-remove" data-idx="${idx}" aria-label="移除">✕</button>
-        `;
-        item.querySelector('.ri-remove').addEventListener('click', () => {
-          budgetRoster.splice(idx, 1);
-          renderBudgetShop();
-          renderBudgetRoster();
-        });
-        list.appendChild(item);
-      });
-    }
-    const r = budgetRemaining();
-    rem.textContent = '剩余 ¥' + r;
-    rem.classList.toggle('empty', r === 0);
-  }
-
-  document.querySelectorAll('.mode-tab').forEach(tab => {
-    tab.addEventListener('click', () => switchMode(tab.dataset.mode));
-  });
-
-  // 单挑模式：点击标题展开/折叠职业选择
-  document.querySelectorAll('.duel-side-title').forEach(title => {
-    title.addEventListener('click', () => {
-      const picker = title.nextElementSibling;
-      if (picker && picker.classList.contains('duel-class-picker')){
-        picker.classList.toggle('collapsed');
-        title.classList.toggle('collapsed');
-      }
-    });
-  });
-
-  // 移动端横向滑动切换模式：标签溢出时启用轮播
-  const modeTabsEl = document.querySelector('.mode-tabs');
-  let modeScrollTimer = null;
-  let modeIsAutoScroll = false;
-
-  function checkModeTabsOverflow(){
-    const wide = window.innerWidth >= 760;
-    if (wide){
-      // 窗口足够宽：所有模式tab平铺换行显示，不滚动
-      modeTabsEl.classList.remove('carousel');
-      modeTabsEl.style.flexWrap = 'wrap';
-      modeTabsEl.style.overflowX = 'visible';
-      modeTabsEl.scrollLeft = 0;
-    } else {
-      // 窗口较窄：恢复横向滚动轮播
-      modeTabsEl.style.flexWrap = 'nowrap';
-      modeTabsEl.style.overflowX = 'auto';
-      if (modeTabsEl.scrollWidth > modeTabsEl.clientWidth + 10){
-        modeTabsEl.classList.add('carousel');
-      } else {
-        modeTabsEl.classList.remove('carousel');
-      }
-    }
-  }
-  window.addEventListener('resize', checkModeTabsOverflow);
-  setTimeout(checkModeTabsOverflow, 100); // 初始检测（等字体加载后）
-
-  modeTabsEl.addEventListener('scroll', () => {
-    if (modeIsAutoScroll) return;
-    if (!modeTabsEl.classList.contains('carousel')) return;
-    clearTimeout(modeScrollTimer);
-    modeScrollTimer = setTimeout(() => {
-      const tabs = modeTabsEl.querySelectorAll('.mode-tab');
-      const center = modeTabsEl.scrollLeft + modeTabsEl.clientWidth / 2;
-      let closest = null, closestDist = Infinity;
-      tabs.forEach(tab => {
-        const tabCenter = tab.offsetLeft + tab.offsetWidth / 2;
-        const dist = Math.abs(tabCenter - center);
-        if (dist < closestDist) { closestDist = dist; closest = tab; }
-      });
-      if (closest && !closest.classList.contains('active')) {
-        closest.click();
-      }
-    }, 150);
-  });
 
   function getTeamRolesText(team){
     return teams[team].roles.map(r => CLASSES[r.cls].icon + CLASSES[r.cls].label + '×' + r.count).join(' ') || '空阵容';
@@ -21368,13 +19825,6 @@
   let draftVsAI = true;
   let draftTeams = null; // 选秀完成后的队伍，供 startGame 使用
   let draftState = null;
-  // 流程模板：先手(lead)与本轮后手轮换。L=先手, F=后手
-  const DRAFT_TEMPLATE = [
-    { slot: 'L', type: 'ban' },   { slot: 'F', type: 'ban' },
-    { slot: 'L', type: 'pick3' }, { slot: 'F', type: 'pick3' }, { slot: 'F', type: 'pick3' },
-    { slot: 'L', type: 'ban' },   { slot: 'F', type: 'ban' },
-    { slot: 'L', type: 'pick3' }, { slot: 'L', type: 'pick3' }, { slot: 'F', type: 'pick3' }
-  ];
   // 手操小选秀模板：翻硬币定先手 → 双方轮流各禁 3 名 → 双方各从随机 3 选 1 中选 1 名
   const DRAFT_TEMPLATE_MANUAL = [
     { slot: 'L', type: 'ban' }, { slot: 'F', type: 'ban' },
@@ -21383,8 +19833,8 @@
     { slot: 'L', type: 'pick3' }, { slot: 'F', type: 'pick3' }
   ];
   // 翻硬币决定先手，生成实际步序（先手走 L 模板，后手走 F 模板）
-  function buildDraftSteps(lead, purpose){
-    const tpl = purpose === 'manual' ? DRAFT_TEMPLATE_MANUAL : DRAFT_TEMPLATE;
+  function buildDraftSteps(lead){
+    const tpl = DRAFT_TEMPLATE_MANUAL;
     const other = lead === 'A' ? 'B' : 'A';
     return tpl.map(t => ({
       type: t.type,
@@ -21393,18 +19843,13 @@
   }
   function draftBegin(purpose){
     draftTeams = null;
-    const mode = purpose === 'manual' ? 'manual' : 'draft';
-    if (mode === 'manual'){
-      manualTwoPlayer = !!($('manualTwoPlayer') && $('manualTwoPlayer').checked);
-      draftVsAI = !manualTwoPlayer;
-      $('draftTitle').textContent = '🎮 手操小选秀';
-    } else {
-      draftVsAI = $('draftVsAI').checked;
-      $('draftTitle').textContent = '⚔️ 选秀对战';
-    }
+    const mode = 'manual';
+    manualTwoPlayer = !!($('manualTwoPlayer') && $('manualTwoPlayer').checked);
+    draftVsAI = !manualTwoPlayer;
+    $('draftTitle').textContent = '🎮 手操小选秀';
     // 翻硬币随机决定先手
     const lead = Math.random() < 0.5 ? 'A' : 'B';
-    draftState = { A: [], B: [], banned: [], pool: Object.keys(CLASSES), step: 0, options: [], steps: buildDraftSteps(lead, mode), lead: lead, coinDone: false, purpose: mode };
+    draftState = { A: [], B: [], banned: [], pool: Object.keys(CLASSES), step: 0, options: [], steps: buildDraftSteps(lead), lead: lead, coinDone: false, purpose: mode };
     $('draftOverlay').classList.remove('hidden');
     $('draftCancelBtn').style.display = '';
     $('draftSubtitle').innerHTML = '🪙 翻硬币决定先手...';
@@ -21524,195 +19969,15 @@
   function draftFinish(){
     const s = draftState;
     // 手操小选秀：写回手操选人并直接开战（1v1）
-    if (s.purpose === 'manual'){
-      if (s.A[0]) manualPick.A = s.A[0];
-      if (s.B[0]) manualPick.B = s.B[0];
-      $('draftOverlay').classList.add('hidden');
-      draftState = null;
-      draftTeams = null;
-      renderManualPicker('A');
-      renderManualPicker('B');
-      startGame();
-      return;
-    }
-    draftTeams = {
-      A: budgetBuildTeam('队伍 A', '#ff7a3d', s.A),
-      B: budgetBuildTeam('队伍 B', '#5fd4ff', s.B)
-    };
+    if (s.A[0]) manualPick.A = s.A[0];
+    if (s.B[0]) manualPick.B = s.B[0];
     $('draftOverlay').classList.add('hidden');
-    openPlacePhase();
-  }
-
-  // ===== 选秀站位布置状态机 =====
-  let placeState = null; // { sel:{team,cls}|null, A:{roster:[],slots:[]}, B:{...} }
-  const PLACE_W = VIEW.w, PLACE_H = VIEW.h; // 站位坐标沿用对局坐标系(1180x600)
-  // 每队 3 名角色，分 前排(靠近中线) 与 后排(贴近己方边缘)：前排 2 格上下、后排 1 格居中
-  const placeSlotXY = (team, i) => {
-    const A = team === 'A';
-    if (i >= 2) return { x: A ? 160 : 1020, y: 275, row: 'back' };         // 后排
-    return { x: A ? 360 : 820, y: i === 0 ? 160 : 390, row: 'front' };      // 前排
-  };
-
-  function openPlacePhase(){
-    placeState = {};
-    for (const t of ['A','B']){
-      const tm = draftTeams[t];
-      placeState[t] = {
-        roster: tm.roles.map(r => ({ cls: r.cls, name: r.name, color: r.color, placed: false })),
-        slots: [0,1,2].map((_, i) => { const p = placeSlotXY(t, i); return { x: p.x, y: p.y, row: p.row, used: false, cls: null, i }; })
-      };
-    }
-    placeState.sel = null;
-    $('draftOverlay').classList.add('hidden');
-    $('placeOverlay').classList.remove('hidden');
-    renderPlace();
-  }
-  function renderPlace(){
-    const done = placeAllPlaced();
-    $('placeStartBtn').disabled = !done;
-    $('placeHint').innerHTML = !done
-      ? (placeState.sel
-          ? `✅ 已选中 <b>${CLASSES[placeState.sel.cls].icon} ${CLASSES[placeState.sel.cls].label}</b>（点场地上 ${placeState.sel.team === 'A' ? '左半场' : '右半场'} 的站位格放下）`
-          : '请点击角色栏里的<b>角色</b>，再点场地上对应半场的站位格；两侧都放满后即可开战')
-      : '✅ 双方站位已布置完成，可开始对战';
-    for (const t of ['A','B']){
-      const box = $('placeRoster' + t);
-      box.innerHTML = '';
-      placeState[t].roster.forEach(h => {
-        const c = CLASSES[h.cls];
-        const b = document.createElement('div');
-        b.className = 'place-hero' + (h.placed ? ' placed' : '') +
-          (placeState.sel && placeState.sel.team === t && placeState.sel.cls === h.cls ? ' sel' : '');
-        b.innerHTML = `<span class="ph-i">${c.icon}</span><span class="ph-n">${c.label}</span><span class="ph-st">${h.placed ? '已布' : '可布'}</span>`;
-        b.onclick = () => placeSelectHero(t, h.cls);
-        box.appendChild(b);
-      });
-    }
-    drawPlaceCanvas();
-  }
-  function placeAllPlaced(){
-    return (placeState.A.roster.every(r => r.placed) && placeState.B.roster.every(r => r.placed));
-  }
-  function placeSelectHero(team, cls){
-    const s = placeState[team];
-    const h = s.roster.find(r => r.cls === cls);
-    if (h.placed){ // 已放 → 撤回回池并选中它
-      const si = s.slots.findIndex(sl => sl.used && sl.cls === cls);
-      if (si >= 0){ s.slots[si].used = false; s.slots[si].cls = null; }
-      h.placed = false;
-      placeState.sel = { team, cls };
-    } else {
-      placeState.sel = { team, cls };
-    }
-    renderPlace();
-  }
-  function placeSlotClick(t, idx){
-    const s = placeState[t];
-    const slot = s.slots[idx];
-    const sel = placeState.sel;
-    if (sel){
-      if (sel.team !== t){ $('placeHint').innerHTML = `只能放置到 ${sel.team} 队的半场`; return; }
-      if (!(slot.used && slot.cls === sel.cls)){
-        if (slot.used){ // 槽已被占用 → 旧角色回池
-          const ex = s.roster.find(r => r.cls === slot.cls); if (ex) ex.placed = false;
-        }
-        slot.cls = sel.cls; slot.used = true;
-        const h = s.roster.find(r => r.cls === sel.cls); if (h) h.placed = true;
-      }
-      placeState.sel = null;
-    } else if (slot.used){ // 无选中、点占用的格 → 撤回回池并选中
-      const h = s.roster.find(r => r.cls === slot.cls);
-      if (h){ h.placed = false; placeState.sel = { team: t, cls: slot.cls }; }
-      slot.used = false; slot.cls = null;
-    } else {
-      $('placeHint').innerHTML = '请先点选要放置的角色';
-    }
-    renderPlace();
-  }
-  function drawPlaceCanvas(){
-    const cv = $('placeCanvas');
-    const ctx = cv.getContext('2d');
-    const W = cv.width, H = cv.height;
-    ctx.clearRect(0, 0, W, H);
-    const sx = vx => vx / PLACE_W * W, sy = vy => vy / PLACE_H * H;
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#0e1024'); g.addColorStop(1, '#0a0c1a');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    ctx.fillStyle = 'rgba(255,122,61,0.06)'; ctx.fillRect(0, 0, W * 0.5, H);
-    ctx.fillStyle = 'rgba(95,212,255,0.06)'; ctx.fillRect(W * 0.5, 0, W * 0.5, H);
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.setLineDash([8,6]);
-    ctx.beginPath(); ctx.moveTo(W * 0.5, 0); ctx.lineTo(W * 0.5, H); ctx.stroke(); ctx.setLineDash([]);
-    // 站位格
-    for (const t of ['A','B']){
-      placeState[t].slots.forEach((sl, i) => {
-        const px = sx(sl.x), py = sy(sl.y), R = 27;
-        const isSel = placeState.sel && placeState.sel.team === t;
-        ctx.save();
-        ctx.beginPath(); ctx.arc(px, py, R, 0, Math.PI * 2);
-        if (sl.used){
-          const role = placeState[t].roster.find(r => r.cls === sl.cls);
-          const col = role ? role.color : '#888';
-          ctx.fillStyle = col; ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1;
-          ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 2; ctx.stroke();
-          ctx.fillStyle = '#000'; ctx.font = 'bold 18px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText(CLASSES[sl.cls].icon, px, py);
-          ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif';
-          ctx.fillText(CLASSES[sl.cls].label, px, py + 22);
-        } else {
-          ctx.strokeStyle = isSel ? 'rgba(255,215,0,0.95)' : 'rgba(255,255,255,0.35)';
-          ctx.lineWidth = isSel ? 2.5 : 1.5; ctx.setLineDash([5,4]); ctx.stroke(); ctx.setLineDash([]);
-          ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.font = 'bold 13px sans-serif';
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.fillText(sl.row === 'front' ? '前' : '后', px, py);
-        }
-        const rowTag = sl.row === 'front' ? '前排' : '后排';
-        ctx.fillStyle = t === 'A' ? 'rgba(255,122,61,0.95)' : 'rgba(95,212,255,0.95)';
-        ctx.font = 'bold 12px sans-serif'; ctx.fillText(rowTag + ' · ' + t, px, py - R - 9);
-        ctx.restore();
-      });
-    }
-  }
-  function placeCanvasHandler(e){
-    const cv = $('placeCanvas');
-    const r = cv.getBoundingClientRect();
-    const ux = (e.clientX - r.left), uy = (e.clientY - r.top);
-    const vx = ux / r.width * PLACE_W, vy = uy / r.height * PLACE_H;
-    let best = null, bd = 70;
-    for (const t of ['A','B']){
-      placeState[t].slots.forEach((sl, i) => {
-        const d = Math.hypot(vx - sl.x, vy - sl.y);
-        if (d < bd){ bd = d; best = { t, i }; }
-      });
-    }
-    if (!best){ $('placeHint').innerHTML = '未点中站位格，请点圆形的方格'; return; }
-    placeSlotClick(best.t, best.i);
-  }
-  function placeStart(){
-    for (const t of ['A','B']){
-      draftTeams[t].spots = placeState[t].slots.map(s => ({ x: s.x, y: s.y, cls: s.cls }));
-    }
-    $('placeOverlay').classList.add('hidden');
+    draftState = null;
+    draftTeams = null;
+    renderManualPicker('A');
+    renderManualPicker('B');
     startGame();
   }
-  function placeAutoFill(){
-    for (const t of ['A','B']){
-      const s = placeState[t];
-      const toPlace = s.roster.filter(h => !h.placed).map(h => h.cls);
-      const empties = s.slots.filter(sl => !sl.used);
-      const order = s.roster.filter(h => !h.placed).map(h => h.cls);
-      toPlace.forEach((cls, j) => { if (empties[j]){ empties[j].used = true; empties[j].cls = cls; const h = s.roster.find(x => x.cls === cls); if (h) h.placed = true; } });
-    }
-    placeState.sel = null;
-    renderPlace();
-  }
-  $('placeCanvas').addEventListener('click', placeCanvasHandler);
-  $('placeStartBtn').addEventListener('click', placeStart);
-  $('placeAutoBtn').addEventListener('click', placeAutoFill);
-  $('placeBackBtn').addEventListener('click', () => {
-    $('placeOverlay').classList.add('hidden');
-    draftState = null; draftTeams = null;
-    $('startScreen').classList.remove('hidden');
-  });
 
   function renderDraftCoin(s){
     const box = $('draftOptions');
@@ -21736,11 +20001,10 @@
       renderDraftCoin(s);
       return;
     }
-    const manual = s.purpose === 'manual';
-    const labelA = manual ? (draftVsAI ? '你 · 队伍 A' : 'P1 · 队伍 A') : '队伍 A';
-    const labelB = manual ? (draftVsAI ? '电脑 · 队伍 B' : 'P2 · 队伍 B') : '队伍 B';
-    const shortA = manual ? (draftVsAI ? '你' : 'P1') : '队伍 A';
-    const shortB = manual ? (draftVsAI ? '电脑' : 'P2') : '队伍 B';
+    const labelA = draftVsAI ? '你 · 队伍 A' : 'P1 · 队伍 A';
+    const labelB = draftVsAI ? '电脑 · 队伍 B' : 'P2 · 队伍 B';
+    const shortA = draftVsAI ? '你' : 'P1';
+    const shortB = draftVsAI ? '电脑' : 'P2';
     const nmA = $('draftSideA').querySelector('.draft-team-name');
     const nmB = $('draftSideB').querySelector('.draft-team-name');
     if (nmA) nmA.textContent = labelA;
@@ -21818,77 +20082,24 @@
   }
 
   function startGame(){
-    if (currentMode === 'duel'){
-      teams = DUEL_TEAMS();
-    } else if (currentMode === 'budget'){
-      if (budgetRoster.length === 0){
-        alert('阵容为空！请先在职业商店中购买至少一个角色');
-        return;
-      }
-      teams = BUDGET_TEAMS();
-    } else if (currentMode === 'survival'){
-      if (survivalRoster.length === 0){
-        alert('阵容为空！请先选择至少一个角色');
-        return;
-      }
-      // 初始化生存模式
-      survivalWave = 1;
-      survivalUpgrades = { hp: 0, dmg: 0, spd: 0, cd: 0 };
-      survivalBetweenWaves = false;
-      survivalWaveTimer = 0;
-      survivalEnemiesSpawned = false;
-      survivalGameOver = false;
-      survivalGold = 0;
-      // 玩家队伍
-      const playerRoles = survivalRoster.map(k => {
-        const c = CLASSES[k];
-        const params = {};
-        c.params.forEach(p => { params[p.key] = p.def; });
-        return { cls: k, name: c.label, color: c.color, params: params, count: 1, size: 18, speed: 120 };
-      });
-      survivalOriginalTeam = { name: '我的战队', color: '#ff7a3d', roles: playerRoles };
-      teams = {
-        A: JSON.parse(JSON.stringify(survivalOriginalTeam)),
-        B: survivalSpawnEnemies(survivalWave)
-      };
-    } else if (currentMode === 'battleroyale'){
-      // 大逃杀模式：不需要预设队伍，startMatch中直接生成玩家
-      brPlayerCount = parseInt($('brPlayerCount').value) || 12;
-      teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
-    } else if (currentMode === 'random'){
-      teams = RANDOM_TEAMS();
-    } else if (currentMode === 'draft'){
-      // 未完成选秀则先进入选秀流程
-      if (!draftTeams){ draftBegin(); return; }
-      teams = draftTeams;
-    } else if (currentMode === 'manual'){
-      manualTwoPlayer = !!($('manualTwoPlayer') && $('manualTwoPlayer').checked);
-      teams = MANUAL_TEAMS();
-    } else {
-      teams = JSON.parse(JSON.stringify(CUSTOM_EMPTY));
-    }
+    manualTwoPlayer = !!($('manualTwoPlayer') && $('manualTwoPlayer').checked);
+    teams = MANUAL_TEAMS();
     $('startScreen').classList.add('hidden');
-    $('backBtn').style.display = (currentMode === 'custom' || currentMode === 'budget' || currentMode === 'survival' || currentMode === 'battleroyale' || currentMode === 'random' || currentMode === 'draft' || currentMode === 'manual') ? '' : 'none';
+    $('backBtn').style.display = '';
     round = 1;
     paused = false;
     resizeCanvas();
     renderRoles('A');
     renderRoles('B');
-    // 生存/随机/20元模式锁定配置面板：隐藏添加按钮
-    document.querySelectorAll('.btn-add').forEach(btn => {
-      btn.style.display = (currentMode === 'survival' || currentMode === 'random' || currentMode === 'budget' || currentMode === 'draft') ? 'none' : '';
-    });
-    // 大逃杀/选秀对战模式隐藏配置面板（选秀结束后阵容固定不可更改）
-    $('teamCfgA').style.display = (currentMode === 'battleroyale' || currentMode === 'draft' || currentMode === 'manual') ? 'none' : '';
-    $('teamCfgB').style.display = (currentMode === 'battleroyale' || currentMode === 'draft' || currentMode === 'manual') ? 'none' : '';
+    // 手操模式隐藏阵容编辑面板
+    $('teamCfgA').style.display = 'none';
+    $('teamCfgB').style.display = 'none';
     syncLabels();
     startMatch();
     requestAnimationFrame(loop);
   }
 
   $('startBtn').addEventListener('click', startGame);
-  $('survivalStartBtn').addEventListener('click', startGame);
-  $('brStartBtn').addEventListener('click', startGame);
   $('manualStartBtn').addEventListener('click', () => {
     manualTwoPlayer = !!($('manualTwoPlayer') && $('manualTwoPlayer').checked);
     if ($('manualMiniDraft') && $('manualMiniDraft').checked){ draftBegin('manual'); return; }
@@ -21896,6 +20107,16 @@
   });
   $('manualTwoPlayer').addEventListener('change', updateManualHint);
   $('manualMiniDraft').addEventListener('change', updateManualHint);
+  // 手操选人：点击标题展开/折叠职业选择面板
+  document.querySelectorAll('#manualTitleA, #manualTitleB').forEach(title => {
+    title.addEventListener('click', () => {
+      const picker = title.nextElementSibling;
+      if (picker && picker.classList.contains('duel-class-picker')){
+        picker.classList.toggle('collapsed');
+        title.classList.toggle('collapsed');
+      }
+    });
+  });
   // 自定义键位弹层：打开 / 关闭 / 恢复默认 / 完成
   if ($('keybindOpenBtn')) $('keybindOpenBtn').addEventListener('click', openKeybindPanel);
   if ($('keybindCloseBtn')) $('keybindCloseBtn').addEventListener('click', closeKeybindPanel);
@@ -21908,21 +20129,7 @@
   if ($('keybindModal')) $('keybindModal').addEventListener('click', (e) => {
     if (e.target === $('keybindModal')) closeKeybindPanel();
   });
-  $('brPlayerCount').addEventListener('input', (e) => {
-    $('brPlayerCountLabel').textContent = e.target.value;
-  });
-  // 随机抽选模式事件
-  $('randomTeamSize').addEventListener('input', (e) => {
-    randomTeamSize = parseInt(e.target.value);
-    updateRandomPreview();
-  });
-  $('randomStartBtn').addEventListener('click', startRandomDraw);
-  $('drawStartBtn').addEventListener('click', () => {
-    $('drawOverlay').classList.add('hidden');
-    startGame();
-  });
-  // 选秀对战：开始 / 取消
-  $('draftStartBtn').addEventListener('click', draftBegin);
+  // 选秀对战：取消
   $('draftCancelBtn').addEventListener('click', () => {
     const wasManual = !!(draftState && draftState.purpose === 'manual');
     $('draftOverlay').classList.add('hidden');
@@ -21937,32 +20144,9 @@
       renderManualPicker('B');
     }
   });
-  $('budgetClearBtn').addEventListener('click', () => {
-    budgetRoster = [];
-    renderBudgetShop();
-    renderBudgetRoster();
-  });
-
   // 结算页按钮
   $('rematchBtn').addEventListener('click', () => {
     hideResult();
-    // 20元组队模式：再来一局时重新随机生成对手
-    if (currentMode === 'budget'){
-      teams = BUDGET_TEAMS();
-      renderRoles('A');
-      renderRoles('B');
-      syncLabels();
-    }
-    // 选秀对战模式：再来一局时重新翻硬币选秀
-    if (currentMode === 'draft'){
-      draftBegin();
-      return;
-    }
-    // 随机抽选模式：再来一局时重新抽选
-    if (currentMode === 'random'){
-      startRandomDraw();
-      return;
-    }
     round++;
     paused = false;
     startMatch();
@@ -21970,42 +20154,17 @@
   $('backToMenuBtn').addEventListener('click', () => {
     hideResult();
     $('startScreen').classList.remove('hidden');
-    $('drawOverlay').classList.add('hidden');
     $('draftOverlay').classList.add('hidden');
     draftState = null;
-    drawAnimating = false;
     paused = true;
     round = 1;
-    // 重置生存模式状态
-    survivalGameOver = false;
-    survivalBetweenWaves = false;
-    const overlay = $('upgradeOverlay');
-    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    // 恢复配置面板添加按钮
-    document.querySelectorAll('.btn-add').forEach(btn => { btn.style.display = ''; });
   });
   $('backBtn').addEventListener('click', () => {
     $('startScreen').classList.remove('hidden');
-    $('drawOverlay').classList.add('hidden');
     $('draftOverlay').classList.add('hidden');
     draftState = null;
-    drawAnimating = false;
     paused = true;
     round = 1;
-    // 重置生存模式状态
-    survivalGameOver = false;
-    survivalBetweenWaves = false;
-    // 重置大逃杀状态
-    brGameOver = false;
-    brSafeZone = null;
-    brItems = [];
-    const overlay = $('upgradeOverlay');
-    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    // 恢复配置面板添加按钮
-    document.querySelectorAll('.btn-add').forEach(btn => { btn.style.display = ''; });
-    // 恢复配置面板显示
-    $('panelA').style.display = '';
-    $('panelB').style.display = '';
   });
 
   // ============== 图鉴总览事件 ==============
@@ -22023,9 +20182,7 @@
   // ============== 启动 ==============
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
-  renderDuelPicker('A');
-  renderDuelPicker('B');
-  switchMode('duel');
+  switchMode('manual');
   renderLegend();
   syncLabels();
   // 游戏延迟启动，等待玩家点击开始按钮
