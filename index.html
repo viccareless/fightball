@@ -1731,18 +1731,30 @@
       ]
     },
     healer: {
-      label: '天使', icon: '😇', maxHp: 135, color: '#f5e6b8', cost: 6, ballSpeed: 100,
-      desc: '圣光续航·净化护盾',
-      stats: { atk: 4, def: 4, spd: 6, rng: 5, sup: 9, ctrl: 5 },
-      codex: '光翼垂落，圣辉涤净一切苦痛。圣光护佑同伴，消弭身上灾厄；必要之时，燃烧自身微光，唤回逝去的战友。',
+      label: '天使', icon: '😇', maxHp: 160, color: '#f5e6b8', cost: 6, ballSpeed: 420,
+      desc: '圣辉叠层·自愈续航',
+      stats: { atk: 6, def: 5, spd: 4, rng: 6, sup: 7, ctrl: 5 },
+      codex: '圣光垂落，辉芒不息。借圣辉持续侵蚀敌人，自愈之力支撑漫长拉锯，圣光领域步步蚕食敌手。',
       params: [
-        { key: 'dmg', label: '光弹伤害', min: 2, max: 14, step: 1, def: 5, int: true },
-        { key: 'hotRate', label: '攻速秒/发', min: 0.4, max: 1.3, step: 0.05, def: 0.65, int: false },
-        { key: 'auraHeal', label: '光环回血/秒', min: 2, max: 14, step: 1, def: 4, int: true },
-        { key: 'auraCD', label: '光环冷却秒', min: 6, max: 18, step: 1, def: 10, int: false },
-        { key: 'shieldAmt', label: '护盾吸收量', min: 15, max: 120, step: 5, def: 45, int: true },
-        { key: 'shieldCd', label: '护盾目标冷却秒', min: 3, max: 12, step: 1, def: 6, int: false },
-        { key: 'reviveRatio', label: '复活保留血量比', min: 0.2, max: 0.7, step: 0.05, def: 0.4, int: false }
+        { key: 'dmg', label: '圣光弹伤害', min: 2, max: 14, step: 1, def: 7, int: true },
+        { key: 'hotRate', label: '攻速秒/发', min: 0.4, max: 1.3, step: 0.05, def: 0.7, int: false },
+        { key: 'holyMax', label: '圣辉最大层数', min: 2, max: 6, step: 1, def: 4, int: true },
+        { key: 'holyDmgPer', label: '圣辉每层增伤%', min: 1, max: 10, step: 1, def: 4, int: true },
+        { key: 'holyDur', label: '圣辉持续秒', min: 2, max: 8, step: 0.5, def: 4, int: false },
+        { key: 'hitHeal', label: '命中小回血', min: 1, max: 8, step: 1, def: 3, int: true },
+        { key: 'shelterHeal', label: '庇护回血量', min: 5, max: 60, step: 5, def: 30, int: true },
+        { key: 'shelterShield', label: '庇护护盾量', min: 10, max: 80, step: 5, def: 40, int: true },
+        { key: 'shelterCD', label: '圣光庇护冷却秒', min: 6, max: 18, step: 1, def: 10, int: false },
+        { key: 'shelterDur', label: '庇护持续秒', min: 2, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'fieldDmg', label: '耀场每跳伤害', min: 1, max: 10, step: 1, def: 3, int: true },
+        { key: 'fieldCD', label: '圣辉耀场冷却秒', min: 6, max: 20, step: 1, def: 12, int: false },
+        { key: 'fieldDur', label: '耀场持续秒', min: 2, max: 7, step: 0.5, def: 4, int: false },
+        { key: 'fieldR', label: '耀场半径(格)', min: 1.5, max: 4, step: 0.1, def: 2.8, int: false },
+        { key: 'lowHealBonus', label: '圣愈低血回血加成%', min: 10, max: 40, step: 5, def: 20, int: true },
+        { key: 'ultCD', label: '圣临冷却秒', min: 14, max: 36, step: 1, def: 24, int: false },
+        { key: 'ultDur', label: '圣临持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'ultDmgBonus', label: '圣临圣光弹增伤%', min: 5, max: 40, step: 5, def: 20, int: true },
+        { key: 'ultPenalty', label: '圣临后治疗降低%', min: 20, max: 80, step: 5, def: 50, int: true }
       ]
     },
     guard: {
@@ -1982,18 +1994,29 @@
       ]
     },
     timeMage: {
-      label: '时光修复师', icon: '⏳', maxHp: 95, color: '#fff370', cost: 7,
-      desc: '时弹点射·低频回溯',
-      stats: { atk: 4, def: 4, spd: 5, rng: 6, sup: 8, ctrl: 4 },
-      codex: '战场回溯者，定期向最近敌人发射时光弹，拥有独立输出手段。回溯印记仅庇护核心友军——刺客本体可享复活，但其分身、召唤师的召唤物与忍者替身不在复活之列；每次回溯后印记进入漫长冷却，复活血量与生效速度均被削减；保留全队冷却缩减与定期净化，是克制而可靠的续航核心。',
+      label: '时光修复师', icon: '⏳', maxHp: 150, color: '#c9a6ff', cost: 7, ballSpeed: 440,
+      desc: '时滞拉扯·前摇延展',
+      stats: { atk: 5, def: 4, spd: 6, rng: 6, sup: 7, ctrl: 6 },
+      codex: '执掌流逝的碎片，凝固敌人身上滞留的时序。膨胀的时间领域放缓万物流转，在迟缓的时空缝隙中掌握对战节奏。',
       params: [
-        { key: 'reviveHp', label: '复活血量%', min: 15, max: 60, step: 5, def: 40, int: true },
-        { key: 'markTime', label: '印记持续/秒', min: 4, max: 12, step: 0.5, def: 6, int: false },
-        { key: 'reviveCd', label: '复活冷却/秒', min: 6, max: 20, step: 1, def: 10, int: true },
-        { key: 'cdReduce', label: '冷却缩减%', min: 5, max: 35, step: 5, def: 12, int: true },
-        { key: 'cleanseRate', label: '净化间隔/秒', min: 4, max: 12, step: 0.5, def: 7, int: false },
-        { key: 'boltDmg', label: '时光弹伤害', min: 0, max: 20, step: 1, def: 6, int: true },
-        { key: 'boltRate', label: '时光弹间隔/秒', min: 0.6, max: 4, step: 0.1, def: 1.6, int: false }
+        { key: 'dmg', label: '时间碎片伤害', min: 2, max: 12, step: 1, def: 6, int: true },
+        { key: 'rate', label: '攻速秒/发', min: 0.4, max: 1.4, step: 0.05, def: 0.7, int: false },
+        { key: 'lagSlowPer', label: '时滞每层减速%', min: 2, max: 15, step: 1, def: 6, int: true },
+        { key: 'lagMax', label: '时滞最大层数', min: 2, max: 5, step: 1, def: 3, int: true },
+        { key: 'lagDur', label: '时滞持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'warpCD', label: '时间扭曲冷却秒', min: 5, max: 16, step: 1, def: 9, int: false },
+        { key: 'warpDur', label: '时间扭曲持续秒', min: 1, max: 5, step: 0.5, def: 2.5, int: false },
+        { key: 'warpR', label: '时间场半径(格)', min: 1.5, max: 4, step: 0.1, def: 2.8, int: false },
+        { key: 'warpSlow', label: '场内减速/前摇%', min: 10, max: 40, step: 2, def: 22, int: true },
+        { key: 'lockCD', label: '时滞凝锁冷却秒', min: 8, max: 24, step: 1, def: 14, int: false },
+        { key: 'lockDur', label: '凝锁持续秒', min: 1, max: 4, step: 0.5, def: 2, int: false },
+        { key: 'lockCastPer', label: '凝锁每层前摇%', min: 3, max: 20, step: 1, def: 8, int: true },
+        { key: 'passiveCD', label: '时序命中减CD秒', min: 0.05, max: 0.6, step: 0.05, def: 0.2, int: false },
+        { key: 'ultCD', label: '时间膨胀冷却秒', min: 14, max: 34, step: 1, def: 22, int: false },
+        { key: 'ultDur', label: '膨胀持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
+        { key: 'ultR', label: '膨胀半径(格)', min: 2, max: 4.5, step: 0.1, def: 3, int: false },
+        { key: 'ultDebuff', label: '膨胀移速攻速降低%', min: 15, max: 50, step: 5, def: 30, int: true },
+        { key: 'ultCastPer', label: '膨胀前摇延长%', min: 15, max: 50, step: 5, def: 30, int: true }
       ]
     },
     shieldGuard: {
@@ -2153,7 +2176,7 @@
         { key: 'kamuiFailCdExtra', label: '虚化空放追加锁定/秒', min: 0, max: 8, step: 0.5, def: 3, int: false },
         { key: 'kamuiFailEffectMul', label: '虚化空放抓取效果倍率', min: 0.2, max: 1, step: 0.1, def: 0.5, int: false },
         { key: 'kamuiPerfectEffectMul', label: '完美虚化抓取效果倍率', min: 1, max: 3, step: 0.1, def: 1.0, int: false },
-        { key: 'kamuiPerfectRefund', label: '完美虚化瞳力返还', min: 0, max: 10, step: 1, def: 2, int: true },
+        { key: 'kamuiPerfectRefund', label: '完美虚化瞳力返还', min: 0, max: 10, step: 1, def: 3, int: true },
         { key: 'kamuiAiCloseRange', label: 'AI主动虚化近身距离', min: 60, max: 320, step: 10, def: 150, int: true },
         { key: 'kamuiAiHpPct', label: 'AI主动虚化残血阈值%', min: 0, max: 90, step: 5, def: 45, int: true },
         { key: 'comboFireDmg', label: '木火连击附加伤害', min: 3, max: 30, step: 1, def: 12, int: true },
@@ -2370,23 +2393,32 @@
       ]
     },
     tongShi: {
-      label: '橦师', icon: '🕸️', maxHp: 160, color: '#aeb6c2', cost: 7, ballSpeed: 135,
-      desc: '银丝织网·灵相夺舍',
-      stats: { atk: 7, def: 4, spd: 8, rng: 4, sup: 3, ctrl: 8 },
-      codex: '银丝织网，蚕食灵相。八重灵痕浸透之时，便可夺取敌人意识，使其永久沦为傀儡。代价是自身灵相持续损耗，本体愈发脆弱。身死一刻，过往所有灵痕一同燃尽，化作最后的尘嚣。',
+      label: '橦师', icon: '🕸️', maxHp: 155, color: '#aeb6c2', cost: 7, ballSpeed: 900,
+      desc: '灵痕侵蚀·拟像木偶',
+      stats: { atk: 6, def: 4, spd: 5, rng: 6, sup: 4, ctrl: 7 },
+      codex: '暗灵编织出敌手之形，灵纹木偶伴身而起。灵痕爬满敌人躯体，拟像甚至能复刻其术法；领域铺开，蚀纹层层生长。',
       params: [
-        { key: 'fireRate', label: '攻速秒/发', min: 0.3, max: 1.4, step: 0.05, def: 0.7, int: false },
-        { key: 'bulletSpeed', label: '傀线弹速', min: 400, max: 1000, step: 20, def: 900, int: true },
-        { key: 'threadDmg', label: '傀线基础伤害', min: 4, max: 14, step: 1, def: 7, int: true },
-        { key: 'bindSlow', label: '缚足减速比例', min: 0.1, max: 0.6, step: 0.05, def: 0.4, int: false },
-        { key: 'bindDur', label: '缚足持续秒', min: 1, max: 5, step: 0.5, def: 3, int: false },
-        { key: 'erodeDur', label: '侵蚀持续秒', min: 2, max: 7, step: 0.5, def: 4, int: false },
-        { key: 'guardReduce', label: '灵护减伤比例', min: 0.05, max: 0.4, step: 0.05, def: 0.15, int: false },
-        { key: 'guardDur', label: '灵护持续秒', min: 1, max: 6, step: 0.5, def: 3, int: false },
-        { key: 'bleed', label: '残血流血/秒', min: 1, max: 12, step: 1, def: 4, int: true },
-        { key: 'waveR', label: '尘缘冲击波px', min: 40, max: 200, step: 10, def: 105, int: true },
-        { key: 'markDmg', label: '灵痕引爆伤/层', min: 1, max: 8, step: 1, def: 3, int: true },
-        { key: 'domPenalty', label: '支配扣血惩罚', min: 10, max: 60, step: 5, def: 30, int: true }
+        { key: 'fireRate', label: '攻速秒/发', min: 0.3, max: 1.4, step: 0.05, def: 0.72, int: false },
+        { key: 'bulletSpeed', label: '灵丝弹速', min: 400, max: 1000, step: 20, def: 900, int: true },
+        { key: 'threadDmg', label: '灵丝基础伤害', min: 3, max: 12, step: 1, def: 6, int: true },
+        { key: 'markMax', label: '灵痕最大层数', min: 3, max: 8, step: 1, def: 5, int: true },
+        { key: 'markDur', label: '灵痕持续秒', min: 2, max: 8, step: 0.5, def: 4, int: false },
+        { key: 'markDefPer', label: '灵痕每层降防%', min: 2, max: 12, step: 1, def: 5, int: true },
+        { key: 'burstCD', label: '灵丝束冷却秒', min: 5, max: 18, step: 1, def: 10, int: false },
+        { key: 'burstDmg', label: '灵丝束伤害', min: 2, max: 14, step: 1, def: 6, int: true },
+        { key: 'burstSlow', label: '灵丝束减速%', min: 10, max: 45, step: 5, def: 20, int: true },
+        { key: 'burstSlowDur', label: '灵丝束减速秒', min: 0.5, max: 3, step: 0.1, def: 1.2, int: false },
+        { key: 'lockCD', label: '灵锁冷却秒', min: 8, max: 28, step: 1, def: 16, int: false },
+        { key: 'dollLife', label: '木偶持续秒', min: 2, max: 9, step: 0.5, def: 5, int: false },
+        { key: 'dollHpRatio', label: '木偶血量比', min: 0.2, max: 0.7, step: 0.05, def: 0.4, int: false },
+        { key: 'dollAtkPer', label: '木偶普攻伤害%', min: 15, max: 60, step: 5, def: 35, int: true },
+        { key: 'dollSkillPer', label: '木偶技能伤害%', min: 20, max: 70, step: 5, def: 40, int: true },
+        { key: 'passiveCD', label: '蚀纹命中减CD秒', min: 0.05, max: 0.6, step: 0.05, def: 0.2, int: false },
+        { key: 'ultCD', label: '灵纹领域冷却秒', min: 14, max: 34, step: 1, def: 23, int: false },
+        { key: 'ultDur', label: '领域持续秒', min: 1, max: 6, step: 0.5, def: 3.2, int: false },
+        { key: 'ultR', label: '领域半径(格)', min: 2, max: 4.5, step: 0.1, def: 3, int: false },
+        { key: 'ultMarkPer', label: '领域每秒叠痕', min: 0.5, max: 3, step: 0.5, def: 1, int: false },
+        { key: 'ultBurstCdCut', label: '领域灵丝束减CD%', min: 10, max: 60, step: 5, def: 30, int: true }
       ]
     }
   };
@@ -2664,11 +2696,11 @@
       ]
     },
     healer: {
-      atk: { name: '圣光弹', cds: ['anlAtkCD'], max: 0.65 },
+      atk: { name: '圣光弹', cds: ['anlAtkCD'], max: 0.7 },
       slots: [
-        { name: '圣佑光环', cds: ['anlAuraCD'], max: 10 },
-        { name: '光之守护', cds: ['anlShieldCD'], max: 1.5 },
-        { name: '献祭重生', field: 'anlUltUsed' },
+        { name: '圣光庇护', cds: ['anlShelterCD'], max: 10 },
+        { name: '圣辉耀场', cds: ['anlFieldCD'], max: 12 },
+        { name: '圣临', cds: ['anlUltCD'], max: 24 },
       ]
     },
     guard: {
@@ -2689,9 +2721,11 @@
       ]
     },
     timeMage: {
-      atk: { name: '时光弹', cds: ['timeBoltCD'], max: 1.6 },
+      atk: { name: '时间碎片', cds: ['timeBoltCD'], max: 0.7 },
       slots: [
-        { name: '净化全队', cds: ['timeMageCleanseCD'], max: 7 },
+        { name: '时间扭曲', cds: ['tmWarpCD'], max: 9 },
+        { name: '时滞凝锁', cds: ['tmLockCD'], max: 14 },
+        { name: '时间膨胀', cds: ['tmUltCD'], max: 22 },
       ]
     },
     windRanger: {
@@ -2787,8 +2821,12 @@
       slots: []
     },
     tongShi: {
-      atk: { name: '傀线', cds: ['tsAtkCD'], max: 0.7 },
-      slots: []
+      atk: { name: '灵丝', cds: ['tsAtkCD'], max: 0.72 },
+      slots: [
+        { name: '灵丝束', cds: ['tsBurstCD'], max: 10 },
+        { name: '灵锁', cds: ['tsLockCD'], max: 16, readyWhen: (b) => { if (!b.tsMarks) return false; const mx = b.params.markMax || 5; for (const v of b.tsMarks.values()) if (v >= mx) return true; return false; } },
+        { name: '灵纹领域', cds: ['tsFieldCD'], max: 23 },
+      ]
     },
   };
   const MANUAL_LOCK_SENTINEL = 9999;         // 未按键时的封锁值（远大于任何真实冷却）
@@ -2937,21 +2975,23 @@
       { label: '重箭', color: '#ffd76b', text: b => (b.fbCharging ? '蓄力中' : '待发') },
     ],
     healer: [
-      { label: '重生', color: '#ffe066', flag: b => b.anlUltUsed },
+      { label: '圣辉', color: '#ffe066', max: b => (b.params.holyMax || 4), get: (b, balls) => { let m = 0; for (const x of balls){ if (x.alive && x.team !== b.team) m = Math.max(m, x._anlHolyStacks || 0); } return m; } },
+      { label: '圣临', color: '#fff3c4', show: b => b.anlUltT > 0, text: () => '圣临' },
     ],
     guard: [
       { label: '战痕', color: '#ffd76b', max: 5, get: b => b._gdWarken || 0 },
     ],
     timeMage: [
-      { label: '印记', color: '#fff370', get: (b) => timeMarks.filter(tm => tm.source === b).length },
+      { label: '最高时滞', color: '#c9a6ff', max: b => (b.params.lagMax || 3), get: (b, balls) => { let m = 0; for (const x of balls){ if (x.alive && x.team !== b.team) m = Math.max(m, x._tmLagStacks || 0); } return m; } },
+      { label: '膨胀', color: '#d8c6ff', show: b => b.tmUltT > 0, text: () => '时间膨胀' },
     ],
     empMage: [
       { label: '最高漏电', color: '#4da6ff', max: b => (b.params.maxStacks || 3), get: (b, balls) => { let m = 0; for (const x of balls){ if (x.alive && x.team !== b.team) m = Math.max(m, x.leakStacks || 0); } return m; } },
     ],
     tongShi: [
-      { label: '最高灵痕', color: '#c8d2de', max: 8, get: b => { let m = 0; if (b.tsMarks) for (const v of b.tsMarks.values()) m = Math.max(m, v); return m; } },
-      { label: '支配', color: '#f2f6fb', text: b => (b.tsDominated ? '已夺舍' : '待夺舍') },
-      { label: '残相', color: '#8d97a3', show: b => !!b.tsCellBroken, text: () => '残缺灵相' },
+      { label: '最高灵痕', color: '#c8d2de', max: b => (b.params.markMax || 5), get: b => { let m = 0; if (b.tsMarks) for (const v of b.tsMarks.values()) m = Math.max(m, v); return m; } },
+      { label: '木偶', color: '#f2f6fb', text: b => ((b.tsDoll && b.tsDoll.alive) ? '拟像中' : '待召唤') },
+      { label: '领域', color: '#aeb6c2', show: b => b.tsFieldT > 0, text: () => '灵纹领域' },
     ],
   };
 
@@ -5265,9 +5305,20 @@
       this.frostAtkCD = 0; // 霜冻法师普攻冷却
       this.frostZoneCD = 0; // 霜冻领域施放冷却
       this.frostBurstUsed = false; // 极寒爆发是否已用（一局一次）
-      this.timeMageCleanseCD = 0; // 时光修复师净化冷却
-      this.timeBoltCD = 1.2; // 时光修复师时光弹发射冷却
-      this.reviveAuraCD = 0; // 时光修复师复活冷却（用于降低复活频率）
+      this.timeBoltCD = 1.2; // 时光修复师·时间碎片发射冷却
+      this.tmWarpCD = 0; // 时间扭曲冷却
+      this.tmWarpT = 0; // 时间场剩余秒
+      this.tmWarpTick = 0; // 时间场结算计时
+      this.tmLockCD = 0; // 时滞凝锁冷却
+      this.tmUltCD = 0; // 时间膨胀冷却
+      this.tmUltT = 0; // 时间膨胀剩余秒
+      // ===== 目标侧字段（时光修复师 施加） =====
+      this._tmLagStacks = 0; // 时滞层数
+      this._tmLagT = 0; // 时滞剩余秒
+      this._tmLagBy = null; // 时滞来源
+      this._tmLockT = 0; // 被凝锁剩余秒（期间时滞不可清除）
+      this._tmCastSlowT = 0; // 施法迟滞剩余秒
+      this._tmCastSlowPct = 0; // 施法迟滞比例（0~1）
       // 护盾守卫相关状态
       this.shieldHP = 0; // 当前护盾层数
       this.shieldRegenCD = 0; // 护盾再生冷却
@@ -5509,20 +5560,23 @@
       this._pupCtrlCdUntil = 0; // 被控制后的控制冷却截止（傀儡师时钟）
       this._pupLastHitBy = null; // 最后一次命中它的傀儡师
       this._pupLastHitT = 0; // 最后命中时刻（傀儡师时钟）
-      // ===== 橦师（灵痕·永久支配）相关状态 =====
-      this.tsAtkCD = 0; // 傀线攻击冷却
+      // ===== 橦师（灵痕·拟像木偶）相关状态 =====
+      this.tsAtkCD = 0; // 灵丝攻击冷却
       this.tsClock = 0; // 橦师内置时钟
-      this.tsMarks = new Map(); // 目标 -> 灵痕层数（最高8）
-      this.tsDominated = null; // 当前被永久支配的目标（全场仅1名）
-      this.tsGuard = 0; // 灵护减伤剩余时间（灵相侵蚀时获得）
-      this.tsCellBroken = false; // 残缺灵相是否激活（hp<35%）
-      this.tsBrokenAt = 0; // 残缺灵相激活时记录，用于残血流血结算
-      this.tsDeathUsed = false; // 尘缘散尽（死亡被动）一局一次
-      this.isTsSummon = false; // 预留：橦师无召唤物，恒 false
-      // 目标侧侵入字段：侵蚀阻断叠层、缚足减速计时
-      this._tsErodedUntil = 0; // 被侵蚀的截止（橦师时钟），期间不叠灵痕
-      this._tsBindT = 0; // 缚足减速剩余秒
-      this._tsBindSlow = 0; // 缚足施加的 slow 值
+      this.tsMarks = new Map(); // 目标 -> 灵痕层数（最高5）
+      this.tsBurstCD = 0; // 灵丝束冷却
+      this.tsLockCD = 0; // 灵锁冷却
+      this.tsDoll = null; // 当前灵纹木偶（复刻敌方本体）
+      this.tsDollT = 0; // 木偶剩余秒
+      this.tsFieldCD = 0; // 灵纹领域冷却
+      this.tsFieldT = 0; // 领域剩余秒
+      this.tsFieldTick = 0; // 领域叠痕计时
+      this.isTsSummon = false; // 预留：橦师本体无召唤物，恒 false
+      // 目标侧侵入字段：灵痕衰减计时、灵丝束减速计时
+      this._tsMarkT = 0; // 灵痕剩余秒（衰减）
+      this._tsMarkBy = null; // 灵痕来源橦师
+      this._tsBindT = 0; // 灵丝束减速剩余秒
+      this._tsBindSlow = 0; // 灵丝束施加的 slow 值
       // ===== 火弓手（炽焰长弓）相关状态 =====
       this.fbAtkCD = 0; // 普攻冷却
       this.fbChargeTime = 0; // 蓄力进度 0~2 秒
@@ -5545,21 +5599,21 @@
       // ===== 目标侧状态 =====
       this._gdTauntBy = null; // 被哪个卫士嘲讽（强制切换攻击目标）
       this._gdArmorT = 0; // 破甲印记剩余秒（受伤害+15%）
-      // ===== 天使（圣光·诘佑）相关状态 =====
+      // ===== 天使（圣辉·自愈续航）相关状态 =====
       this.anlAtkCD = 0; // 圣光弹冷却
-      this.anlAuraCD = 0; // 圣佑光环冷却
-      this.anlAuraTime = 0; // 光环剩余秒
-      this.anlShieldCD = 0; // 光之守护全局冷却
-      this.anlUltUsed = false; // 献祭重生是否已释放（一局一次）
-      // ===== 目标侧字段（圣光·诘佑 施加） =====
-      this._anlMarkT = 0; // 圣蚀剩余秒（受伤害小幅增加）
-      this._anlMarkBy = null; // 圣蚀来源天使
-      this._anlAuraT = 0; // 处于圣佑光环内减伤
-      this._anlShieldHP = 0; // 圣光护盾吸收量
-      this._anlShieldCC = false; // 护盾期间是否可免疫一次控制
-      this._anlShieldLast = 0; // 目标最近一次套盾时间戳（CD）
-      this._anlRevivedBy = null; // 由哪位天使复活
-      this._anlRevived = false; // 是否为复活单位（场上最多同时1个）
+      this.anlShelterCD = 0; // 圣光庇护冷却
+      this.anlFieldCD = 0; // 圣辉耀场冷却
+      this.anlFieldT = 0; // 耀场剩余秒
+      this.anlFieldTick = 0; // 耀场伤害结算计时
+      this.anlUltCD = 0; // 圣临冷却
+      this.anlUltT = 0; // 圣临剩余秒
+      this.anlUltPenaltyT = 0; // 圣临结束后自身治疗削弱剩余秒
+      // ===== 目标侧字段（天使 施加） =====
+      this._anlHolyStacks = 0; // 圣辉层数（提升其受到的圣光弹伤害）
+      this._anlHolyT = 0; // 圣辉剩余秒
+      this._anlHolyBy = null; // 圣辉来源天使
+      this._anlShieldHP = 0; // 圣光庇护护盾吸收量
+      this._anlShieldT = 0; // 圣光庇护护盾剩余秒
       // ===== 目标侧字段（奥术法师·法力崩解 施加 法术易伤） =====
       this._mageVulnT = 0; // 法力崩解易伤剩余秒（受技能伤害增加）
       this._mageVulnBy = null; // 易伤来源奥术法师
@@ -5664,30 +5718,24 @@
         }
         this.dmgBuff = buff;
       }
-      // 时光修复师光环：全队冷却缩减
-      {
-        let cdReduce = 0;
-        for (const b of balls){
-          if (b.alive && b.team === this.team && b.cls === 'timeMage'){
-            const cr = (b.params.cdReduce || 12) / 100;
-            if (cr > cdReduce) cdReduce = cr;
-          }
-        }
-        this.cdReduceBuff = cdReduce;
-        // 对主要冷却字段应用额外缩减
-        if (cdReduce > 0){
-          const extra = dt * cdReduce;
-          if (this.fireCD > 0) this.fireCD -= extra;
-          if (this.castCD > 0) this.castCD -= extra;
-          if (this.skillCD > 0) this.skillCD -= extra;
-          if (this.atkCD > 0) this.atkCD -= extra;
-          if (this.dashCD > 0) this.dashCD -= extra;
-          if (this.cloneCD > 0) this.cloneCD -= extra;
-          if (this.trapCD > 0) this.trapCD -= extra;
-          if (this.summonCD > 0) this.summonCD -= extra;
-          if (this.timeMageCleanseCD > 0) this.timeMageCleanseCD -= extra;
-          if (this.bashCD > 0) this.bashCD -= extra;
-        }
+      // 天使自身技能计时（圣光庇护/圣辉耀场/圣临）
+      if (this.cls === 'healer'){
+        if (this.anlShelterCD > 0) this.anlShelterCD -= dt;
+        if (this.anlFieldCD > 0) this.anlFieldCD -= dt;
+        if (this.anlUltCD > 0) this.anlUltCD -= dt;
+        if (this.anlUltPenaltyT > 0) this.anlUltPenaltyT -= dt;
+      }
+      // 时光修复师自身技能计时（时间扭曲/时滞凝锁/时间膨胀）
+      if (this.cls === 'timeMage'){
+        if (this.tmWarpCD > 0) this.tmWarpCD -= dt;
+        if (this.tmLockCD > 0) this.tmLockCD -= dt;
+        if (this.tmUltCD > 0) this.tmUltCD -= dt;
+      }
+      // 橦师自身技能计时（灵丝束/灵锁/灵纹领域）
+      if (this.cls === 'tongShi'){
+        if (this.tsBurstCD > 0) this.tsBurstCD -= dt;
+        if (this.tsLockCD > 0) this.tsLockCD -= dt;
+        if (this.tsFieldCD > 0) this.tsFieldCD -= dt;
       }
       // 被标记计时（召唤师标记，人偶集火）
       if (this.markTime > 0) this.markTime -= dt;
@@ -5756,8 +5804,58 @@
         }
       }
 
-      // 天使：圣蚀（受伤害增加）与圣佑减伤计时
-      if (this._anlMarkT > 0){ this._anlMarkT -= dt; if (this._anlMarkT < 0) this._anlMarkT = 0; }
+      // 天使·圣辉：层数衰减（提升其受到的圣光弹伤害；圣临期间由施法者冻结不衰减）
+      if (this._anlHolyT > 0){
+        this._anlHolyT -= dt;
+        if (this._anlHolyT <= 0){ this._anlHolyT = 0; this._anlHolyStacks = 0; this._anlHolyBy = null; }
+      }
+      // 天使·圣光庇护护盾计时
+      if (this._anlShieldT > 0){
+        this._anlShieldT -= dt;
+        if (this._anlShieldT <= 0){ this._anlShieldT = 0; this._anlShieldHP = 0; }
+      }
+      // 时光修复师·时滞层数衰减（凝锁期间不清空）
+      if (this._tmLagT > 0){
+        this._tmLagT -= dt;
+        if (this._tmLagT <= 0 && this._tmLockT <= 0){ this._tmLagT = 0; this._tmLagStacks = 0; this._tmLagBy = null; }
+      }
+      // 时滞凝锁结束：清空全部时滞
+      if (this._tmLockT > 0){
+        this._tmLockT -= dt;
+        if (this._tmLockT <= 0){ this._tmLockT = 0; this._tmLagStacks = 0; this._tmLagBy = null; this._tmLagT = 0; }
+      }
+      // 施法迟滞：按比例回填技能冷却，等价于冷却推进变慢（拉长技能前摇）
+      if (this._tmCastSlowT > 0){
+        this._tmCastSlowT -= dt;
+        const pct = this._tmCastSlowPct || 0;
+        if (pct > 0){
+          const add = dt * pct;
+          for (const f of ['fireCD','castCD','skillCD','atkCD','volleyCD','frostAtkCD','timeBoltCD','berserkAtkCD','arcAtkCD','soulAtkCD','painAtkCD','titanMeleeCD','linMeleeCD']){
+            if (this[f] > 0) this[f] += add;
+          }
+        }
+        if (this._tmCastSlowT <= 0){ this._tmCastSlowT = 0; this._tmCastSlowPct = 0; }
+      }
+      // 橦师·灵痕衰减（木偶存在期间停止衰减；领域内衰减减半）
+      if (this._tsMarkT > 0){
+        const src = this._tsMarkBy;
+        let mul = 1;
+        if (src && src.alive){
+          if (src.tsDoll && src.tsDoll.alive) mul = 0;
+          else if (src.tsFieldT > 0 && Math.hypot(this.x - src.x, this.y - src.y) <= (src.params.ultR || 3) * 70 + this.size) mul = 0.5;
+        }
+        this._tsMarkT -= dt * mul;
+        if (this._tsMarkT <= 0){
+          this._tsMarkT = 0;
+          if (src && src.tsMarks) src.tsMarks.delete(this);
+          this._tsMarkBy = null;
+        }
+      }
+      // 橦师·灵丝束减速计时
+      if (this._tsBindT > 0){
+        this._tsBindT -= dt;
+        if (this._tsBindT <= 0){ this._tsBindT = 0; this._tsBindSlow = 0; }
+      }
       // 奥术法师·法力崩解易伤计时
       if (this._mageVulnT > 0){ this._mageVulnT -= dt; if (this._mageVulnT <= 0){ this._mageVulnT = 0; this._mageVulnBy = null; } }
       // 刺客：破影标记计时
@@ -6637,10 +6735,10 @@
             this.obitoKamuiManual = false;
             this.obitoKamuiNegated = false;
             this.obitoKamuiPerfect = false;
-            // 神威成功抓取（含击杀）：返还5点瞳力
-            if (grabSucceeded){
-              this.obitoChakra = Math.min(10, this.obitoChakra + 5);
-              floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '神威抓取·瞳力+5', '#b484ff', {life: 1.3, size: 13}));
+            // 神威成功抓取：仅"完美虚化"才返还 2 点瞳力（其他状态：AI 虚化/普通闪避/空放均不返还）
+            if (grabSucceeded && kamuiState === 'perfect'){
+              this.obitoChakra = Math.min(10, this.obitoChakra + 2);
+              floatTexts.push(new FloatText(this.x, this.y - this.size - 28, '神威抓取·瞳力+2', '#b484ff', {life: 1.3, size: 13}));
               for (let i=0;i<18;i++){
                 const ang = Math.random()*Math.PI*2;
                 particles.push(new Particle(this.x, this.y, '#b484ff', {ang, speed:50+Math.random()*90, life:0.6+Math.random()*0.4, size:2+Math.random()*2.5}));
