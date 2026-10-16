@@ -1671,6 +1671,13 @@
   .endless-card .ec-name { font-size:17px; font-weight:700; color:#fff; margin:8px 0 6px; letter-spacing:1px; }
   .endless-card .ec-desc { font-size:12.5px; color:#c8bde8; line-height:1.5; }
   .endless-card .ec-stack { margin-top:8px; font-size:11.5px; color:#7fffd0; }
+  .endless-pool { margin-top:16px; text-align:center; font-size:12px; color:#9d93c4; }
+  .endless-pool summary { cursor:pointer; color:#c9a6ff; font-size:12.5px; letter-spacing:1px; outline:none; }
+  .endless-pool-list { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:10px; }
+  .endless-pool-item {
+    padding:4px 10px; border-radius:999px; font-size:11.5px; color:#d9d2f2;
+    background:rgba(90,70,150,.35); border:1px solid rgba(160,130,230,.35); white-space:nowrap; }
+  .endless-pool-item.owned { opacity:.42; border-style:dashed; }
   .endless-buffs { margin-top:16px; text-align:center; font-size:12.5px; color:#9d93c4; line-height:1.8; }
   .endless-buffs b { color:#7fffd0; }
   .endless-buttons { display:flex; gap:12px; justify-content:center; margin-top:18px; }
@@ -1995,7 +2002,7 @@
   "use strict";
 
   // 构建标记：控制台可见，用于确认浏览器加载的是最新代码（排除预览缓存导致的旧版报错）
-  console.log('[祝融蓄力箭] build 2026-10-16 blank12 · 弓手改为真正弓箭（远射程+高速细长箭矢+拉弓前摇）；小怪物种外形；前期减负');
+  console.log('[祝融蓄力箭] build 2026-10-16 blank13 · 借技池扩至17个（新增神罗天征/地爆天星/全域雷暴/雷霆跳跃/魔刀千刃）；蓄力狙击改为0.9s蓄力；候选池总览');
 
   const BLANK_P2_COLOR = '#7fc4ff';   // 双人模式 P2 空白角色的区分色（与 P1 的灰白拉开）
 
@@ -2963,13 +2970,13 @@
       label: '哥布林爆破手', icon: '💣', maxHp: 58, color: '#c98a3c', ballSpeed: 66, ballSize: 18, mob: true,
       desc: '无尽闯关小怪·投掷爆弹',
       stats: { atk: 6, def: 2, spd: 3, rng: 6, sup: 0, ctrl: 3 },
-      codex: '背着火药桶的哥布林，投出的爆弹落地即炸，能一次炸伤一片。',
+      codex: '背着火药桶的哥布林，爆弹落地后引信烧尽才爆开，能一次炸伤一片，但留出了躲避时间。',
       params: [
         { key: 'dmg', label: '爆弹伤害', min: 2, max: 50, step: 1, def: 10, int: true },
         { key: 'atkCD', label: '投弹间隔秒', min: 0.8, max: 5, step: 0.1, def: 2.4, int: false },
         { key: 'range', label: '投掷距离', min: 80, max: 480, step: 10, def: 320, int: true },
         { key: 'keepDist', label: '保持距离', min: 60, max: 400, step: 10, def: 240, int: true },
-        { key: 'blastR', label: '爆炸半径', min: 40, max: 160, step: 5, def: 86, int: true }
+        { key: 'blastR', label: '爆炸半径', min: 40, max: 160, step: 5, def: 76, int: true }
       ]
     },
     slime: {
@@ -3063,6 +3070,7 @@
   // 召唤类同样收录：召唤物各自携带独立 AI，不消耗召唤者的能量 / 层数。
   // 带下列任一标签的技能一律不进候选池：专属资源 / 变身 / 被动。
   const ENDLESS_SKILL_EXCLUDED_TAGS = ['resource', 'transform', 'passive'];
+  const EB_SNIPE_CHARGE = 0.9;   // 借用「蓄力狙击」的蓄力时长（秒），蓄力期间可微调朝向
   const ENDLESS_SKILLS = [
     { id: 'meteor', srcCls: 'mage', name: '陨星落', icon: '☄️', cd: 14, tags: [], cdsField: 'ebMeteorCD',
       desc: '吟唱 1.6 秒后在敌人头顶召落陨星，150 范围高额伤害',
@@ -3098,9 +3106,38 @@
     { id: 'rasengan', srcCls: 'minato', name: '螺旋丸', icon: '🌀', cd: 8, tags: [], cdsField: 'ebRasenganCD',
       desc: '瞬移至敌人身旁，贴身引爆螺旋丸',
       cast(b, c){ if (c.enemy && c.enemy.alive) b._castRasengan(c.enemy, c.balls, c.particles, 1); } },
-    { id: 'snipeShot', srcCls: 'sniper', name: '蓄力狙击', icon: '🎯', cd: 8, tags: [], cdsField: 'ebSnipeCD',
-      desc: '超高速百分比穿透弹，沿瞄准方向射出',
-      cast(b, c){ b._sniperShoot(c.dirX, c.dirY, 1); } },
+    { id: 'snipeShot', srcCls: 'sniper', name: '蓄力狙击', icon: '🎯', cd: 9, tags: [], cdsField: 'ebSnipeCD',
+      desc: '原地蓄力 0.9 秒后射出超高速百分比穿透弹，蓄力期间可微调朝向',
+      cast(b, c){
+        b._ebSnipe = { t: EB_SNIPE_CHARGE, dirX: c.dirX, dirY: c.dirY, tick: 0 };
+        floatTexts.push(new FloatText(b.x, b.y - b.size - 20, '蓄力狙击…', '#ff6a6a', {life: 0.8, size: 12}));
+        for (let i = 0; i < 12; i++){
+          const a = Math.random() * Math.PI * 2;
+          c.particles.push(new Particle(b.x, b.y, i % 2 ? '#ff4444' : '#ffcc33', {ang: a, speed: 90 + Math.random() * 80, life: 0.4, size: 2.2}));
+        }
+      },
+      tick(b, dt, c){
+        const S = b._ebSnipe;
+        if (!S) return;
+        S.t -= dt;
+        S.tick -= dt;
+        // 蓄力期间持续跟随瞄准方向（玩家可边走位边修正落点）
+        if (c.dirX != null && (Math.abs(c.dirX) + Math.abs(c.dirY) > 0.001)){ S.dirX = c.dirX; S.dirY = c.dirY; }
+        // 枪口汇聚：粒子自四周被吸入枪口，蓄力越满越密
+        if (S.tick <= 0){
+          S.tick = 0.09;
+          const mx = b.x + S.dirX * b.size, my = b.y + S.dirY * b.size;
+          for (let i = 0; i < 3; i++){
+            const a = Math.random() * Math.PI * 2, r = 24 + Math.random() * 26;
+            c.particles.push(new Particle(mx + Math.cos(a) * r, my + Math.sin(a) * r, '#ff8844',
+              {ang: a + Math.PI, speed: r / 0.16, life: 0.16, size: 2}));
+          }
+        }
+        if (S.t <= 0){
+          b._ebSnipe = null;
+          b._sniperShoot(S.dirX, S.dirY, 1);   // 满蓄力发射
+        }
+      } },
     { id: 'fireBomb', srcCls: 'fireBow', name: '焚天重箭', icon: '🔥', cd: 8, tags: [], cdsField: 'ebFireBombCD',
       desc: '贯穿三名敌人的爆燃长箭，命中处爆燃',
       cast(b, c){ b._fbFireBomb(c.enemy, c.balls, c.bullets, c.aoes, c.particles, c.aimAng); } },
@@ -3196,6 +3233,34 @@
           particles.push(new Particle(sx, sy, i % 2 ? '#dfe6ee' : '#aeb6c2', {ang: a, speed: 120 + Math.random() * 90, life: 0.5, size: 2.6}));
         }
         floatTexts.push(new FloatText(sx, sy - b.size - 12, '拟像木偶!', '#e6ecf3', {life: 0.9, size: 12}));
+      } },
+    // ===== 轮回眼 / 雷神 / 伍六七：均不依赖六道形态、觉醒或专属能量，可在空白角色身上直接运行 =====
+    { id: 'shinra', srcCls: 'pain', name: '神罗天征', icon: '🌐', cd: 11, tags: [], cdsField: 'ebShinraCD',
+      desc: '以自身为中心爆发斥力：净化自身全部负面、反弹敌弹，240 范围高额伤害并击退',
+      cast(b, c){ b._painShinraTensei(c.balls, c.particles, b.params); } },
+    { id: 'chibaku', srcCls: 'pain', name: '地爆天星', icon: '🌑', cd: 16, tags: [], cdsField: 'ebChibakuCD',
+      desc: '锁定敌人召出引力奇点：汇聚 → 封印 → 碎星三阶段，禁锢并重创范围内敌人',
+      cast(b, c){
+        const t = (c.enemy && c.enemy.alive) ? c.enemy : { x: b.x + c.dirX * 200, y: b.y + c.dirY * 200 };
+        b._painChibakuTensei(t, c.balls, c.particles, c.aoes, b.params);
+      } },
+    { id: 'thunderStorm', srcCls: 'thunderLord', name: '全域雷暴', icon: '🌩️', cd: 18, tags: [], cdsField: 'ebStormCD',
+      desc: '全场降下雷暴：对所有敌人造成高额雷伤并短暂麻痹，同时为自身与队友赋能',
+      cast(b, c){ b._thunderStorm(c.balls, c.particles, b.params); } },
+    { id: 'thunderJump', srcCls: 'thunderLord', name: '雷霆跳跃', icon: '⚡', cd: 6, tags: [], cdsField: 'ebJumpCD',
+      desc: '朝瞄准方向瞬移一段距离，落地激起雷电冲击（走位保命用）',
+      cast(b, c){ b._thunderJump(c.enemy, c.balls, c.particles, b.params); } },
+    { id: 'wlqBlade', srcCls: 'wuLiuQi', name: '魔刀千刃', icon: '⚔️', cd: 12, tags: [], cdsField: 'ebBladeCD',
+      desc: '千刀归一 0.42 秒后释放千刃破：沿朝向斩出长距穿透走廊',
+      cast(b, c){
+        b._wlqBlade(c.particles, c.dirX, c.dirY);
+        b._ebBlade = { t: 0.42 };
+      },
+      tick(b, dt, c){
+        const B = b._ebBlade;
+        if (!B) return;
+        B.t -= dt;
+        if (B.t <= 0){ b._ebBlade = null; b._wlqBladeBurst(c.balls, c.particles); }
       } },
     // ===== 下列技能依赖专属资源 / 变身，被规则过滤，永不进入候选池（同时作为规则示例保留） =====
     { id: 'emberForm', srcCls: 'whiteEmber', name: '卡厄斯兰那斩', icon: '⚔️', cd: 3, tags: ['transform'],
@@ -4592,10 +4657,28 @@
       }
     }
     draw(ctx){
-      // 无尽闯关·爆破手爆弹：火药黑球 + 引信闪烁（轻量渲染，落地即炸）
+      // 无尽闯关·爆破手爆弹：火药黑球 + 引信闪烁；落地后进入引信前摇并预警爆炸范围
       if (this.isMobBomb){
         const flick = 0.5 + 0.5*Math.sin(Date.now()*0.03);
         ctx.save();
+        if (this._mobArmed){
+          // 引信前摇：爆炸范围预警（随进度加深）+ 引信读条环
+          const R = this.aoeRadius || 76;
+          const k = this._mobFuse0 > 0 ? 1 - Math.max(0, this.life) / this._mobFuse0 : 1;
+          ctx.globalAlpha = 0.14 + 0.16*k;
+          ctx.fillStyle = '#ff7a1a';
+          ctx.beginPath(); ctx.arc(this.x, this.y, R, 0, Math.PI*2); ctx.fill();
+          ctx.globalAlpha = 0.45 + 0.4*k;
+          ctx.strokeStyle = '#ff8a3c';
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([6, 6]);
+          ctx.beginPath(); ctx.arc(this.x, this.y, R, 0, Math.PI*2); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 0.95;
+          ctx.strokeStyle = '#ffd76b';
+          ctx.lineWidth = 2.6;
+          ctx.beginPath(); ctx.arc(this.x, this.y, R*0.84, -Math.PI/2, -Math.PI/2 + k*Math.PI*2); ctx.stroke();
+        }
         ctx.globalAlpha = 0.3 + 0.35*flick;
         ctx.fillStyle = '#ff7a1a';
         ctx.beginPath(); ctx.arc(this.x, this.y, this.size*1.7, 0, Math.PI*2); ctx.fill();
@@ -5524,9 +5607,12 @@
     }
   }
 
-  // 无尽闯关·爆破手爆弹落地/飞尽爆燃：对范围内敌方（玩家方）造成范围伤害
+  // 无尽闯关·爆破手爆弹：落地后的引信前摇（秒）——留出躲出爆炸范围的窗口
+  const MOB_BOMB_FUSE = 0.7;
+
+  // 无尽闯关·爆破手爆弹引信烧尽爆燃：对范围内敌方（玩家方）造成范围伤害
   function mobBombExplode(bul, balls, aoes, particles){
-    const aoeR = bul.aoeRadius || 86;
+    const aoeR = bul.aoeRadius || 76;
     for (const eb of balls){
       if (!eb.alive || eb.team === bul.team) continue;
       if (Math.hypot(eb.x - bul.x, eb.y - bul.y) > aoeR + eb.size) continue;
@@ -8900,8 +8986,10 @@
         || this.arcBlinkCasting > 0);
       const sp = Math.hypot(this.vx, this.vy);
       const mSpdMul = (this.cls === 'berserker' && this.howlT > 0) ? 1 + ((this.params.howlSpdUp != null ? this.params.howlSpdUp : 70) / 100) : 1; // 狂化战吼移速加成
+      // 借用「蓄力狙击」蓄力期间大幅减速（站定蓄力，蓄满即射）
+      const chargeMul = this._ebSnipe ? 0.3 : 1;
       if (!dashActive && sp < this.baseSpeed * 1.6 * mSpdMul){
-        const slowMul = 1 - Math.min(0.9, this.slow || 0) * 0.85;
+        const slowMul = (1 - Math.min(0.9, this.slow || 0) * 0.85) * chargeMul;
         if (inp.ilen > 0){
           this.vx = inp.ix * this.baseSpeed * 1.08 * mSpdMul * slowMul;
           this.vy = inp.iy * this.baseSpeed * 1.08 * mSpdMul * slowMul;
@@ -16449,7 +16537,7 @@
           if (this._chT <= 0) this._chSt = 'close';
         }
       } else if (kind === 'bomber'){
-        // 哥布林爆破手：与猎物保持投弹距离，抛出落地即炸的爆弹
+        // 哥布林爆破手：与猎物保持投弹距离，抛出落地后引信烧尽才爆的爆弹
         const keep = p.keepDist != null ? p.keepDist : 240;
         if (d > keep + 40){
           this.vx += dirX * this.baseSpeed * spdMul * dt * 2.4;
@@ -16472,7 +16560,7 @@
           bul.isMobShot = true;              // 轻量渲染：无拖尾
           bul.size = 7;
           bul.life = ft;
-          bul.aoeRadius = p.blastR || 86;    // 落地爆炸半径
+          bul.aoeRadius = p.blastR || 76;    // 落地爆炸半径
           bullets.push(bul);
           particles.push(new Particle(this.x, this.y, '#ffb36b', {ang: Math.atan2(dy, dx), speed:70, life:0.2, size:2.4}));
         }
@@ -21492,6 +21580,46 @@
       }
       // 无尽闯关小怪：按职业绘制各自外形（轻量矢量造型，无渐变/模糊）
       if (this.mobKind) this._drawMobShape(ctx);
+      // 无尽闯关·空白角色：空环本体标记 + 借用技能蓄力指示
+      if (this.cls === 'blank'){
+        const bt = Date.now() * 0.001;
+        const tag = this.manualPlayer === 2 ? BLANK_P2_COLOR : '#ffd76b';
+        ctx.save();
+        // 「空白」身份：虚线空环（P1 金 / P2 蓝）
+        ctx.globalAlpha = 0.35 + 0.15 * Math.sin(bt * 2.4);
+        ctx.strokeStyle = tag;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 7]);
+        ctx.beginPath(); ctx.arc(x, y, this.size + 5, 0, Math.PI * 2); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
+        // 蓄力狙击：瞄准射线 + 蓄力进度环 + 蓄力核心
+        const S = this._ebSnipe;
+        if (S){
+          const prog = Math.min(1, Math.max(0, 1 - S.t / EB_SNIPE_CHARGE));
+          ctx.save();
+          const ax = S.dirX, ay = S.dirY;
+          ctx.globalAlpha = 0.3 + 0.4 * prog;
+          ctx.strokeStyle = '#ff4444';
+          ctx.lineWidth = 1.2;
+          ctx.setLineDash([10, 8]);
+          ctx.beginPath();
+          ctx.moveTo(x + ax * (this.size + 6), y + ay * (this.size + 6));
+          ctx.lineTo(x + ax * 300, y + ay * 300);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 0.95;
+          ctx.strokeStyle = '#ff8844';
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#ff4444'; ctx.shadowBlur = 10;
+          ctx.beginPath(); ctx.arc(x, y, this.size + 11, -Math.PI / 2, -Math.PI / 2 + prog * Math.PI * 2); ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.globalAlpha = 0.5 + 0.5 * prog;
+          ctx.fillStyle = '#ffdd88';
+          ctx.beginPath(); ctx.arc(x + ax * this.size, y + ay * this.size, 2 + 5 * prog, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        }
+      }
       // 青莲剑士：腰悬长剑 + 剑气流转 + 剑意环 + 剑阵/剑影
       if (this.cls === 'qinglian'){
         const qt = Date.now() * 0.001;
@@ -22609,6 +22737,7 @@
     $('endlessSub').textContent = '基础加成 生命 +4% · 伤害 +3%，再从下方三张卡中选一张强化';
     const box = $('endlessCards');
     box.innerHTML = '';
+    box.parentNode.querySelectorAll('.endless-pool').forEach(n => n.remove());
     endlessPickCards().forEach(c => {
       const count = ENDLESS.cards.filter(id => id === c.id).length;
       const d = document.createElement('div');
@@ -22633,6 +22762,8 @@
     $('endlessSub').textContent = who + '空白角色·借取一技（已持 ' + mine.length + ' / ' + ENDLESS_BLANK_MAX + '）';
     const box = $('endlessCards');
     box.innerHTML = '';
+    // 清理上一轮（双人时 P1 → P2）遗留的候选池总览
+    box.parentNode.querySelectorAll('.endless-pool').forEach(n => n.remove());
     const pool = endlessDraftPool(side);
     const picks = [];
     for (let i = 0; i < 3 && pool.length; i++){
@@ -22648,6 +22779,17 @@
       d.addEventListener('click', () => endlessTakeSkill(side, sk, onDone));
       box.appendChild(d);
     }
+    // 候选池总览：可展开查看全部可借技能（虚线为已持有），让池子深浅一目了然
+    const allPool = ENDLESS_SKILLS.filter(s => !(s.tags || []).some(t => ENDLESS_SKILL_EXCLUDED_TAGS.includes(t)));
+    const ownedIds = new Set(mine.map(s => s.id));
+    const poolBox = document.createElement('details');
+    poolBox.className = 'endless-pool';
+    poolBox.innerHTML = '<summary>候选池总览：共 ' + allPool.length + ' 个可借技能（点击展开）</summary>'
+      + '<div class="endless-pool-list">'
+      + allPool.map(s => '<span class="endless-pool-item' + (ownedIds.has(s.id) ? ' owned' : '') + '">'
+          + s.icon + ' ' + s.name + ' · ' + s.cd + 's</span>').join('')
+      + '</div>';
+    box.parentNode.insertBefore(poolBox, box.nextSibling);
     const owned = mine.map(s => s.icon + s.name).join(' · ') || '无';
     $('endlessBuffs').innerHTML = who + '已借技能：' + owned;
     const btns = $('endlessButtons');
@@ -24206,12 +24348,31 @@
           shake = Math.max(shake, 5);
         }
       }
-      // 无尽闯关·爆破手爆弹落地/飞尽即炸
+      // 无尽闯关·爆破手爆弹：飞行结束（落地）先点燃引信进入前摇，引信烧尽才爆燃
       for (const b of bullets){
-        if (b.life <= 0 && b.isMobBomb && !b._mobBoomed){
-          b._mobBoomed = true;
-          mobBombExplode(b, balls, aoes, particles);
+        if (!b.isMobBomb || b._mobBoomed) continue;
+        if (b.life > 0){
+          if (b._mobArmed && Math.random() < 0.4){      // 引信阶段：持续迸火星
+            const a = Math.random() * Math.PI * 2;
+            particles.push(new Particle(b.x + Math.cos(a) * 5, b.y - b.size - 2, '#ffd76b',
+              {ang: a, speed: 40 + Math.random() * 60, life: 0.3, size: 2}));
+          }
+          continue;
         }
+        if (!b._mobArmed){                                // 落地：停住并点燃引信
+          b._mobArmed = true;
+          b._mobFuse0 = MOB_BOMB_FUSE;
+          b.life = MOB_BOMB_FUSE;
+          b.vx = 0; b.vy = 0;
+          for (let i = 0; i < 8; i++){
+            const a = Math.random() * Math.PI * 2;
+            particles.push(new Particle(b.x, b.y, i % 2 ? '#ffd76b' : '#8a6a3a',
+              {ang: a, speed: 60 + Math.random() * 80, life: 0.35, size: 2.4}));
+          }
+          continue;
+        }
+        b._mobBoomed = true;                              // 引信烧尽：爆燃
+        mobBombExplode(b, balls, aoes, particles);
       }
       bullets = bullets.filter(b => b.life > 0);
       traps = traps.filter(t => t.life > 0);
